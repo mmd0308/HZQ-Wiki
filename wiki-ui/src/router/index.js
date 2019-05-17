@@ -20,6 +20,10 @@ export const constantRouterMap = [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index')
+      },
+      {
+        path: 'test',
+        component: () => import('@/views/dashboard/test')
       }
     ]
   },
@@ -32,7 +36,19 @@ export const constantRouterMap = [
     children: [
       {
         path: 'layout',
-        component: () => import('@/views/document/layout/Layout')
+        component: () => import('@/views/doc/layout/Layout')
+      }
+    ]
+  },
+  {
+    path: '/doc',
+    component: Layout,
+    name: 'Layout',
+    hidden: true,
+    children: [
+      {
+        path: 'set',
+        component: () => import('@/views/doc/set/index')
       }
     ]
   },

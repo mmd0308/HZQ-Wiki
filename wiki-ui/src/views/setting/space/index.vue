@@ -11,15 +11,7 @@
       border
       style="width: 100%">
       <el-table-column
-        label="日期"
-        width="180">
-        <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="姓名">
+        label="空间名称">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.name }}</span>
         </template>
@@ -34,6 +26,14 @@
         label="文档数量">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="日期"
+        width="180">
+        <template slot-scope="scope">
+          <i class="el-icon-time"/>
+          <span style="margin-left: 10px">{{ scope.row.date }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="160">
@@ -53,7 +53,19 @@
     <el-dialog :visible.sync="dialogSpaceVisible" :title="dialogTitle" width="40%">
       <el-form :model="spaceForm" label-width="100px" >
         <el-form-item label="空间名称" prop="name">
-          <el-input v-model="spaceForm.name"/>
+          <el-input v-model="spaceForm.name" style="width:80%"/>
+        </el-form-item>
+        <el-form-item label="访问级别" prop="visitLevel">
+          <el-select v-model="spaceForm.visitLevel" placeholder="请选择" style="width:80%">
+            <el-option
+              v-for="item in visitLevels"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="spaceForm.desc" type="textarea" style="width:80%"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -71,8 +83,18 @@ export default {
       dialogTitle: '新增空间',
       dialogSpaceVisible: false,
       spaceForm: {
-        name: ''
+        name: '',
+        visitLevel: 0,
+        desc: ''
       },
+      visitLevels: [
+        {
+          value: 0,
+          label: '私有空间'
+        }, {
+          value: 1,
+          label: '共享空间'
+        }],
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',

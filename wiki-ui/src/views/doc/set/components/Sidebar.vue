@@ -2,19 +2,13 @@
   <div class="sidebar">
     <ul>
       <li :class="{clickSiber:clickSidber === 'personal'}" @click="clickSiberItem('personal')">
-        <span>个人中心</span>
+        <span>概要</span>
       </li>
       <li :class="{clickSiber:clickSidber === 'user'}" @click="clickSiberItem('user')">
-        <span>用户管理</span>
+        <span>成员</span>
       </li>
       <li :class="{clickSiber:clickSidber === 'space'}" @click="clickSiberItem('space')">
-        <span>空间管理</span>
-      </li>
-      <li :class="{clickSiber:clickSidber === 'document'}" @click="clickSiberItem('document')">
-        <span>文档管理</span>
-      </li>
-      <li :class="{clickSiber:clickSidber === 'config'}" @click="clickSiberItem('config')">
-        <span>配置管理</span>
+        <span>设置</span>
       </li>
     </ul>
   </div>

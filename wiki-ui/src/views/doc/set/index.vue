@@ -15,14 +15,11 @@
 <script>
 import Sidebar from './components/Sidebar'
 import UserSet from './components/UserSet'
-import Space from './space/index'
-import Document from '../doc/index'
+
 export default {
   components: {
     Sidebar,
-    UserSet,
-    Space,
-    Document
+    UserSet
   },
   data() {
     return {
@@ -43,12 +40,12 @@ export default {
     width: 984px;
     margin: 0 auto;
     .left{
-        width: 200px;
+        width: 180px;
         float: left;
     }
     .right{
         float: right;
-        width: 765px;
+        width: 780px;
     }
 }
 </style>

@@ -1,4 +1,4 @@
-package com.hzqing.wikiadmin;
+package com.hzqing.admin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
