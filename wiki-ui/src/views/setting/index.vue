@@ -8,6 +8,7 @@
         <user-set v-if="checkRightTemp === 'personal'" />
         <space v-if="checkRightTemp === 'space'" />
         <document v-if="checkRightTemp === 'document'" />
+        <user v-if="checkRightTemp === 'user'" />
       </el-card>
     </div>
   </div>
@@ -17,12 +18,14 @@ import Sidebar from './components/Sidebar'
 import UserSet from './components/UserSet'
 import Space from '../space/index'
 import Document from '../doc/index'
+import User from '../system/user/index'
 export default {
   components: {
     Sidebar,
     UserSet,
     Space,
-    Document
+    Document,
+    User
   },
   data() {
     return {

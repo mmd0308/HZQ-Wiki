@@ -27,7 +27,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data
-    debugger
     if (res.code !== 200) {
       Message({
         message: res.message,

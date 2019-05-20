@@ -1,5 +1,6 @@
 package com.hzqing.admin.service.system.impl;
 
+import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.mapper.system.UserMapper;
 import com.hzqing.admin.service.system.IUserService;
@@ -21,5 +22,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<User> selectList(User user) {
         return userMapper.selectList(user);
+    }
+
+    @Override
+    public int insert(User user) {
+        return userMapper.insert(user);
+    }
+
+    @Override
+    public int update(User user) {
+        return userMapper.update(user);
+    }
+
+    @Override
+    public int deletedById(String id) {
+        return userMapper.deletedById(id);
     }
 }

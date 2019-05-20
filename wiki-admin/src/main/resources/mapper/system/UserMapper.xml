@@ -3,14 +3,105 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzqing.admin.mapper.system.UserMapper">
+
     <resultMap id="baseResult" type="user">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="remark" property="remark" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <sql id="tableName">
+        hw_user
+    </sql>
+
     <select id="selectList" resultMap="baseResult" parameterType="user">
-        select *
-        from hw_user
+        select
+            id,
+            name,
+            username,
+            password,
+            email,
+            phone,
+            remark,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        from
+        <include refid="tableName"/>
+        <where>
+            <if test="name != null and name != ''">
+                name like '%${name}%'
+            </if>
+        </where>
     </select>
+
+    <insert id="insert" parameterType="space" >
+        INSERT INTO
+            <include refid="tableName"/>
+        (
+            name,
+            username,
+            password,
+            email,
+            phone,
+            remark,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        ) VALUE (
+            #{name},
+            #{username},
+            #{password},
+            #{email},
+            #{phone},
+            #{remark},
+            #{createBy},
+            #{createTime},
+            #{updateBy},
+            #{updateTime}
+        )
+    </insert>
+
+    <delete id="deletedById" parameterType="string">
+        DELETE FROM
+            <include refid="tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="space">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 </mapper>

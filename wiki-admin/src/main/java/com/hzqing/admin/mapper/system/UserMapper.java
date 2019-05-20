@@ -12,4 +12,9 @@ public interface UserMapper {
 
     List<User> selectList(User user);
 
+    int update(User user);
+
+    int insert(User user);
+
+    int deletedById(String id);
 }

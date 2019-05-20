@@ -11,4 +11,10 @@ import java.util.List;
 public interface IUserService {
     
     List<User> selectList(User user);
+
+    int insert(User user);
+
+    int update(User user);
+
+    int deletedById(String id);
 }
