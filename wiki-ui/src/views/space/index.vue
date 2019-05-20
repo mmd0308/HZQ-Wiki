@@ -78,7 +78,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
@@ -144,7 +144,6 @@ export default {
     },
     addOrUpdate() {
       this.$refs[this.ruleForm].validate((valid) => {
-        debugger
         if (valid) {
           addOrUpdate(this.spaceForm).then(() => {
             this.dialogSpaceVisible = false
@@ -172,12 +171,6 @@ export default {
         })
       })
     },
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(index, row) {
-      console.log(index, row)
-    },
     handleSizeChange(val) {
       this.listQuery.pageSize = val
       this.page()
@@ -185,6 +178,10 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageNum = val
       this.page()
+    },
+    cancel() {
+      this.dialogSpaceVisible = false
+      this.spaceForm = this.init()
     }
   }
 }
