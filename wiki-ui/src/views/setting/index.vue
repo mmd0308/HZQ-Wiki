@@ -15,7 +15,7 @@
 <script>
 import Sidebar from './components/Sidebar'
 import UserSet from './components/UserSet'
-import Space from './space/index'
+import Space from '../space/index'
 import Document from '../doc/index'
 export default {
   components: {
