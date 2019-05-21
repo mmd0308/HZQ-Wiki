@@ -60,11 +60,18 @@
         label-width="0px"
         class="card-box login-form">
 
-        <el-form-item prop="nickName">
+        <el-form-item prop="username">
           <span class="svg-container svg-container_login">
             <svg-icon icon-class="user" />
           </span>
-          <el-input v-model="regForm.nickName" type="text" auto-complete="on" placeholder="昵称" />
+          <el-input v-model="regForm.username" type="text" auto-complete="on" placeholder="登陆账号" />
+        </el-form-item>
+
+        <el-form-item prop="phone">
+          <span class="svg-container svg-container_login">
+            <svg-icon icon-class="phone" />
+          </span>
+          <el-input v-model="regForm.phone" type="text" auto-complete="on" placeholder="手机号" />
         </el-form-item>
 
         <el-form-item prop="email">
@@ -74,12 +81,6 @@
           <el-input v-model="regForm.email" type="text" auto-complete="on" placeholder="邮箱" />
         </el-form-item>
 
-        <el-form-item prop="phone">
-          <span class="svg-container svg-container_login">
-            <svg-icon icon-class="phone" />
-          </span>
-          <el-input v-model="regForm.phone" type="text" auto-complete="on" placeholder="手机号" />
-        </el-form-item>
         <el-form-item prop="password">
           <span class="svg-container">
             <svg-icon icon-class="password"/>
@@ -105,7 +106,7 @@
 </template>
 
 <script>
-// import { register } from '@/api/manager/system/user/login'
+import { registerUser } from '@/api/system/user/index'
 export default {
   name: 'Login',
   data() {
@@ -121,18 +122,19 @@ export default {
         username: '',
         password: ''
       },
-      regForm: {
-        nickName: '',
-        phone: '',
-        password: '',
-        email: ''
-      },
+      regForm: this.initReg(),
       loginRules: {
         username: [{ required: true, trigger: 'blur', message: '请输入账号' }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       regRules: {
-        nickName: [{ required: true, trigger: 'blur', message: '请输入昵称' }]
+        username: [{ required: true, trigger: 'blur', message: '请输入账号' }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ],
+        phone: [{ required: true, message: '联系电话不能为空' }]
       },
       loading: false,
       pwdType: 'password',
@@ -140,6 +142,15 @@ export default {
     }
   },
   methods: {
+    initReg() {
+      return {
+        name: '',
+        username: '',
+        phone: '',
+        password: '',
+        email: ''
+      }
+    },
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = ''
@@ -168,16 +179,18 @@ export default {
       this.$refs.regForm.validate(valid => {
         if (valid) {
           this.loading = true
-          // register(this.regForm).then(() => {
-          //   this.$notify({
-          //     title: '成功',
-          //     message: '恭喜你！你已注册成功，请登录！',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          //   this.loading = false
-          //   this.formStates = 'login'
-          // })
+          this.regForm.name = this.regForm.username
+          registerUser(this.regForm).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '恭喜你！你已注册成功，请登录！',
+              type: 'success',
+              duration: 2000
+            })
+            this.loading = false
+            this.formStates = 'login'
+            this.regForm = this.initReg()
+          })
         } else {
           console.log('注册校验错误')
           return false

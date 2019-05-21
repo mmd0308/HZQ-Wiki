@@ -19,7 +19,7 @@ public class UserDoc {
     private int docId;
 
     /**
-     * 空间成员操作权限 0 浏览者 1 编辑者 2 管理员 3 创建者
+     * 文档成员操作权限  1 浏览者 2 编辑者 3 管理员
      */
     private int privilege;
 

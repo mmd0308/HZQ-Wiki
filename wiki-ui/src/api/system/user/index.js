@@ -16,6 +16,14 @@ export function addOrUpdate(params) {
   })
 }
 
+export function registerUser(params) {
+  return request({
+    url: '/api/user/register',
+    method: 'post',
+    data: params
+  })
+}
+
 export function deletedById(id) {
   return request({
     url: '/api/user/deleted/' + id,

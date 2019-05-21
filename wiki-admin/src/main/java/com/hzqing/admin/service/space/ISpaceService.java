@@ -16,4 +16,11 @@ public interface ISpaceService {
     int update(Space space);
 
     int deletedById(String id);
+
+    /**
+     * 根据用户id，获取该用户的所有空间
+     * @param space
+     * @return
+     */
+    List<Space> selectListByUserId(Space space);
 }

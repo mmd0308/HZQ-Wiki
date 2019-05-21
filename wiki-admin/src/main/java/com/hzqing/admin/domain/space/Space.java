@@ -10,12 +10,12 @@ import lombok.Data;
 @Data
 public class Space extends Base {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
     private String remark;
 
-    private int visitLevel;
+    private Integer visitLevel;
 
 }

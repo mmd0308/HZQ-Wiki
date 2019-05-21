@@ -3,9 +3,13 @@ package com.hzqing.admin.controller.base;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.domain.base.Base;
 import com.hzqing.admin.domain.system.User;
+import com.hzqing.admin.domain.system.UserInfo;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,6 +20,16 @@ import java.util.List;
 public class BaseController {
 
     public BaseController() {
+    }
+
+
+    protected Object initAddOrUpdate(Base base){
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        base.setCreateTime(LocalDateTime.now());
+        base.setUpdateTime(LocalDateTime.now());
+        base.setUpdateBy(userInfo.getId());
+        base.setCreateBy(userInfo.getId());
+        return base;
     }
 
     protected void startPage(int pageNum, int pageSize) {

@@ -1,5 +1,6 @@
 package com.hzqing.admin.controller.space;
 
+import com.hzqing.admin.common.Constant;
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Doc;
@@ -25,6 +26,23 @@ public class SpaceController extends BaseController {
     @Autowired
     private ISpaceService spaceService;
 
+    /**
+     * 获取制定用户的空间
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @param space
+     * @return
+     */
+    @GetMapping("/page/{userId}")
+    public ResponseMessage showPage(@PathVariable int userId, int pageNum, int pageSize, Space space){
+        startPage(pageNum,pageSize);
+        space.setCreateBy(userId);
+        List<Space> spaces = spaceService.selectListByUserId(space);
+        return responseMessage(spaces);
+    }
+
+
     @GetMapping("/page")
     public ResponseMessage page(int pageNum, int pageSize, Space space){
         startPage(pageNum,pageSize);
@@ -35,14 +53,11 @@ public class SpaceController extends BaseController {
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody Space space){
         int res = -1;
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        space.setCreateTime(LocalDateTime.now());
-        space.setUpdateTime(LocalDateTime.now());
-        space.setUpdateBy(userInfo.getId());
-        if ( space.getId() ==0){ //新增
-            space.setCreateBy(userInfo.getId());
+        space = (Space) initAddOrUpdate(space);
+        if (space.getId() == null){ //新增
             res = spaceService.insert(space);
         }else {
+            space.setCreateBy(null);
             res = spaceService.update(space);
         }
         return responseMessage(res);

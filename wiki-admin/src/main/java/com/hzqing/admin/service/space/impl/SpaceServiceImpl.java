@@ -1,14 +1,12 @@
 package com.hzqing.admin.service.space.impl;
 
 import com.hzqing.admin.domain.space.Space;
-import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.mapper.space.SpaceMapper;
 import com.hzqing.admin.mapper.space.UserSpaceMapper;
 import com.hzqing.admin.service.space.ISpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -45,5 +43,10 @@ public class SpaceServiceImpl implements ISpaceService {
     @Override
     public int deletedById(String id) {
         return spaceMapper.deletedById(id);
+    }
+
+    @Override
+    public List<Space> selectListByUserId(Space space) {
+        return spaceMapper.selectListByUserId(space);
     }
 }

@@ -14,7 +14,7 @@ public class Base implements Serializable {
     /**
      * 创建人Id
      */
-    private int createBy;
+    private Integer createBy;
 
     /**
      * 创建时间
@@ -24,7 +24,7 @@ public class Base implements Serializable {
     /**
      * 更新人id
      */
-    private int updateBy;
+    private Integer updateBy;
 
     /**
      * 更新时间

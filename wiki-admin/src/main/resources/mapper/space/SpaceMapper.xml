@@ -15,6 +15,18 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="baseResultDto" type="spacedto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark" />
+        <result column="visit_level" property="visitLevel" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="privilege" property="privilege"/>
+    </resultMap>
+
     <sql id="tableName">
         hw_space
     </sql>
@@ -39,6 +51,27 @@
                 and  visit_level = #{visitLevel}
             </if>
         </where>
+    </select>
+
+    <!--     根据用户id，获取该用户的所有空间-->
+    <select id="selectListByUserId" resultMap="baseResultDto" parameterType="spacedto">
+        select
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            u.privilege
+        from
+        <include refid="tableName"/> s
+        LEFT JOIN
+            hw_user_space u ON u.space_id = s.id
+        where
+            s.create_by = #{createBy}
+            or find_in_set(s.id, (select space_id from hw_user_space where user_id = #{createBy}))
     </select>
 
     <insert id="insert" parameterType="space" >

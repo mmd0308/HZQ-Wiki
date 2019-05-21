@@ -4,6 +4,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 const user = {
   state: {
     token: getToken(),
+    userId: '',
     name: '',
     avatar: '',
     roles: []
@@ -15,6 +16,9 @@ const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_ID: (state, id) => {
+      state.userId = id
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -45,12 +49,14 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
+
           if (data.roles && data.roles.length > 0) {
             commit('SET_ROLES', data.roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
           commit('SET_NAME', data.name)
+          commit('SET_ID', data.id)
           resolve(response)
         }).catch(error => {
           reject(error)

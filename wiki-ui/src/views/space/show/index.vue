@@ -23,6 +23,7 @@
           </el-form>
         </template>
       </el-table-column>
+
       <el-table-column
         label="空间名称"
         prop="name">
@@ -32,6 +33,20 @@
           </router-link>
         </template>
       </el-table-column>
+      <el-table-column
+        v-if="spaceVisitLevel === '0'"
+        label="拥有权限"
+        width="100"
+        prop="privilege">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.privilege == null">拥有者</el-tag>
+          <!--   1 浏览者 2 编辑者 3 管理员 -->
+          <el-tag v-if="scope.row.privilege == '1'" type="success">浏览者</el-tag>
+          <el-tag v-if="scope.row.privilege == '2'" type="warning">编辑者</el-tag>
+          <el-tag v-if="scope.row.privilege == '3'" type="danger">管理员</el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         width="50">
@@ -80,8 +95,10 @@
   </div>
 </template>
 <script>
-import { page, addOrUpdate, deletedById } from '@/api/space/index'
+import { page, showPage, addOrUpdate } from '@/api/space/index'
+import { mapGetters } from 'vuex'
 export default {
+
   data() {
     return {
       dialogSpaceVisible: false,
@@ -106,14 +123,22 @@ export default {
       ruleForm: 'ruleForm',
       rules: {
         name: [
-          { required: true, message: '请输入空间名称', trigger: 'blur' },
-          { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入空间名称', trigger: 'blur' }
         ]
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
+  },
   created() {
-    this.page()
+    if (this.spaceVisitLevel === '0') {
+      this.showPage()
+    } else {
+      this.page()
+    }
   },
   methods: {
     init() {
@@ -132,11 +157,21 @@ export default {
           addOrUpdate(this.spaceForm).then(() => {
             this.dialogSpaceVisible = false
             this.spaceForm = this.init()
-            this.page()
+            if (this.spaceVisitLevel === '1') {
+              this.page()
+            } else {
+              this.showPage()
+            }
           })
         } else {
           return false
         }
+      })
+    },
+    showPage() {
+      showPage(this.listQuery, this.userId).then(response => {
+        this.spaceLists = response.data
+        this.total = response.total
       })
     },
     page() {
@@ -146,8 +181,12 @@ export default {
       })
     },
     changeSpaceVisitLevel(val) {
-      this.listQuery.visitLevel = val
-      this.page()
+      if (val === '1') {
+        this.listQuery.visitLevel = val
+        this.page()
+      } else {
+        this.showPage()
+      }
     },
     cancel() {
       this.dialogSpaceVisible = false
@@ -155,11 +194,19 @@ export default {
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val
-      this.page()
+      if (this.spaceVisitLevel === '1') {
+        this.page()
+      } else {
+        this.showPage()
+      }
     },
     handleCurrentChange(val) {
       this.listQuery.pageNum = val
-      this.page()
+      if (this.spaceVisitLevel === '1') {
+        this.page()
+      } else {
+        this.showPage()
+      }
     }
   }
 }
