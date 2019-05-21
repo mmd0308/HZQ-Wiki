@@ -35,6 +35,9 @@
             <if test="name != null and name != ''">
                 name like '%${name}%'
             </if>
+            <if test="visitLevel != null">
+                and  visit_level = #{visitLevel}
+            </if>
         </where>
     </select>
 

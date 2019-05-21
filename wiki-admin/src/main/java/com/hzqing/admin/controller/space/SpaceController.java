@@ -4,9 +4,11 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.space.Space;
+import com.hzqing.admin.domain.system.UserInfo;
 import com.hzqing.admin.service.doc.IDocService;
 import com.hzqing.admin.service.space.ISpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -33,9 +35,12 @@ public class SpaceController extends BaseController {
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody Space space){
         int res = -1;
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         space.setCreateTime(LocalDateTime.now());
         space.setUpdateTime(LocalDateTime.now());
+        space.setUpdateBy(userInfo.getId());
         if ( space.getId() ==0){ //新增
+            space.setCreateBy(userInfo.getId());
             res = spaceService.insert(space);
         }else {
             res = spaceService.update(space);

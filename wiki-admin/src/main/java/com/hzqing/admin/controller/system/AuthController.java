@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author hzqing
  * @date 2019-05-17 10:39
@@ -28,9 +25,7 @@ public class AuthController extends BaseController {
     public ResponseMessage userInfo(){
         UserInfo userInfo = new UserInfo();
         userInfo.setName("jj");
-        List<String> roles = new ArrayList<>();
-        roles.add("Role_admin");
-        userInfo.setRoles(roles);
+        userInfo.setRoles(new String[]{"Role"});
         return responseMessage(userInfo);
     }
 }

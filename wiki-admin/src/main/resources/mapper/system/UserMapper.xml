@@ -43,6 +43,24 @@
             </if>
         </where>
     </select>
+    <select id="selectByUserName" resultMap="baseResult" parameterType="string">
+        select
+            id,
+            name,
+            username,
+            password,
+            email,
+            phone,
+            remark,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        from
+            <include refid="tableName"/>
+        where
+            username = #{username}
+    </select>
 
     <insert id="insert" parameterType="space" >
         INSERT INTO

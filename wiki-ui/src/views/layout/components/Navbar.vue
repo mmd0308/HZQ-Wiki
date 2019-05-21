@@ -10,28 +10,45 @@
         mode="horizontal"
         background-color="#545c64"
         text-color="#fff"
+        router="true"
         active-text-color="#ffd04b"
         @select="handleSelect">
-        <el-menu-item index="1">
-          <router-link to="/">
-            首页
-          </router-link>
+        <el-menu-item index="/">
+          首页
         </el-menu-item>
-        <el-menu-item index="3" disabled>
+        <el-menu-item index="/space" >
           空间
         </el-menu-item>
-        <el-menu-item index="4" >
-          <router-link to="/set/index" >
-
-            设置
-          </router-link>
+        <el-menu-item index="/set/index" >
+          系统管理
         </el-menu-item>
       </el-menu>
 
     </div>
-    <div style="float:right;margin:10px 0px;" >
-      <avatar username="heng zhao qing" size="40" />
-    </div>
+    <div style="float:right;" >
+      <!-- <el-dropdown placement="bottom" trigger="click">
+        <avatar username="heng zhao qing" size="40" />
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>退出登陆</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown> -->
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        background-color="#545c64"
+        text-color="#fff"
+        router="true"
+        active-text-color="#ffd04b"
+        @select="handleSelect">
+        <el-submenu>
+          <template slot="title">
+            <avatar style="float:left;margin-top:10px;" username="heng zhao qing" size="40" />
+          </template>
+          <el-menu-item index="/" >个人中心</el-menu-item>
+          <el-menu-item index="/login" @click="logout">退出登陆</el-menu-item>
+        </el-submenu>
+    </el-menu></div>
   </div>
 </template>
 <script>
@@ -42,12 +59,17 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: '/'
     }
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
+    },
+    logout() {
+      this.$store.dispatch('LogOut').then(() => {
+        this.$router.push({ path: this.redirect || '/login' })
+      })
     }
   }
 }

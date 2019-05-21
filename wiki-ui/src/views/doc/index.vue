@@ -10,15 +10,39 @@
       :data="docLists"
       :show-header="false"
       style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="文档名称">
+              <span>{{ props.row.name }}</span>
+            </el-form-item>
+            <el-form-item label="创建人">
+              <span>{{ props.row.createBy }}</span>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <span>{{ props.row.createTime }}</span>
+            </el-form-item>
+            <el-form-item label="文档描述">
+              <span>{{ props.row.remark }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template slot-scope="scope">
           <router-link to="/doc/set">
             <h3>{{ scope.row.name }}</h3>
           </router-link>
-          <span>{{ scope.row.remark }}</span>
-          <div>
-            {{ scope.row.createTime }}
-          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="160">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.visitLevel == 0">
+            私有项目
+          </el-tag>
+          <el-tag v-if="scope.row.visitLevel == 1" type="warning">
+            共享项目
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120">
@@ -35,6 +59,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div style="margin:10px 0 0 0;">
       <el-pagination
         :current-page="listQuery.pageNum"
@@ -141,10 +166,12 @@ export default {
       console.log(index, row)
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.listQuery.pageSize = val
+      this.page()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.listQuery.pageNum = val
+      this.page()
     }
   }
 }
@@ -161,4 +188,17 @@ export default {
         border-color:#f98d5f;
     }
 }
+
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="set" style="background:blue;">
+  <div class="set hzq-wiki-main" style="background:blue;">
     <div class="left" style="background: pink">
       <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
     </div>
@@ -16,7 +16,7 @@
 <script>
 import Sidebar from './components/Sidebar'
 import UserSet from './components/UserSet'
-import Space from '../space/index'
+import Space from '../space/admin/index'
 import Document from '../doc/index'
 import User from '../system/user/index'
 export default {
@@ -43,8 +43,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .set {
-    width: 984px;
-    margin: 0 auto;
     .left{
         width: 200px;
         float: left;

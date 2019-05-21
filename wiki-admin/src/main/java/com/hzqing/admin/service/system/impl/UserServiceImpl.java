@@ -38,4 +38,9 @@ public class UserServiceImpl implements IUserService {
     public int deletedById(String id) {
         return userMapper.deletedById(id);
     }
+
+    @Override
+    public User selectByUserName(String username) {
+        return userMapper.selectByUserName(username);
+    }
 }

@@ -30,6 +30,12 @@
             update_by,
             update_time
         from hw_doc
+        <where>
+            <if test="visitLevel != null">
+                visit_level = #{visitLevel}
+            </if>
+        </where>
+
     </select>
 
     <insert id="insert" parameterType="doc" >

@@ -17,4 +17,6 @@ public interface UserMapper {
     int insert(User user);
 
     int deletedById(String id);
+
+    User selectByUserName(String username);
 }

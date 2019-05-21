@@ -24,6 +24,14 @@ export const constantRouterMap = [
       {
         path: 'test',
         component: () => import('@/views/dashboard/test')
+      },
+      {
+        path: 'space',
+        component: () => import('@/views/space/show/index')
+      },
+      {
+        path: 'doc',
+        component: () => import('@/views/doc/show/index')
       }
     ]
   },

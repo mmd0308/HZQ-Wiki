@@ -11,10 +11,18 @@ import java.util.List;
 @Data
 public class UserInfo {
 
+    private int id;
+
     private String name;
 
-    private List<String> roles;
+    private String username;
 
-    private List<String> permission;
+    private String password;
+
+    private String[] resources;
+
+    private String[] roles;
+
+    private String token;
 
 }
