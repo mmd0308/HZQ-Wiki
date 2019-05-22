@@ -2,6 +2,7 @@ package com.hzqing.admin.service.doc;
 
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.system.User;
+import com.hzqing.admin.dto.doc.DocDto;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface IDocService {
     int insert(Doc doc);
 
     int update(Doc doc);
+
+    List<DocDto> selectListByID(Doc doc);
 }

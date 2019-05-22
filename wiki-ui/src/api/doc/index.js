@@ -8,6 +8,14 @@ export function page(query) {
   })
 }
 
+export function showDocPage(query, userId) {
+  return request({
+    url: '/api/doc/page/' + userId,
+    method: 'get',
+    params: query
+  })
+}
+
 export function addOrUpdate(doc) {
   return request({
     url: '/api/doc/addOrUpdate',

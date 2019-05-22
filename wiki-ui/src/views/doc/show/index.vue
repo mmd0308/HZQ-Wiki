@@ -1,30 +1,30 @@
 <template>
   <div class="hzq-wiki-main">
     <div style="padding-bottom: 10px;">
-      <el-radio-group v-model="spaceVisitLevel" @change="changeSpaceVisitLevel">
+      <el-radio-group v-model="docVisitLevel" @change="changeDocVisitLevel">
         <el-radio-button label="0">个人文档</el-radio-button>
         <el-radio-button label="1"> 共享文档</el-radio-button>
       </el-radio-group>
-      <el-button type="success" style="float:right">
+      <el-button type="success" style="float:right" @click="docToAdd">
         新增文档
       </el-button>
     </div>
 
     <el-table
-      :data="spaceLists"
+      :data="docLists"
       :show-header="false"
       style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="空间名称">
+            <el-form-item label="文档名称">
               <span>{{ props.row.name }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column
-        label="空间名称"
+        label="文档名称"
         prop="name">
         <template slot-scope="scope">
           <router-link to="/">
@@ -40,36 +40,156 @@
         </template>
       </el-table-column>
     </el-table>
+    <div
+      style="text-align: center; padding-top: 15px;">
+      <el-pagination
+        :total="total"
+        :current-page="listQuery.pageNum"
+        :page-size="listQuery.pageSize"
+        background
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"/>
+    </div>
+    <!-- 新增或者修改项目 -->
+    <el-dialog :visible.sync="dialogDocVisible" :title="dialogTitle" width="40%">
+      <el-form :model="docForm" label-width="100px" >
+        <el-form-item label="文档名称" prop="name">
+          <el-input v-model="docForm.name" style="width:80%"/>
+        </el-form-item>
+
+        <el-form-item label="所属空间" prop="spaceId">
+          <el-select v-model="docForm.spaceId" placeholder="请选择" style="width:80%">
+            <el-option
+              v-for="item in spaceLists"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"/>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="访问级别" prop="visitLevel">
+          <el-select v-model="docForm.visitLevel" placeholder="请选择" style="width:80%">
+            <el-option
+              v-for="item in visitLevels"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="描述" prop="remark">
+          <el-input v-model="docForm.remark" type="textarea" style="width:80%"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addOrUpdate">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { page, addOrUpdate, deletedById } from '@/api/doc/index'
+import { page, addOrUpdate, showDocPage } from '@/api/doc/index'
+import { showPage } from '@/api/space/index'
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      spaceVisitLevel: '0',
+      dialogTitle: '新增文档',
+      dialogDocVisible: false,
+      docForm: {
+        name: '',
+        spaceId: '',
+        visitLevel: 0,
+        remark: ''
+      },
+      visitLevels: [
+        {
+          value: 0,
+          label: '私有空间'
+        }, {
+          value: 1,
+          label: '共享空间'
+        }],
+      docVisitLevel: '0',
+      docLists: [],
       spaceLists: [],
+      spaceId: '',
       total: 0,
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        name: '',
-        visitLevel: this.spaceVisitLevel
+        visitLevel: '0',
+        spaceId: ''
+      },
+      spacelistQuery: {
+        pageNum: 1,
+        pageSize: 100
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
+  },
   created() {
-    this.page()
+    if (this.docVisitLevel === '0') {
+      this.showDocPage()
+    } else {
+      this.page()
+    }
+    this.spaceId = this.$route.query.spaceId
   },
   methods: {
     page() {
+      this.listQuery.visitLevel = this.docVisitLevel
       page(this.listQuery).then(response => {
-        this.spaceLists = response.data
+        this.docLists = response.data
         this.total = response.total
       })
     },
-    changeSpaceVisitLevel(val) {
-      this.listQuery.visitLevel = val
+    showDocPage() {
+      this.listQuery.spaceId = this.spaceId
+      showDocPage(this.listQuery, this.userId).then(response => {
+        this.docLists = response.data
+        this.total = response.total
+      })
+    },
+    spaceAll() {
+      showPage(this.spacelistQuery, this.userId).then(response => {
+        this.spaceLists = response.data
+      })
+    },
+    changeDocVisitLevel(val) {
+      if (val === '0') {
+        this.showDocPage()
+      } else {
+        this.page()
+      }
+    },
+    docToAdd() {
+      this.dialogDocVisible = true
+      this.docForm.spaceId = this.spaceId
+      this.spaceAll()
+    },
+    addOrUpdate() {
+      addOrUpdate(this.docForm).then(() => {
+        this.dialogDocVisible = false
+        if (this.docVisitLevel === '0') {
+          this.showDocPage()
+        } else {
+          this.page()
+        }
+      })
+    },
+    handleSizeChange(val) {
+      this.listQuery.pageSize = val
+      this.page()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.pageNum = val
       this.page()
     }
   }

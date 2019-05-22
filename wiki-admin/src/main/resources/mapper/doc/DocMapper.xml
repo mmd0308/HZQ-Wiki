@@ -17,6 +17,45 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="baseResultDto" type="docdto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="space_id" property="spaceId" />
+        <result column="remark" property="remark" />
+        <result column="visit_level" property="visitLevel" />
+        <result column="img" property="img" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="privilege" property="privilege"/>
+    </resultMap>
+
+
+
+    <!--     根据用户id，空间id 获取该用户的所有文档-->
+    <select id="selectListByID" resultMap="baseResultDto" parameterType="docdto">
+        select
+            s.id,
+            s.name,
+            s.space_id,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            u.privilege
+        from
+            hw_doc s
+        LEFT JOIN
+            hw_user_doc u ON u.doc_id = s.id
+        where
+            s.create_by = #{createBy}
+            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
+            and s.space_id = #{spaceId}
+    </select>
+
     <select id="selectList" resultMap="baseResult" parameterType="doc">
         select
             id,

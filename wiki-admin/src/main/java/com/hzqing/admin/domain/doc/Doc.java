@@ -1,6 +1,7 @@
 package com.hzqing.admin.domain.doc;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hzqing.admin.domain.base.Base;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,27 +12,20 @@ import java.time.LocalDateTime;
  * @date 2019-05-17 09:53
  */
 @Data
-public class Doc implements Serializable {
+public class Doc extends Base {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
-    private int spaceId;
+    private Integer spaceId;
 
     private String remark;
 
-    private int visitLevel;
+    private Integer visitLevel;
 
     private String img;
 
-    private int createBy;
-
-    private LocalDateTime createTime;
-
-    private int updateBy;
-
-    private LocalDateTime updateTime;
 
 
 }

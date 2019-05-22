@@ -1,6 +1,7 @@
 package com.hzqing.admin.service.doc.impl;
 
 import com.hzqing.admin.domain.doc.Doc;
+import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
 import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class DocServiceImpl implements IDocService {
     @Override
     public int update(Doc doc) {
         return docMapper.update(doc);
+    }
+
+    @Override
+    public List<DocDto> selectListByID(Doc doc) {
+        return docMapper.selectListByID(doc);
     }
 }

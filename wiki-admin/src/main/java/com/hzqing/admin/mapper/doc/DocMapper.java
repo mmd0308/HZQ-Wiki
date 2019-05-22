@@ -2,6 +2,7 @@ package com.hzqing.admin.mapper.doc;
 
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.system.User;
+import com.hzqing.admin.dto.doc.DocDto;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface DocMapper {
     int update(Doc doc);
 
     int insert(Doc doc);
+
+    List<DocDto> selectListByID(Doc doc);
 }

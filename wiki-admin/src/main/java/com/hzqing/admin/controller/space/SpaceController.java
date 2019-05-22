@@ -6,6 +6,7 @@ import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.service.doc.IDocService;
 import com.hzqing.admin.service.space.ISpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class SpaceController extends BaseController {
     public ResponseMessage showPage(@PathVariable int userId, int pageNum, int pageSize, Space space){
         startPage(pageNum,pageSize);
         space.setCreateBy(userId);
-        List<Space> spaces = spaceService.selectListByUserId(space);
+        List<SpaceDto> spaces = spaceService.selectListByUserId(space);
         return responseMessage(spaces);
     }
 

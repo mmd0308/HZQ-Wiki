@@ -1,6 +1,7 @@
 package com.hzqing.admin.service.space;
 
 import com.hzqing.admin.domain.space.Space;
+import com.hzqing.admin.dto.space.SpaceDto;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface ISpaceService {
      * @param space
      * @return
      */
-    List<Space> selectListByUserId(Space space);
+    List<SpaceDto> selectListByUserId(Space space);
 }

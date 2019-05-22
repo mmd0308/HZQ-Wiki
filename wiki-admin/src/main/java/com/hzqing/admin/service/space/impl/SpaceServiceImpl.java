@@ -1,6 +1,7 @@
 package com.hzqing.admin.service.space.impl;
 
 import com.hzqing.admin.domain.space.Space;
+import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.mapper.space.SpaceMapper;
 import com.hzqing.admin.mapper.space.UserSpaceMapper;
 import com.hzqing.admin.service.space.ISpaceService;
@@ -46,7 +47,7 @@ public class SpaceServiceImpl implements ISpaceService {
     }
 
     @Override
-    public List<Space> selectListByUserId(Space space) {
+    public List<SpaceDto> selectListByUserId(Space space) {
         return spaceMapper.selectListByUserId(space);
     }
 }
