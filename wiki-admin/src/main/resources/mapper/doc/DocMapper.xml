@@ -52,8 +52,8 @@
             hw_user_doc u ON u.doc_id = s.id
         where
             s.create_by = #{createBy}
-            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
             and s.space_id = #{spaceId}
+            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
     </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="doc">
