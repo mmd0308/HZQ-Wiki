@@ -17,6 +17,11 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
+Vue.use(mavonEditor)
+
 /**
  * This project originally used easy-mock to simulate data,
  * but its official service is very unstable,

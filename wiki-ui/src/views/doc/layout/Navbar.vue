@@ -9,8 +9,26 @@
           首页
         </router-link>
       </el-button>
-      <el-button size="small" type="success">编辑</el-button>
+      <el-button v-if="docStatus == 'R'" size="small" type="success" @click="toEdit">
+        编辑
+      </el-button>
       <el-button size="small" type="danger">删除</el-button>
     </div>
   </div>
 </template>
+<script>
+export default {
+  props: {
+    docStatus: {
+      type: String,
+      required: true
+    }
+  },
+  methods: {
+    toEdit() {
+      this.docStatus = 'E'
+      this.$emit('editStatus', this.docStatus)
+    }
+  }
+}
+</script>

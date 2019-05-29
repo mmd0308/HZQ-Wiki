@@ -18,7 +18,9 @@
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="文档名称">
-              <span>{{ props.row.name }}</span>
+              <router-link to="/doc/layout">
+                <span>{{ props.row.name }}</span>
+              </router-link>
             </el-form-item>
           </el-form>
         </template>
@@ -27,7 +29,7 @@
         label="文档名称"
         prop="name">
         <template slot-scope="scope">
-          <router-link to="/">
+          <router-link to="/doc/layout">
             {{ scope.row.name }}
           </router-link>
         </template>
@@ -135,12 +137,12 @@ export default {
     ])
   },
   created() {
+    this.spaceId = this.$route.query.spaceId
     if (this.docVisitLevel === '0') {
       this.showDocPage()
     } else {
       this.page()
     }
-    this.spaceId = this.$route.query.spaceId
   },
   methods: {
     page() {

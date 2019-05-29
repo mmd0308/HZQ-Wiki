@@ -16,8 +16,9 @@
   "dependencies": {
     "axios": "0.18.0",
     "diff2html": "^2.7.0",
-    "element-ui": "2.7.2",
+    "element-ui": "2.8.2",
     "js-cookie": "2.2.0",
+    "mavon-editor": "^2.7.4",
     "mockjs": "1.0.1-beta3",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",

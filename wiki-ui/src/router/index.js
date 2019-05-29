@@ -46,6 +46,10 @@ export const constantRouterMap = [
         path: 'layout',
         component: () => import('@/views/doc/layout/Layout')
       }
+      // {
+      //   path: 'edit',
+      //   component: () => import('@/views/doc/edit/Layout')
+      // }
     ]
   },
   {

@@ -2,10 +2,10 @@
   <div class="document-main">
     <el-container>
       <el-aside width="280px">
-        <document-tree/>
+        <document-tree :doc-status="docStatus"/>
       </el-aside>
-      <el-main>
-        <document/>
+      <el-main style="padding:0px 0 0 1px">
+        <document :doc-status="docStatus"/>
       </el-main>
     </el-container>
   </div>
@@ -17,6 +17,12 @@ export default {
   components: {
     Document,
     DocumentTree
+  },
+  props: {
+    docStatus: {
+      type: String,
+      required: true
+    }
   }
 }
 </script>
