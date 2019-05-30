@@ -4,8 +4,8 @@
       <el-header>
         <navbar :doc-status="docStatus" @editStatus="editStatus"/>
       </el-header>
-      <el-main style="padding:0px;">
-        <document-main :doc-status="docStatus" />
+      <el-main style="padding:0px;  min-height: calc(100vh - 60px)">
+        <document-main :doc-status="docStatus" :doc-id="docId" />
       </el-main>
     </el-container>
   </div>
@@ -19,9 +19,11 @@ export default {
     Navbar,
     DocumentMain
   },
+
   data() {
     return {
-      docStatus: 'R' // 状态为可读
+      docStatus: 'R', // 状态为可读
+      docId: this.$route.query.docId
     }
   },
   methods: {
@@ -32,3 +34,8 @@ export default {
 }
 
 </script>
+<style>
+.app-doc{
+  min-height: 100%
+}
+</style>

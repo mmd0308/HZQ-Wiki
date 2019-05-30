@@ -20,6 +20,12 @@ export default {
     Navbar,
     AppMain
   },
+  props: {
+    docId: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
 

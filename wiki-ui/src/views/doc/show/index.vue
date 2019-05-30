@@ -17,7 +17,7 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="文档名称">
+            <el-form-item label="文档名称1">
               <router-link to="/doc/layout">
                 <span>{{ props.row.name }}</span>
               </router-link>
@@ -29,7 +29,7 @@
         label="文档名称"
         prop="name">
         <template slot-scope="scope">
-          <router-link to="/doc/layout">
+          <router-link :to="{ path: '/doc/layout', query: { docId: scope.row.id }}">
             {{ scope.row.name }}
           </router-link>
         </template>
@@ -42,6 +42,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div
       style="text-align: center; padding-top: 15px;">
       <el-pagination
@@ -53,13 +54,13 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
     </div>
+
     <!-- 新增或者修改项目 -->
     <el-dialog :visible.sync="dialogDocVisible" :title="dialogTitle" width="40%">
       <el-form :model="docForm" label-width="100px" >
         <el-form-item label="文档名称" prop="name">
           <el-input v-model="docForm.name" style="width:80%"/>
         </el-form-item>
-
         <el-form-item label="所属空间" prop="spaceId">
           <el-select v-model="docForm.spaceId" placeholder="请选择" style="width:80%">
             <el-option
@@ -69,7 +70,6 @@
               :value="item.id"/>
           </el-select>
         </el-form-item>
-
         <el-form-item label="访问级别" prop="visitLevel">
           <el-select v-model="docForm.visitLevel" placeholder="请选择" style="width:80%">
             <el-option
@@ -79,7 +79,6 @@
               :value="item.value"/>
           </el-select>
         </el-form-item>
-
         <el-form-item label="描述" prop="remark">
           <el-input v-model="docForm.remark" type="textarea" style="width:80%"/>
         </el-form-item>
@@ -89,6 +88,7 @@
         <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 <script>
