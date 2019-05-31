@@ -13,11 +13,18 @@
       <hr>
     </div>
 
+    <div class="tree-box">
+      <div class="zTreeDemoBackground left">
+        <ul id="treeContent" class="ztree"/>
+      </div>
+    </div>
+    <!--
     <el-tree
       ref="catalogTree"
       :data="catalogData"
       :props="defaultProps"
       :filter-node-method="filterNode"
+      :highlight-current="true"
       :expand-on-click-node="false"
       node-key="id"
       class="filter-tree"
@@ -46,6 +53,8 @@
         </div>
       </div>
     </el-tree>
+-->
+
     <!--
     <el-tree
       v-if="docStatus == 'E'"
@@ -93,9 +102,8 @@
 </template>
 
 <script>
-import { tree, catalogPage, addOrUpdate, deletedById } from '@/api/doc/catalog'
-import { mapGetters } from 'vuex'
-import { delay } from 'q'
+import { all, addOrUpdate, deletedById } from '@/api/doc/content'
+import $ from 'jquery'
 export default {
   props: {
     docStatus: {
@@ -109,10 +117,32 @@ export default {
   },
   data() {
     return {
+      setting: {
+        view: {
+          showLine: false,
+          showIcon: false,
+          selectedMulti: false,
+          dblClickExpand: false
+          // addDiyDom: addDiyDom
+        },
+        data: {
+          key: {
+            name: 'title'
+          },
+          simpleData: {
+            enable: true,
+            idKey: 'id',
+            pIdKey: 'parentId'
+          }
+        },
+        callback: {
+          // beforeClick: beforeClick
+        }
+      },
+      zNodes: [],
       filterText: '',
       treeVisible: false,
       treeId: '',
-      catalogData: [],
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -132,13 +162,21 @@ export default {
       this.$refs.tree2.filter(val)
     }
   },
+  // mounted() {
+  //   $.fn.zTree.init($('#treeContent'), this.setting, this.zNodes)
+  //   const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
+  //   const curMenu = zTree_Menu.getNodes()[0].children[0]
+  //   zTree_Menu.selectNode(curMenu)
+  // },
   created() {
     this.tree()
   },
   methods: {
     tree() {
-      tree(this.docId).then(res => {
-        this.catalogData = res.data
+      all(this.docId).then(res => {
+        $.fn.zTree.init($('#treeContent'), this.setting, res.data)
+        // this.catalogData = res.data
+        // this.$refs.catalogTree.setCurrentKey(res.data[0].id)
       })
     },
     filterNode(value, data) {
@@ -152,9 +190,12 @@ export default {
       addOrUpdate(this.cataLogForm).then(() => {
         this.catalogDialogFormVisible = false
         this.tree()
+        this.$refs.catalogTree.setCurrentKey('6')
+        // 新增空白文档内容
       })
     },
-    treeClick(data) {
+    treeClick(data, node, event) {
+      debugger
     },
     setCatalog(command, data) {
       // 新增自己文档操作
@@ -206,5 +247,6 @@ export default {
     font-size: 14px;
     padding-right: 8px;
   }
+
 </style>
 

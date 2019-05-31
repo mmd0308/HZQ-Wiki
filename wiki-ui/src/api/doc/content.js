@@ -1,31 +1,31 @@
 import request from '@/utils/request'
 
-export function tree(docId) {
+export function all(docId) {
   return request({
-    url: '/api/catalog/tree/' + docId,
+    url: '/api/content/all/' + docId,
     method: 'get'
   })
 }
 
 export function catalogPage(query) {
   return request({
-    url: '/api/catalog/page',
+    url: '/api/content/page',
     method: 'get',
     params: query
   })
 }
 
-export function addOrUpdate(catalog) {
+export function addOrUpdate(content) {
   return request({
-    url: '/api/catalog/addOrUpdate',
+    url: '/api/content/addOrUpdate',
     method: 'post',
-    data: catalog
+    data: content
   })
 }
 
 export function deletedById(id) {
   return request({
-    url: '/api/catalog/deleted/' + id,
+    url: '/api/content/deleted/' + id,
     method: 'delete'
   })
 }

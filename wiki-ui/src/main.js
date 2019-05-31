@@ -19,6 +19,12 @@ import '@/permission' // permission control
 
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+
+import $ from './assets/jquery/jquery-vendor.js' // 导入jquery
+import '../plugins/ztree/js/jquery.ztree.core.min.js'
+import '../plugins/ztree/js/jquery.ztree.excheck.min.js'
+import '../plugins/ztree/css/zTreeStyle.css'
+
 // use
 Vue.use(mavonEditor)
 

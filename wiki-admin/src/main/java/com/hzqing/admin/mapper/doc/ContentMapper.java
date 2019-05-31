@@ -1,6 +1,6 @@
 package com.hzqing.admin.mapper.doc;
 
-import com.hzqing.admin.domain.doc.Catalog;
+import com.hzqing.admin.domain.doc.Content;
 
 import java.util.List;
 
@@ -8,11 +8,11 @@ import java.util.List;
  * @author hzqing
  * @date 2019-05-30 09:45
  */
-public interface CatalogMapper {
-    List<Catalog> selectList(Catalog catalog);
+public interface ContentMapper {
+    List<Content> selectList(Content content);
 
-    int update(Catalog catalog);
+    int update(Content content);
 
-    int insert(Catalog catalog);
+    int insert(Content content);
 
 }

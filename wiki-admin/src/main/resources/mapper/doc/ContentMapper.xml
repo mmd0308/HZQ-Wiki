@@ -2,14 +2,17 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hzqing.admin.mapper.doc.CatalogMapper">
+<mapper namespace="com.hzqing.admin.mapper.doc.ContentMapper">
 
-    <resultMap id="baseResult" type="catalog">
+    <resultMap id="baseResult" type="content">
         <id column="id" property="id"/>
         <result column="doc_id" property="docId" />
         <result column="parent_id" property="parentId" />
-        <result column="name" property="name"/>
+        <result column="title" property="title"/>
         <result column="sequence" property="sequence" />
+        <result column="version" property="version"/>
+        <result column="content" property="content" />
+        <result column="content_html" property="cotentHtml" />
         <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
@@ -17,16 +20,19 @@
     </resultMap>
 
     <sql id="tableName">
-        hw_doc_catalog
+        hw_doc_content
     </sql>
 
-    <select id="selectList" resultMap="baseResult" parameterType="catalog">
+    <select id="selectList" resultMap="baseResult" parameterType="content">
         select
             id,
             doc_id,
             parent_id,
-            name,
+            title,
             sequence,
+            version,
+            content,
+            content_html,
             create_time,
             update_by,
             update_time
@@ -40,14 +46,17 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="catalog" >
+    <insert id="insert" parameterType="content" >
         INSERT INTO
             <include refid="tableName" />
         (
             doc_id,
             parent_id,
-            name,
+            title,
             sequence,
+            version,
+            content,
+            content_html,
             create_by,
             create_time,
             update_by,
@@ -55,8 +64,11 @@
         ) VALUE (
             #{docId},
             #{parentId},
-            #{name},
+            #{title},
             #{sequence},
+            #{version},
+            #{content},
+            #{contentHtml}
             #{createBy},
             #{createTime},
             #{updateBy},
@@ -70,7 +82,7 @@
         WHERE id = #{id}
     </delete>
 
-    <update id="update" parameterType="catalog">
+    <update id="update" parameterType="content">
         UPDATE
             <include refid="tableName" />
         <set>

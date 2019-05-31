@@ -31,3 +31,8 @@
   line-height: 60px;
   background-color: rgb(84, 92, 100);
 }
+
+
+.el-tree-node.is-current>.el-tree-node__content{
+  background-color:#f0f7ff !important
+}

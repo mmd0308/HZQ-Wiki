@@ -1,11 +1,9 @@
 package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
-import com.hzqing.admin.common.utils.TreeUtil;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.doc.Catalog;
-import com.hzqing.admin.domain.doc.Doc;
-import com.hzqing.admin.service.doc.ICatalogService;
+import com.hzqing.admin.domain.doc.Content;
+import com.hzqing.admin.service.doc.IContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,37 +14,36 @@ import java.util.List;
  * @date 2019-05-30 09:44
  */
 @RestController
-@RequestMapping("/catalog")
-public class CatalogController extends BaseController {
+@RequestMapping("/content")
+public class ContentController extends BaseController {
     @Autowired
-    private ICatalogService catalogService;
+    private IContentService contentService;
 
 
     @GetMapping("/page")
-    public ResponseMessage page(int pageNum, int pageSize, Catalog catalog){
+    public ResponseMessage page(int pageNum, int pageSize, Content content){
         startPage(pageNum,pageSize);
-        List<Catalog> catalogs = catalogService.selectList(catalog);
-        return responseMessage(catalogs);
+        List<Content> contents = contentService.selectList(content);
+        return responseMessage(contents);
     }
 
-    @GetMapping("/tree/{docId}")
-    public ResponseMessage page(@PathVariable Integer docId){
-        Catalog catalog = new Catalog();
-        catalog.setDocId(docId);
-        List<Catalog> catalogs = catalogService.selectList(catalog);
-        List<Catalog> trees = TreeUtil.build(catalogs, -1);
-        return responseMessage(trees);
+    @GetMapping("/all/{docId}")
+    public ResponseMessage all(@PathVariable Integer docId){
+        Content content = new Content();
+        content.setDocId(docId);
+        List<Content> contents = contentService.selectList(content);
+        return responseMessage(contents);
     }
 
     @PostMapping("/addOrUpdate")
-    public ResponseMessage addOrUpdate(@RequestBody Catalog catalog){
+    public ResponseMessage addOrUpdate(@RequestBody Content content){
         int res = -1;
-        catalog = (Catalog) initAddOrUpdate(catalog);
-        if (catalog.getId() == null){ //新增
-            res = catalogService.insert(catalog);
+        content = (Content) initAddOrUpdate(content);
+        if (content.getId() == null){ //新增
+            res = contentService.insert(content);
         }else {
-            catalog.setCreateBy(null);
-            res = catalogService.update(catalog);
+            content.setCreateBy(null);
+            res = contentService.update(content);
         }
         return responseMessage(res);
     }
