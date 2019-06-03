@@ -24,7 +24,9 @@ public class ContentServiceImpl implements IContentService {
 
     @Override
     public int insert(Content content) {
-        return contentMapper.insert(content);
+        contentMapper.insert(content);
+        // 返回主键
+        return content.getId();
     }
 
     @Override

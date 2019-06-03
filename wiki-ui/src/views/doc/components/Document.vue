@@ -1,15 +1,16 @@
 <template>
   <div class="doc-edit hzq-wiki-height">
-    <mavon-editor v-if="docStatus == 'R'" v-model="value" :subfield="false" :toolbars-flag="false" class="hzq-wiki-height" default-open="preview"/>
+    <mavon-editor v-if="docStatus == 'R'" v-model="contentForm.content" :subfield="false" :toolbars-flag="false" class="hzq-wiki-height" default-open="preview"/>
     <mavon-editor
       v-else
-      v-model="value1"
+      v-model="contentForm.content"
       class="hzq-wiki-height"
       @save="saveContent"/>
   </div>
 </template>
 <script>
-import { page, addOrUpdate, deletedById } from '@/api/doc/content'
+import { addOrUpdate } from '@/api/doc/content'
+import bus from '@/assets/js/eventbus'
 export default {
   props: {
     docStatus: {
@@ -19,16 +20,21 @@ export default {
   },
   data() {
     return {
-      value: 'R',
-      value1: 'E',
       contentForm: this.init()
     }
+  },
+  mounted() {
+    const self = this
+    bus.$on('clickContentTree', function(treeNode) {
+      self.contentForm.id = treeNode.id
+      self.contentForm.content = treeNode.content
+      self.contentForm.contentHtml = treeNode.contentHtml
+    })
   },
   methods: {
     init() {
       return {
-        docId: '',
-        cataId: '',
+        id: '',
         content: '',
         contentHtml: ''
       }

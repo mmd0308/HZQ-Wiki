@@ -1,16 +1,17 @@
 <template>
   <div class="doc-tree" style=" min-height: calc(100vh - 60px)">
-    {{ docStatus }} --  {{ docId }}
+    <!-- {{ docStatus }} --  {{ docId }} -->
     <el-input
       v-if="docStatus == 'R'"
       v-model="filterText"
       placeholder="输入关键字进行过滤"/>
+
     <div v-else>
-      <div style="text-align:center;margin:5px 0px">
+      <div style="text-align:center;margin:10px 0px">
         文档标题
         <i class="el-icon-plus" @click="toAdd"/>
       </div>
-      <hr>
+      <hr style="margin:0px">
     </div>
 
     <div class="tree-box">
@@ -18,83 +19,23 @@
         <ul id="treeContent" class="ztree"/>
       </div>
     </div>
-    <!--
-    <el-tree
-      ref="catalogTree"
-      :data="catalogData"
-      :props="defaultProps"
-      :filter-node-method="filterNode"
-      :highlight-current="true"
-      :expand-on-click-node="false"
-      node-key="id"
-      class="filter-tree"
-      default-expand-all
-      style="min-height: calc(100vh - 100px)"
-      @node-click="treeClick">
-      <div slot-scope="{ node, data }" class="custom-tree-node">
-        <div>
-          <span>
-            {{ node.label }}
-          </span>
-          <el-dropdown
-            v-if="docStatus == 'E'"
-            trigger="click"
-            style="position: absolute;right: 5px;"
-            @command="setCatalog($event,data)">
-            <span class="el-dropdown-link">
-              <svg-icon icon-class="setting" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="add" >添加文档</el-dropdown-item>
-              <el-dropdown-item command="edit">编辑</el-dropdown-item>
-              <el-dropdown-item command="delete">删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-      </div>
-    </el-tree>
--->
 
-    <!--
-    <el-tree
-      v-if="docStatus == 'E'"
-      ref="editDocTree"
-      :data="catalogData"
-      :props="defaultProps"
-      :filter-node-method="filterNode"
-      node-key="id"
-      class="filter-tree"
-      default-expand-all
-      style="min-height:calc(100vh - 100px)"
-      @node-click="treeClick">
-      <div slot-scope="{ node }" class="custom-tree-node " >
-        <div>
-          <span>
-            {{ node.label }} --
-          </span>
-          <span style="position: absolute;right: 5px;">
-            <svg-icon icon-class="setting" />
-          </span>
-        </div>
-      </div>
-    </el-tree>
--->
-    <el-dialog :visible.sync="catalogDialogFormVisible" :title="cataLogTitle" width="35%">
-      <el-form :model="cataLogForm" label-width="80px">
+    <el-dialog :visible.sync="contentDialogFormVisible" :title="contentTitle" width="35%">
+      <el-form :model="contentForm" label-width="80px">
         <el-form-item label="文档名称">
-          <el-input v-model="cataLogForm.name" />
+          <el-input v-model="contentForm.title" />
         </el-form-item>
         <el-form-item label="文档排序">
           <el-input
             id="tentacles"
-            v-model="cataLogForm.sequence"
+            v-model="contentForm.sequence"
             type="number"
             min="10"
             max="100"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="catalogDialogFormVisible = false">取 消</el-button>
+        <el-button @click="contentDialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
@@ -104,6 +45,7 @@
 <script>
 import { all, addOrUpdate, deletedById } from '@/api/doc/content'
 import $ from 'jquery'
+import bus from '@/assets/js/eventbus'
 export default {
   props: {
     docStatus: {
@@ -117,13 +59,56 @@ export default {
   },
   data() {
     return {
-      setting: {
+      setting: this.initSetting(),
+      log: 'dark',
+      className: 'dark',
+      zNodes: [],
+      filterText: '',
+      treeVisible: false,
+      treeId: '',
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      contentDialogFormVisible: false,
+      contentTitle: '新增文档',
+      contentForm: {
+        title: '',
+        sequence: 0,
+        parentId: -1, // 表示顶级菜单
+        docId: this.docId
+      }
+    }
+  },
+  watch: {
+    docStatus: {
+      immediate: true,
+      handler: function(val, oldVal) {
+        // 如果状态发生变化,需要修改树的状态
+        this.tree()
+      }
+    },
+    filterText(val) {
+      this.$refs.tree2.filter(val)
+    }
+  },
+  created() {
+    this.tree()
+  },
+  methods: {
+    initSetting() {
+      var set = {
         view: {
-          showLine: false,
+          showLine: true,
           showIcon: false,
           selectedMulti: false,
-          dblClickExpand: false
-          // addDiyDom: addDiyDom
+          dblClickExpand: true
+        },
+        edit: {
+          enable: false, // 设置 zTree 是否处于编辑状态
+          editNameSelectAll: false, // 节点编辑名称 input 初次显示时,设置 txt 内容是否为全选状态。
+          showRemoveBtn: false,
+          showRenameBtn: false
         },
         data: {
           key: {
@@ -136,47 +121,30 @@ export default {
           }
         },
         callback: {
-          // beforeClick: beforeClick
+          // beforeDrag: this.beforeDrag(),
+          // beforeEditName: this.beforeEditName(),
+          // beforeRemove: this.beforeRemove(),
+          // beforeRename: this.beforeRename(),
+          // onRemove: this.onRemove(),
+          // onRename: this.onRename()
+          onClick: this.onClickMethod
         }
-      },
-      zNodes: [],
-      filterText: '',
-      treeVisible: false,
-      treeId: '',
-      defaultProps: {
-        children: 'children',
-        label: 'name'
-      },
-      catalogDialogFormVisible: false,
-      cataLogTitle: '新增文档',
-      cataLogForm: {
-        name: '',
-        sequence: 0,
-        parentId: -1, // 表示顶级菜单
-        docId: this.docId
       }
-    }
-  },
-  watch: {
-    filterText(val) {
-      this.$refs.tree2.filter(val)
-    }
-  },
-  // mounted() {
-  //   $.fn.zTree.init($('#treeContent'), this.setting, this.zNodes)
-  //   const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
-  //   const curMenu = zTree_Menu.getNodes()[0].children[0]
-  //   zTree_Menu.selectNode(curMenu)
-  // },
-  created() {
-    this.tree()
-  },
-  methods: {
-    tree() {
+      if (this.docStatus === 'E') {
+        set.edit.enable = true
+        set.edit.editNameSelectAll = true
+        set.edit.showRemoveBtn = this.showRemoveBtnMethod
+        set.edit.showRenameBtn = this.showRenameBtnMethod
+      }
+      return set
+    },
+    tree(conId) {
       all(this.docId).then(res => {
-        $.fn.zTree.init($('#treeContent'), this.setting, res.data)
-        // this.catalogData = res.data
-        // this.$refs.catalogTree.setCurrentKey(res.data[0].id)
+        $.fn.zTree.init($('#treeContent'), this.initSetting(), res.data)
+        if (conId) { // 根据id进行选中
+          const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
+          zTree_Menu.selectNode(zTree_Menu.getNodeByParam('id', conId))
+        }
       })
     },
     filterNode(value, data) {
@@ -184,14 +152,12 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     toAdd() {
-      this.catalogDialogFormVisible = true
+      this.contentDialogFormVisible = true
     },
     addOrUpdate() {
-      addOrUpdate(this.cataLogForm).then(() => {
-        this.catalogDialogFormVisible = false
-        this.tree()
-        this.$refs.catalogTree.setCurrentKey('6')
-        // 新增空白文档内容
+      addOrUpdate(this.contentForm).then(res => {
+        this.contentDialogFormVisible = false
+        this.tree(res.data)
       })
     },
     treeClick(data, node, event) {
@@ -200,7 +166,7 @@ export default {
     setCatalog(command, data) {
       // 新增自己文档操作
       if (command === 'add') {
-        this.cataLogForm.parentId = data.id // 设置当前新增文档的父id
+        this.contentForm.parentId = data.id // 设置当前新增文档的父id
         this.toAdd()
       }
 
@@ -234,11 +200,73 @@ export default {
           })
         }
       }
+    },
+    beforeDrag(treeId, treeNodes) {
+      return false
+    },
+    beforeEditName(treeId, treeNode) {
+      this.className = (this.className === 'dark' ? '' : 'dark')
+      this.showLog('[ ' + this.getTime() + ' beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
+      var zTree = $.fn.zTree.getZTreeObj('treeContent')
+      zTree.selectNode(treeNode)
+      setTimeout(function() {
+        if (confirm('进入节点 -- ' + treeNode.name + ' 的编辑状态吗？')) {
+          setTimeout(function() {
+            zTree.editName(treeNode)
+          }, 0)
+        }
+      }, 0)
+      return false
+    },
+    beforeRemove(treeId, treeNode) {
+      this.className = (this.className === 'dark' ? '' : 'dark')
+      this.showLog('[ ' + this.getTime() + ' beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
+      var zTree = $.fn.zTree.getZTreeObj('treeContent')
+      zTree.selectNode(treeNode)
+      return confirm('确认删除 节点 -- ' + treeNode.name + ' 吗？')
+    },
+    onRemove(e, treeId, treeNode) {
+      this.showLog('[ ' + this.getTime() + ' onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
+    },
+    beforeRename(treeId, treeNode, newName, isCancel) {
+      this.className = (this.className === 'dark' ? '' : 'dark')
+      this.showLog((isCancel ? "<span style='color:red'>" : '') + '[ ' + this.getTime() + ' beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name + (isCancel ? '</span>' : ''))
+      if (newName.length == 0) {
+        setTimeout(function() {
+          var zTree = $.fn.zTree.getZTreeObj('treeContent')
+          zTree.cancelEditName()
+          alert('节点名称不能为空.')
+        }, 0)
+        return false
+      }
+      return true
+    },
+    onRename(e, treeId, treeNode, isCancel) {
+      this.showLog((isCancel ? "<span style='color:red'>" : '') + '[ ' + this.getTime() + ' onRename ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name + (isCancel ? '</span>' : ''))
+    },
+    showLog(str) {
+      if (!this.log) this.log = $('#log')
+      this.log.append("<li class='" + this.className + "'>" + str + '</li>')
+      if (this.log.children('li').length > 8) {
+        this.log.get(0).removeChild(this.log.children('li')[0])
+      }
+    },
+    showRemoveBtnMethod(treeId, treeNode) {
+      if (!treeNode.children) { // 没有子节点显示删除按钮
+        return true
+      }
+      return false
+    },
+    showRenameBtnMethod(treeId, treeNode) {
+      return true
+    },
+    onClickMethod(event, treeId, treeNode) {
+      bus.$emit('clickContentTree', treeNode)
     }
   }
 }
 </script>
-<style>
+<style rel="stylesheet/scss" lang="scss">
 .custom-tree-node {
     flex: 1;
     display: flex;
@@ -247,6 +275,49 @@ export default {
     font-size: 14px;
     padding-right: 8px;
   }
+
+.doc-tree {
+  .ztree{
+    //margin-top: 10px;
+    //background: #f0f6e4;
+    padding: 0px;
+    width: 280px;
+    min-height: calc(100vh - 100px);
+    overflow-y: scroll;
+    overflow-x: auto;
+  }
+  .ztree li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    line-height: 30px;
+    text-align: left;
+    white-space: nowrap;
+    outline: 0;
+  }
+  .ztree li ul{
+    margin: 0px;
+    padding: 0 0 0 10px
+  }
+  .ztree li a{
+    width: 280px;
+    height: 30px;
+    padding-top: 0px;
+    margin: 0;
+    text-decoration: none;
+    vertical-align: top;
+    display: inline-block;
+  }
+  .ztree li a:hover {
+    background: #ff7d44;
+  }
+
+  .ztree li a.curSelectedNode{
+    background-color: #ff7d44;
+    border: 0;
+    height: 30px;
+  }
+}
 
 </style>
 

@@ -26,10 +26,12 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li a input.rename {height:14px; width:80px; padding:0; margin:0;
 	font-size:12px; border:1px #7EC4CC solid; *border:0px}
 .ztree li span {line-height:16px; margin-right:2px}
-.ztree li span.button {line-height:0; margin:0; width:16px; height:16px; display: inline-block; vertical-align:middle;
+.ztree li span.button {
+	line-height:0; margin:0; width:16px; height:16px; display: inline-block; vertical-align:middle;
 	border:0 none; cursor: pointer;outline:none;
 	background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
-	background-image:url("./img/zTreeStandard.png"); *background-image:url("./img/zTreeStandard.gif")}
+	background-image:url("./img/zTreeStandard.png"); *background-image:url("./img/zTreeStandard.gif")
+}
 
 .ztree li span.button.chk {width:13px; height:13px; margin:0 3px 0 0; cursor: auto}
 .ztree li span.button.chk.checkbox_false_full {background-position:0 0}

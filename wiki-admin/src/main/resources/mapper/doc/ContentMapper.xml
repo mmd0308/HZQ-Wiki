@@ -12,7 +12,7 @@
         <result column="sequence" property="sequence" />
         <result column="version" property="version"/>
         <result column="content" property="content" />
-        <result column="content_html" property="cotentHtml" />
+        <result column="content_html" property="contentHtml" />
         <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
@@ -46,10 +46,11 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="content" >
+    <insert id="insert" parameterType="content"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
         INSERT INTO
             <include refid="tableName" />
         (
+            id,
             doc_id,
             parent_id,
             title,
@@ -62,13 +63,14 @@
             update_by,
             update_time
         ) VALUE (
+            #{id},
             #{docId},
             #{parentId},
             #{title},
             #{sequence},
             #{version},
             #{content},
-            #{contentHtml}
+            #{contentHtml},
             #{createBy},
             #{createTime},
             #{updateBy},
@@ -86,20 +88,14 @@
         UPDATE
             <include refid="tableName" />
         <set>
-            <if test="name != null and name != ''">
-                name = #{name},
+            <if test="title != null and title != ''">
+                title = #{title},
             </if>
-            <if test="spaceId != null">
-                space_id = #{spaceId},
+            <if test="content != null and content != ''">
+                content = #{content},
             </if>
-            <if test="remark != null and remark != ''">
-                remark = #{remark},
-            </if>
-            <if test="visitLevel != null and visitLevel != ''">
-                visit_level = #{visitLevel},
-            </if>
-            <if test="img != null and img != ''">
-                img = #{img},
+            <if test="contentHtml != null and contentHtml != ''">
+                content_html = #{contentHtml},
             </if>
             <if test="createBy != null and createBy != ''">
                 create_by = #{createBy},

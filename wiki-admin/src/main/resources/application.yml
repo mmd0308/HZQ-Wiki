@@ -20,7 +20,7 @@ mybatis:
   # 配置mapper的扫描，找到所有的mapper.xml映射文件 在DruidConfig中配置
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 加载全局的配置文件
-  # configLocation: classpath:mapper/mybatis-config.xml
+  ##configLocation: classpath:mapper/mybatis-config.xml
 
 
 pagehelper:
