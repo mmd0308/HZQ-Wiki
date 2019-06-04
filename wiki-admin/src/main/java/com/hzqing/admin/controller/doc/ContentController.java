@@ -49,8 +49,14 @@ public class ContentController extends BaseController {
     }
 
     @DeleteMapping("deleted/{id}")
-    public ResponseMessage deleted(@PathVariable String id) {
-//        int res = docService.deletedByIds(ids);
-        return responseMessage(4);
+    public ResponseMessage deleted(@PathVariable Integer id) {
+        Content content = new Content();
+        content.setParentId(id);
+        List<Content> contents = contentService.selectList(content);
+        if (contents.size()>0) { // 表示有子节点，不能删除
+            return responseMessage(500,-1,"有子集文档，不能删除！");
+        }
+        int res = contentService.deletedById(id);
+        return responseMessage(res);
     }
 }

@@ -16,4 +16,5 @@ public interface IContentService {
 
     int update(Content content);
 
+    int deletedById(Integer id);
 }

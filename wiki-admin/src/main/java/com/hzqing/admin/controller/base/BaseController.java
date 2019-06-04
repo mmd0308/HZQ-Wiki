@@ -37,11 +37,15 @@ public class BaseController {
     }
 
     protected ResponseMessage responseMessage(List pageList) {
-        return pageList.size() >= 0 ? (new ResponseMessage()).successPage(pageList, (new PageInfo(pageList)).getTotal()) : (new ResponseMessage()).error();
+        return pageList.size() >= 0 ? ResponseMessage.successPage(pageList, (new PageInfo(pageList)).getTotal()) :ResponseMessage.error();
     }
 
     protected ResponseMessage responseMessage(Object data) {
-        return data == null ? (new ResponseMessage()).error() : (new ResponseMessage()).success(data);
+        return data == null ? ResponseMessage.error() :ResponseMessage.success(data);
     }
+    protected ResponseMessage responseMessage(int code,Object data,String message) {
+        return new ResponseMessage(code, data,message,0);
+    }
+
 
 }

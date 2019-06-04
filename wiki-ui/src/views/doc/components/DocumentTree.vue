@@ -9,7 +9,7 @@
     <div v-else>
       <div style="text-align:center;margin:10px 0px">
         文档标题
-        <i class="el-icon-plus" @click="toAdd"/>
+        <i class="el-icon-plus" @click="toAdd(null)"/>
       </div>
       <hr style="margin:0px">
     </div>
@@ -60,8 +60,6 @@ export default {
   data() {
     return {
       setting: this.initSetting(),
-      log: 'dark',
-      className: 'dark',
       zNodes: [],
       filterText: '',
       treeVisible: false,
@@ -72,12 +70,7 @@ export default {
       },
       contentDialogFormVisible: false,
       contentTitle: '新增文档',
-      contentForm: {
-        title: '',
-        sequence: 0,
-        parentId: -1, // 表示顶级菜单
-        docId: this.docId
-      }
+      contentForm: this.initConentForm()
     }
   },
   watch: {
@@ -89,20 +82,31 @@ export default {
       }
     },
     filterText(val) {
-      this.$refs.tree2.filter(val)
+      this.filterNode(val)
     }
   },
   created() {
     this.tree()
   },
   methods: {
+    initConentForm() {
+      return {
+        id: null,
+        title: '',
+        sequence: 0,
+        parentId: -1, // 表示顶级菜单
+        docId: this.docId
+      }
+    },
     initSetting() {
       var set = {
         view: {
           showLine: true,
           showIcon: false,
           selectedMulti: false,
-          dblClickExpand: true
+          dblClickExpand: true, // 双击展开
+          addHoverDom: null,
+          removeHoverDom: null
         },
         edit: {
           enable: false, // 设置 zTree 是否处于编辑状态
@@ -121,16 +125,17 @@ export default {
           }
         },
         callback: {
-          // beforeDrag: this.beforeDrag(),
-          // beforeEditName: this.beforeEditName(),
-          // beforeRemove: this.beforeRemove(),
-          // beforeRename: this.beforeRename(),
-          // onRemove: this.onRemove(),
-          // onRename: this.onRename()
+          beforeDrag: this.beforeDragMethod, // 取消拖拽
+          beforeEditName: this.beforeEditNameMethod,
+          beforeRemove: this.beforeRemoveMethod,
+          beforeRename: this.beforeRenameMethod,
           onClick: this.onClickMethod
         }
       }
       if (this.docStatus === 'E') {
+        set.view.addHoverDom = this.addHoverDomMethod
+        set.view.removeHoverDom = this.removeHoverDomMethod
+
         set.edit.enable = true
         set.edit.editNameSelectAll = true
         set.edit.showRemoveBtn = this.showRemoveBtnMethod
@@ -140,18 +145,26 @@ export default {
     },
     tree(conId) {
       all(this.docId).then(res => {
+        this.zNodes = res.data
         $.fn.zTree.init($('#treeContent'), this.initSetting(), res.data)
+        const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
+        var treeNode
         if (conId) { // 根据id进行选中
-          const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
-          zTree_Menu.selectNode(zTree_Menu.getNodeByParam('id', conId))
+          treeNode = zTree_Menu.getNodeByParam('id', conId)
+        } else {
+          // 首次加载数据,或者没有制定选择时候,默认选择第一个
+          treeNode = zTree_Menu.getNodes()[0]
         }
+        zTree_Menu.selectNode(treeNode)
+        this.selectContentTree(treeNode)
       })
     },
-    filterNode(value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
-    toAdd() {
+    toAdd(parentId) {
+      // 初始化form表单
+      this.contentForm = this.initConentForm()
+      if (parentId) {
+        this.contentForm.parentId = parentId
+      }
       this.contentDialogFormVisible = true
     },
     addOrUpdate() {
@@ -160,96 +173,49 @@ export default {
         this.tree(res.data)
       })
     },
-    treeClick(data, node, event) {
-      debugger
-    },
-    setCatalog(command, data) {
-      // 新增自己文档操作
-      if (command === 'add') {
-        this.contentForm.parentId = data.id // 设置当前新增文档的父id
-        this.toAdd()
-      }
-
-      // 修改操作
-      if (command === 'edit') {
-        alert('edit')
-      }
-
-      // 删除操作
-      if (command === 'delete') {
-        if (data.children.length === 0) {
-          this.$confirm('此操作将永久删除[' + data.name + ']文档?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            typr: 'warning'
-          }).then(() => {
-            deletedById(data.id).then(() => {
-              this.$notify({
-                title: '成功',
-                message: '文档[' + data.name + ']删除成功!',
-                type: 'success'
-              })
-              this.page()
-            })
-          })
-        } else {
-          this.$notify({
-            title: '错误',
-            message: '该文档包含子级文档,不允许删除!',
-            type: 'error'
-          })
-        }
-      }
-    },
-    beforeDrag(treeId, treeNodes) {
+    // 取消树拖拽
+    beforeDragMethod(treeId, treeNodes) {
       return false
     },
-    beforeEditName(treeId, treeNode) {
-      this.className = (this.className === 'dark' ? '' : 'dark')
-      this.showLog('[ ' + this.getTime() + ' beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
-      var zTree = $.fn.zTree.getZTreeObj('treeContent')
-      zTree.selectNode(treeNode)
-      setTimeout(function() {
-        if (confirm('进入节点 -- ' + treeNode.name + ' 的编辑状态吗？')) {
-          setTimeout(function() {
-            zTree.editName(treeNode)
-          }, 0)
-        }
-      }, 0)
-      return false
-    },
-    beforeRemove(treeId, treeNode) {
-      this.className = (this.className === 'dark' ? '' : 'dark')
-      this.showLog('[ ' + this.getTime() + ' beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
-      var zTree = $.fn.zTree.getZTreeObj('treeContent')
-      zTree.selectNode(treeNode)
-      return confirm('确认删除 节点 -- ' + treeNode.name + ' 吗？')
-    },
-    onRemove(e, treeId, treeNode) {
-      this.showLog('[ ' + this.getTime() + ' onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name)
-    },
-    beforeRename(treeId, treeNode, newName, isCancel) {
-      this.className = (this.className === 'dark' ? '' : 'dark')
-      this.showLog((isCancel ? "<span style='color:red'>" : '') + '[ ' + this.getTime() + ' beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name + (isCancel ? '</span>' : ''))
-      if (newName.length == 0) {
-        setTimeout(function() {
-          var zTree = $.fn.zTree.getZTreeObj('treeContent')
-          zTree.cancelEditName()
-          alert('节点名称不能为空.')
-        }, 0)
-        return false
-      }
+    beforeEditNameMethod(treeId, treeNode) {
       return true
     },
-    onRename(e, treeId, treeNode, isCancel) {
-      this.showLog((isCancel ? "<span style='color:red'>" : '') + '[ ' + this.getTime() + ' onRename ]&nbsp;&nbsp;&nbsp;&nbsp; ' + treeNode.name + (isCancel ? '</span>' : ''))
+    beforeRemoveMethod(treeId, treeNode) {
+      this.$confirm('此操作将永久删除[' + treeNode.title + ']文档?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        typr: 'warning'
+      }).then(() => {
+        deletedById(treeNode.id).then(() => {
+          this.tree() // 刷新树
+          this.$notify({
+            title: '成功',
+            message: '文档[' + treeNode.title + ']删除成功!',
+            type: 'success'
+          })
+        })
+      })
+      return false // 返回false不执行onRemove
     },
-    showLog(str) {
-      if (!this.log) this.log = $('#log')
-      this.log.append("<li class='" + this.className + "'>" + str + '</li>')
-      if (this.log.children('li').length > 8) {
-        this.log.get(0).removeChild(this.log.children('li')[0])
+    beforeRenameMethod(treeId, treeNode, newName, isCancel) {
+      if (newName === '') {
+        return false
       }
+      // 修改名称
+      this.contentForm.id = treeNode.id
+      this.contentForm.title = newName
+      addOrUpdate(this.contentForm).then(res => {
+        this.$notify({
+          title: '成功',
+          message: '标题修改成功!',
+          type: 'success'
+        })
+        return true
+      })
+    },
+    toEdit(treeNode) {
+      this.contentDialogFormVisible = true
+      this.contentForm = this.initConentForm()
     },
     showRemoveBtnMethod(treeId, treeNode) {
       if (!treeNode.children) { // 没有子节点显示删除按钮
@@ -261,7 +227,38 @@ export default {
       return true
     },
     onClickMethod(event, treeId, treeNode) {
+      this.selectContentTree(treeNode)
+    },
+    selectContentTree(treeNode) {
       bus.$emit('clickContentTree', treeNode)
+    },
+    addHoverDomMethod(treeId, treeNode) {
+      var sObj = $('#' + treeNode.tId + '_span')
+      if (treeNode.editNameFlag || $('#addBtn_' + treeNode.tId).length > 0) return
+      var addStr = "<span class='button add' id='addBtn_" + treeNode.tId +	"' title='add node' onfocus='this.blur();'></span>"
+      sObj.after(addStr)
+      var btn = $('#addBtn_' + treeNode.tId)
+      var that = this
+      if (btn) {
+        btn.bind('click', function() {
+          that.toAdd(treeNode.id)
+          // var zTree = $.fn.zTree.getZTreeObj('treeContent')
+          // zTree.addNodes(treeNode, { id: 100, pId: treeNode.id, title: '新增文档节点' })
+          return false
+        })
+      }
+    },
+    removeHoverDomMethod(treeId, treeNode) {
+      $('#addBtn_' + treeNode.tId).unbind().remove()
+    },
+    filterNode(val) {
+      var filterZNode = []
+      this.zNodes.forEach(item => {
+        if (item.title.indexOf(val) !== -1) {
+          filterZNode.push(item)
+        }
+      })
+      $.fn.zTree.init($('#treeContent'), this.initSetting(), filterZNode)
     }
   }
 }
@@ -316,6 +313,14 @@ export default {
     background-color: #ff7d44;
     border: 0;
     height: 30px;
+  }
+  .ztree li span.button {
+    vertical-align: middle;
+  }
+  .ztree li span.button.add{
+    margin-left: 2px;
+    margin-right: -1px;
+    background-position: -144px 0;
   }
 }
 

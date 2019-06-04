@@ -29,7 +29,7 @@
         label="文档名称"
         prop="name">
         <template slot-scope="scope">
-          <router-link :to="{ path: '/doc/layout', query: { docId: scope.row.id }}">
+          <router-link :to="{ path: '/doc/layout', query: { docId: scope.row.id, docName: scope.row.name }}">
             {{ scope.row.name }}
           </router-link>
         </template>

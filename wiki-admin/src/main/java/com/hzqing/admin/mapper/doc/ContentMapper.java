@@ -15,4 +15,5 @@ public interface ContentMapper {
 
     int insert(Content content);
 
+    int deletedById(Integer id);
 }

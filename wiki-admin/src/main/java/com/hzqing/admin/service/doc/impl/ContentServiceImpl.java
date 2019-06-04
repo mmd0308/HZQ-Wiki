@@ -34,4 +34,9 @@ public class ContentServiceImpl implements IContentService {
         return contentMapper.update(content);
     }
 
+    @Override
+    public int deletedById(Integer id) {
+        return contentMapper.deletedById(id);
+    }
+
 }

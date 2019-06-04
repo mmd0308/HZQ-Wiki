@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 style="margin:0px; position:absolute; left:20px;">
-      HZQ-Wiki 使用文档
+      {{ docName }}
     </h3>
     <div style="position:absolute;right:20px;">
       <el-button size="small" type="primary">
@@ -12,7 +12,7 @@
       <el-button v-if="docStatus == 'R'" size="small" type="success" @click="toEdit">
         编辑
       </el-button>
-      <el-button size="small" type="danger">删除</el-button>
+      <!-- <el-button size="small" type="danger">删除</el-button> -->
     </div>
   </div>
 </template>
@@ -20,6 +20,10 @@
 export default {
   props: {
     docStatus: {
+      type: String,
+      required: true
+    },
+    docName: {
       type: String,
       required: true
     }

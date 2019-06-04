@@ -28,26 +28,28 @@ public class ResponseMessage {
      */
     private String message;
 
-
-    public ResponseMessage responseMessage(int code, Object data, String message, long total) {
-        this.setData(data);
-        this.setCode(code);
-        this.setMessage(message);
-        this.setTotal(total);
-        return this;
+    public ResponseMessage() {
     }
 
-    public ResponseMessage successPage(Object data, long total) {
-        return this.responseMessage(200, data, "请求成功", total);
+    public ResponseMessage(int code, Object data, String message,long total) {
+        this.code = code;
+        this.data = data;
+        this.total = total;
+        this.message = message;
     }
 
 
-    public ResponseMessage error() {
-        return this.responseMessage(500, (Object)null, "服务器请求失败", -1L);
+    public static ResponseMessage successPage(Object data, long total) {
+        return new ResponseMessage(200, data, "请求成功", total);
     }
 
-    public ResponseMessage success(Object data) {
-        return this.responseMessage(200, data, "请求成功", -1L);
+
+    public static ResponseMessage error() {
+        return new ResponseMessage(500, (Object)null, "服务器请求失败", -1L);
+    }
+
+    public static ResponseMessage success(Object data) {
+        return new ResponseMessage(200, data, "请求成功", -1L);
     }
 
 }
