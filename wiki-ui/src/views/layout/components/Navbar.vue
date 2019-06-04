@@ -19,19 +19,14 @@
         <el-menu-item index="/space" >
           空间
         </el-menu-item>
-        <el-menu-item index="/set/index" >
+        <!-- 只有admin拥有超级管理员权限 -->
+        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/index" >
           系统管理
         </el-menu-item>
       </el-menu>
 
     </div>
     <div style="float:right;" >
-      <!-- <el-dropdown placement="bottom" trigger="click">
-        <avatar username="heng zhao qing" size="40" />
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>退出登陆</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
       <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -53,7 +48,9 @@
 </template>
 <script>
 import Avatar from 'vue-avatar'
+import { mapGetters } from 'vuex'
 export default {
+
   components: {
     Avatar
   },
@@ -61,6 +58,12 @@ export default {
     return {
       activeIndex: '/'
     }
+  },
+  computed: {
+    ...mapGetters([
+      'userId',
+      'username'
+    ])
   },
   methods: {
     handleSelect(key, keyPath) {
