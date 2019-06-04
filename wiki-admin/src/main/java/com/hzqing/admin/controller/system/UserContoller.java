@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,9 +32,17 @@ public class UserContoller extends BaseController {
         return responseMessage(users);
     }
 
+    /**
+     * 注册用户
+     * @param user
+     * @return
+     */
     @PostMapping("/register")
     public ResponseMessage register(@RequestBody User user){
-        user = (User) initAddOrUpdate(user);
+        user.setCreateBy(-1);
+        user.setUpdateBy(-1);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         int res = userService.insert(user);
         return responseMessage(res);
