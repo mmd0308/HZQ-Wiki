@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzqing.admin.mapper.space.UserSpaceMapper">
+
+
+    <resultMap id="baseResultDto" type="userspacedto">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="space_id" property="spaceId" />
+        <result column="privilege" property="privilege" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime" />
+        <result column="fullName" property="fullName" />
+    </resultMap>
+
+    <sql id="tableName">
+        hw_user_space
+    </sql>
+
+    <select id="selectList" resultMap="baseResultDto" parameterType="userSpace">
+        SELECT
+            s.id,
+            s.user_id,
+            s.space_id,
+            s.privilege,
+            s.create_by,
+            s.create_time,
+            s.expire_time,
+            u.name as fullName
+        FROM
+            hw_user_space  s
+        left join hw_user u on s.user_id = u.id
+        where
+            s.space_id = #{spaceId}
+    </select>
+
+
+</mapper>

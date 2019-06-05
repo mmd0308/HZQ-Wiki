@@ -65,6 +65,13 @@ export const constantRouterMap = [
     ]
   },
   {
+    // 空间设置
+    path: '/space',
+    component: Layout,
+    hidden: true,
+    children: [{ path: 'set', component: () => import('@/views/space/set/Layout') }]
+  },
+  {
     path: '/set',
     component: Layout,
     redirect: '/set/index',

@@ -64,6 +64,7 @@
     <!--     根据用户id，获取该用户的所有空间-->
     <select id="selectListByUserId" resultMap="baseResultDto" parameterType="spacedto">
         SELECT
+            distinct
             s.id,
             s.name,
             s.remark,

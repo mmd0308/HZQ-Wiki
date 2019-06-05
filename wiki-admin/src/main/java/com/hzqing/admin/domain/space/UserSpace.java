@@ -2,6 +2,7 @@ package com.hzqing.admin.domain.space;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -26,5 +27,10 @@ public class UserSpace {
     private int createBy;
 
     private LocalDateTime createTime;
+
+    /**
+     * 到期时间
+     */
+    private LocalDate expireTime;
 
 }
