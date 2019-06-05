@@ -16,9 +16,24 @@
       style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left" class="demo-table-expand">
             <el-form-item label="空间名称">
               <span>{{ props.row.name }}</span>
+            </el-form-item>
+            <el-form-item label="更新人">
+              <span>{{ props.row.updateName }}</span>
+            </el-form-item>
+            <el-form-item label="最新更新时间">
+              <span>{{ props.row.updateTime }}</span>
+            </el-form-item>
+            <el-form-item label="创建人">
+              <span>{{ props.row.createName }}</span>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <span>{{ props.row.createTime }}</span>
+            </el-form-item>
+            <el-form-item label="备注">
+              <span>{{ props.row.remark }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -33,6 +48,7 @@
           </router-link>
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="spaceVisitLevel === '0'"
         label="拥有权限"
@@ -48,6 +64,7 @@
       </el-table-column>
 
       <el-table-column
+        v-if="spaceVisitLevel === '0'"
         label="操作"
         width="50">
         <template slot-scope="scope">
@@ -55,6 +72,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div
       style="text-align: center; padding-top: 15px;">
       <el-pagination
@@ -212,5 +230,16 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>

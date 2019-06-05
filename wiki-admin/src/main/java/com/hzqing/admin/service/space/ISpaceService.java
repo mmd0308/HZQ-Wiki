@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2019-05-20 08:32
  */
 public interface ISpaceService {
-    List<Space> selectList(Space space);
+    List<SpaceDto> selectList(Space space);
 
     int insert(Space space);
 

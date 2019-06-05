@@ -6,7 +6,7 @@ import com.hzqing.admin.dto.space.SpaceDto;
 import java.util.List;
 
 public interface SpaceMapper {
-    List<Space> selectList(Space space);
+    List<SpaceDto> selectList(Space space);
 
     int update(Space space);
 

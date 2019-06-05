@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { Document, DocumentTree } from '../components'
+import { Document, DocumentTree } from './components'
 export default {
   name: 'Layout',
   components: {

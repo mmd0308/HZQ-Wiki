@@ -25,6 +25,8 @@
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
         <result column="privilege" property="privilege"/>
+        <result column="createName" property="createName" />
+        <result column="updateName" property="updateName" />
     </resultMap>
 
     <sql id="tableName">
@@ -32,30 +34,7 @@
     </sql>
 
     <select id="selectList" resultMap="baseResult" parameterType="space">
-        select
-            id,
-            name,
-            remark,
-            visit_level,
-            create_by,
-            create_time,
-            update_by,
-            update_time
-        from 
-            <include refid="tableName"/>
-        <where>
-            <if test="name != null and name != ''">
-                name like '%${name}%'
-            </if>
-            <if test="visitLevel != null">
-                and  visit_level = #{visitLevel}
-            </if>
-        </where>
-    </select>
-
-    <!--     根据用户id，获取该用户的所有空间-->
-    <select id="selectListByUserId" resultMap="baseResultDto" parameterType="spacedto">
-        select
+        SELECT
             s.id,
             s.name,
             s.remark,
@@ -64,9 +43,43 @@
             s.create_time,
             s.update_by,
             s.update_time,
-            u.privilege
-        from
-        <include refid="tableName"/> s
+            cu.name as 'createName',
+            uu.name as 'updateName'
+        FROM
+            hw_space s
+        left join
+            hw_user cu on cu.id = s.create_by
+        left join
+            hw_user uu on uu.id = s.update_by
+        <where>
+            <if test="name != null and name != ''">
+                s.name like '%${name}%'
+            </if>
+            <if test="visitLevel != null">
+                and s.visit_level = #{visitLevel}
+            </if>
+        </where>
+    </select>
+
+    <!--     根据用户id，获取该用户的所有空间-->
+    <select id="selectListByUserId" resultMap="baseResultDto" parameterType="spacedto">
+        SELECT
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            cu.name as 'createName',
+            uu.name as 'updateName'
+        FROM
+        hw_space s
+        left join
+            hw_user cu on cu.id = s.create_by
+        left join
+            hw_user uu on uu.id = s.update_by
         LEFT JOIN
             hw_user_space u ON u.space_id = s.id
         where

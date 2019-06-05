@@ -18,4 +18,6 @@ public interface DocMapper {
     int insert(Doc doc);
 
     List<DocDto> selectListByID(Doc doc);
+
+    List<DocDto> selectListByUserIdAndVL(Doc doc);
 }

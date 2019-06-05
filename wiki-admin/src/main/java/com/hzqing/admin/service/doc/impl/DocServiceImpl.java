@@ -37,4 +37,9 @@ public class DocServiceImpl implements IDocService {
     public List<DocDto> selectListByID(Doc doc) {
         return docMapper.selectListByID(doc);
     }
+
+    @Override
+    public List<DocDto> selectListByUserIdAndVL(Doc doc) {
+        return docMapper.selectListByUserIdAndVL(doc);
+    }
 }

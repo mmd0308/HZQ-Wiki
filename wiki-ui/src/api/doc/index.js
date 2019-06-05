@@ -8,6 +8,13 @@ export function page(query) {
   })
 }
 
+export function dashboardPage(query, userId) {
+  return request({
+    url: '/api/doc/dashboard/' + userId,
+    method: 'get',
+    params: query
+  })
+}
 export function showDocPage(query, userId) {
   return request({
     url: '/api/doc/page/' + userId,

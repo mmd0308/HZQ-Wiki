@@ -29,11 +29,36 @@
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
         <result column="privilege" property="privilege"/>
+        <result column="createName" property="createName" />
     </resultMap>
 
+    <!--    根据用户ID，访问级别获取文档-->
+    <select id="selectListByUserIdAndVL" resultMap="baseResultDto" parameterType="docdto">
+        select
+            s.id,
+            s.name,
+            s.space_id,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            u.privilege,
+            hu.name as 'createName'
+        from
+            hw_doc s
+        LEFT JOIN
+            hw_user_doc u ON u.doc_id = s.id
+        LEFT JOIN
+			hw_user hu on s.create_by = hu.id
+        where
+            s.create_by = #{createBy}
+            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
+            or s.visit_level = #{visitLevel}
+    </select>
 
-
-    <!--     根据用户id，空间id 获取该用户的所有文档-->
+    <!--  根据用户id，空间id 获取该用户的所有文档-->
     <select id="selectListByID" resultMap="baseResultDto" parameterType="docdto">
         select
             s.id,

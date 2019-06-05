@@ -47,7 +47,7 @@ public class SpaceController extends BaseController {
     @GetMapping("/page")
     public ResponseMessage page(int pageNum, int pageSize, Space space){
         startPage(pageNum,pageSize);
-        List<Space> spaces = spaceService.selectList(space);
+        List<SpaceDto> spaces = spaceService.selectList(space);
         return responseMessage(spaces);
     }
 

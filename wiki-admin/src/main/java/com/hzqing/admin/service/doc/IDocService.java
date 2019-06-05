@@ -19,4 +19,6 @@ public interface IDocService {
     int update(Doc doc);
 
     List<DocDto> selectListByID(Doc doc);
+
+    List<DocDto> selectListByUserIdAndVL(Doc doc);
 }

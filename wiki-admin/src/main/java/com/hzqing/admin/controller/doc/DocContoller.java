@@ -40,6 +40,22 @@ public class DocContoller extends BaseController {
         return responseMessage(docDtos);
     }
 
+    /**
+     *  文档首页展示
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @param doc
+     * @return
+     */
+    @GetMapping("/dashboard/{userId}")
+    public ResponseMessage dashboard(@PathVariable int userId, int pageNum, int pageSize, Doc doc){
+        startPage(pageNum,pageSize);
+        doc.setCreateBy(userId);
+        List<DocDto> docDtos = docService.selectListByUserIdAndVL(doc);
+        return responseMessage(docDtos);
+    }
+
     @GetMapping("/page")
     public ResponseMessage page(int pageNum, int pageSize, Doc doc){
         startPage(pageNum,pageSize);
