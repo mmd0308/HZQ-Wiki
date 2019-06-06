@@ -51,6 +51,17 @@ public class SpaceController extends BaseController {
         return responseMessage(spaces);
     }
 
+    /**
+     * 根据id获取对象
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    public ResponseMessage get(@PathVariable int id){
+        SpaceDto spaceDto = spaceService.get(id);
+        return responseMessage(spaceDto);
+    }
+
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody Space space){
         int res = -1;

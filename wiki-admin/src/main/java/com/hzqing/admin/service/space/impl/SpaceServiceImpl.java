@@ -50,4 +50,9 @@ public class SpaceServiceImpl implements ISpaceService {
     public List<SpaceDto> selectListByUserId(Space space) {
         return spaceMapper.selectListByUserId(space);
     }
+
+    @Override
+    public SpaceDto get(int id) {
+        return spaceMapper.get(id);
+    }
 }

@@ -8,6 +8,13 @@ export function page(query) {
   })
 }
 
+export function get(id) {
+  return request({
+    url: '/api/space/get/' + id,
+    method: 'get'
+  })
+}
+
 export function showPage(query, userId) {
   return request({
     url: '/api/space/page/' + userId,

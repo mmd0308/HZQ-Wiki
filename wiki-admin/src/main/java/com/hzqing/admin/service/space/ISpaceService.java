@@ -24,4 +24,11 @@ public interface ISpaceService {
      * @return
      */
     List<SpaceDto> selectListByUserId(Space space);
+
+    /**
+     * 根据id获取对象
+     * @param id
+     * @return
+     */
+    SpaceDto get(int id);
 }

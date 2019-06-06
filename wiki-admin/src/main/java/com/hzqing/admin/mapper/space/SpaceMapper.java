@@ -15,4 +15,6 @@ public interface SpaceMapper {
     int deletedById(String id);
 
     List<SpaceDto> selectListByUserId(Space space);
+
+    SpaceDto get(int id);
 }
