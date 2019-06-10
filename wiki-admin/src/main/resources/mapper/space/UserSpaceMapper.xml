@@ -37,5 +37,55 @@
             s.space_id = #{spaceId}
     </select>
 
+    <select id="selectUserListBySID" resultType="user" parameterType="int" >
+        SELECT
+            u.id,
+            u.name
+        FROM
+            hw_user u
+        where
+            u.id not in (select us.user_id from hw_user_space us where us.space_id =  #{spaceId})
+    </select>
+
+
+    <insert id="insert" parameterType="userSpace" >
+        INSERT INTO
+            <include refid="tableName"/>
+        (
+            user_id,
+            space_id,
+            privilege,
+            create_by,
+            create_time,
+            expire_time
+        ) VALUE (
+            #{userId},
+            #{spaceId},
+            #{privilege},
+            #{createBy},
+            #{createTime},
+            #{expireTime}
+        )
+    </insert>
+
+    <delete id="deletedById" parameterType="string">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="space">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="privilege != null ">
+                privilege = #{privilege},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 </mapper>

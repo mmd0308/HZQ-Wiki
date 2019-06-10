@@ -8,9 +8,16 @@ export function userSpacePage(query, spaceId) {
   })
 }
 
+export function spaceNonUserAll(spaceId) {
+  return request({
+    url: '/api/uspace/spaceNonUserAll/' + spaceId,
+    method: 'get'
+  })
+}
+
 export function addOrUpdate(params) {
   return request({
-    url: '/api/space/addOrUpdate',
+    url: '/api/uspace/addOrUpdate',
     method: 'post',
     data: params
   })
@@ -18,7 +25,7 @@ export function addOrUpdate(params) {
 
 export function deletedById(id) {
   return request({
-    url: '/api/space/deleted/' + id,
+    url: '/api/uspace/deleted/' + id,
     method: 'delete'
   })
 }

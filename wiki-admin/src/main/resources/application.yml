@@ -5,7 +5,7 @@ debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hzq_wiki
+    url: jdbc:mysql://localhost:3306/hzq_wiki?useSSL=false
     username: root
     password: root
     type: com.alibaba.druid.pool.DruidDataSource
