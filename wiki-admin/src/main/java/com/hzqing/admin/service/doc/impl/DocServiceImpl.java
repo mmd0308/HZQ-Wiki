@@ -42,4 +42,14 @@ public class DocServiceImpl implements IDocService {
     public List<DocDto> selectListByUserIdAndVL(Doc doc) {
         return docMapper.selectListByUserIdAndVL(doc);
     }
+
+    @Override
+    public DocDto get(int id) {
+        return docMapper.get(id);
+    }
+
+    @Override
+    public int deletedById(String id) {
+        return docMapper.deletedById(id);
+    }
 }

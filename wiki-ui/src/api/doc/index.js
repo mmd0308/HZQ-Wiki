@@ -8,6 +8,13 @@ export function page(query) {
   })
 }
 
+export function get(id) {
+  return request({
+    url: '/api/doc/get/' + id,
+    method: 'get'
+  })
+}
+
 export function dashboardPage(query, userId) {
   return request({
     url: '/api/doc/dashboard/' + userId,
@@ -28,5 +35,12 @@ export function addOrUpdate(doc) {
     url: '/api/doc/addOrUpdate',
     method: 'post',
     data: doc
+  })
+}
+
+export function deletedById(id) {
+  return request({
+    url: '/api/doc/deleted/' + id,
+    method: 'delete'
   })
 }

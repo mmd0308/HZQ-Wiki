@@ -34,11 +34,29 @@
           </router-link>
         </template>
       </el-table-column>
+
       <el-table-column
+        v-if="docVisitLevel === '0'"
+        label="拥有权限"
+        width="100"
+        prop="privilege">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.privilege == null">拥有者</el-tag>
+          <!--   1 浏览者 2 编辑者 3 管理员 -->
+          <el-tag v-if="scope.row.privilege == '1'" type="success">浏览者</el-tag>
+          <el-tag v-if="scope.row.privilege == '2'" type="warning">编辑者</el-tag>
+          <el-tag v-if="scope.row.privilege == '3'" type="danger">管理员</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="docVisitLevel === '0'"
         label="操作"
         width="50">
         <template slot-scope="scope">
-          <i class="el-icon-setting"/>
+          <router-link :to="{ path:'/doc/set', query: { docId: scope.row.id }}">
+            <i class="el-icon-setting"/>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>

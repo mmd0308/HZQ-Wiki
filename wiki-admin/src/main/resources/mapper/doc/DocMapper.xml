@@ -32,6 +32,30 @@
         <result column="createName" property="createName" />
     </resultMap>
 
+    <select id="get" resultMap="baseResultDto" parameterType="int">
+        SELECT
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            s.space_id,
+            s.img,
+            cu.name as 'createName',
+            uu.name as 'updateName'
+        FROM
+            hw_doc s
+        left join
+            hw_user cu on cu.id = s.create_by
+        left join
+            hw_user uu on uu.id = s.update_by
+        where
+            s.id = #{id}
+    </select>
+
     <!--    根据用户ID，访问级别获取文档-->
     <select id="selectListByUserIdAndVL" resultMap="baseResultDto" parameterType="docdto">
         select

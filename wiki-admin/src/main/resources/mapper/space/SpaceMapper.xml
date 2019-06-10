@@ -95,6 +95,7 @@
             s.create_time,
             s.update_by,
             s.update_time,
+            u.privilege,
             cu.name as 'createName',
             uu.name as 'updateName'
         FROM

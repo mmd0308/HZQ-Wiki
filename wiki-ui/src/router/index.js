@@ -55,13 +55,9 @@ export const constantRouterMap = [
   {
     path: '/doc',
     component: Layout,
-    name: 'Layout',
     hidden: true,
     children: [
-      {
-        path: 'set',
-        component: () => import('@/views/doc/set/index')
-      }
+      { path: 'set', component: () => import('@/views/doc/set/Layout') }
     ]
   },
   {
@@ -69,7 +65,9 @@ export const constantRouterMap = [
     path: '/space',
     component: Layout,
     hidden: true,
-    children: [{ path: 'set', component: () => import('@/views/space/set/Layout') }]
+    children: [
+      { path: 'set', component: () => import('@/views/space/set/Layout') }
+    ]
   },
   {
     path: '/set',

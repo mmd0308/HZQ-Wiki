@@ -42,3 +42,5 @@ hzq:
   druid:
     username: root
     password: root
+  fs:
+    path: '/Users/hzq/workspace/github/HZQ-Wiki/fs/'

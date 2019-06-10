@@ -1,17 +1,20 @@
 package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.utils.DateUtils;
+import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Doc;
-import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hzqing
@@ -20,6 +23,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/doc")
 public class DocContoller extends BaseController {
+
+    @Value("${hzq.fs.path}")
+    protected String filePath;
 
     @Autowired
     private IDocService docService;
@@ -38,6 +44,17 @@ public class DocContoller extends BaseController {
         doc.setCreateBy(userId);
         List<DocDto> docDtos = docService.selectListByID(doc);
         return responseMessage(docDtos);
+    }
+
+    /**
+     * 根据id获取对象
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    public ResponseMessage get(@PathVariable int id){
+        DocDto docDto = docService.get(id);
+        return responseMessage(docDto);
     }
 
     /**
@@ -76,9 +93,27 @@ public class DocContoller extends BaseController {
         return responseMessage(res);
     }
 
-    @DeleteMapping("deleted")
-    public ResponseMessage deleted(String ids) {
-//        int res = docService.deletedByIds(ids);
-        return responseMessage(4);
+    @DeleteMapping("deleted/{id}")
+    public ResponseMessage deleted(@PathVariable String id) {
+        int res = docService.deletedById(id);
+        return responseMessage(res);
+    }
+
+    /**
+     * 上传图片，返回图片路径
+     * @param file
+     * @return
+     */
+    @PostMapping("/uploadImages")
+    public ResponseMessage uploadImages(MultipartFile file, String docId){
+        String dataPaths =  DateUtils.getYearAndMonth() + "/";
+        String resPath = "doc/" + docId + "/images/" + dataPaths;
+        String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        try {
+            FileUtil.uploadFile(file.getBytes(),filePath + resPath,fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseMessage().success("/fs/"+resPath + fileName);
     }
 }

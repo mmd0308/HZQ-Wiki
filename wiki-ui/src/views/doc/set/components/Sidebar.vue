@@ -1,14 +1,11 @@
 <template>
   <div class="sidebar">
     <ul>
-      <li :class="{clickSiber:clickSidber === 'personal'}" @click="clickSiberItem('personal')">
-        <span>概要</span>
-      </li>
-      <li :class="{clickSiber:clickSidber === 'user'}" @click="clickSiberItem('user')">
-        <span>成员</span>
-      </li>
-      <li :class="{clickSiber:clickSidber === 'space'}" @click="clickSiberItem('space')">
+      <li :class="{clickSiber:clickSidber === 'base'}" @click="clickSiberItem('base')">
         <span>设置</span>
+      </li>
+      <li :class="{clickSiber:clickSidber === 'member'}" @click="clickSiberItem('member')">
+        <span>成员</span>
       </li>
     </ul>
   </div>
@@ -19,6 +16,10 @@ export default {
     createBar: {
       type: String,
       default: ''
+    },
+    docId: {
+      type: Number,
+      required: true
     }
   },
   data() {

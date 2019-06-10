@@ -1,29 +1,30 @@
 <template>
   <div class="set" style="background:blue;">
     <div class="left" style="background: pink">
-      <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
+      <sidebar :create-bar="checkRightTemp" :doc-id="docId" @getRightTemp="getRightTemp" />
     </div>
     <div class="right">
       <el-card>
-        <user-set v-if="checkRightTemp === 'personal'" />
-        <space v-if="checkRightTemp === 'space'" />
-        <document v-if="checkRightTemp === 'document'" />
+        <base-set v-if="checkRightTemp === 'base'" :doc-id="docId" />
+        <member v-if="checkRightTemp === 'member'" :doc-id="docId"/>
       </el-card>
     </div>
   </div>
 </template>
 <script>
 import Sidebar from './components/Sidebar'
-import UserSet from './components/UserSet'
-
+import BaseSet from './components/BaseSet'
+import Member from './components/Member'
 export default {
   components: {
     Sidebar,
-    UserSet
+    BaseSet,
+    Member
   },
   data() {
     return {
-      checkRightTemp: 'personal'
+      docId: this.$route.query.docId,
+      checkRightTemp: 'base'
     }
   },
   methods: {
