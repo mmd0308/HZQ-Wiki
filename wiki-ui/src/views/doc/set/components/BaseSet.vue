@@ -2,10 +2,15 @@
   <div class="basicSet">
     <el-form :ref="ruleForm" :model="docForm" :rules="rules" label-position="right" label-width="100px">
       <el-form-item label="文档封面">
+
         <img
+          v-if="docForm.img"
           :src="docForm.img"
           style="width: 230px;height: 190px;"
           @click="showDocImg">
+        <div v-else style="width: 230px;height: 190px;    border: 1px solid dimgrey; text-align: center;" @click="showDocImg">
+          请选择文档封面
+        </div>
       </el-form-item>
       <el-form-item label="空间名称" prop="name">
         <el-input v-model="docForm.name" style="width: 600px;"/>

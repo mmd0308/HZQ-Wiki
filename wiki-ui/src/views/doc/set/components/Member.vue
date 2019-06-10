@@ -1,17 +1,17 @@
 <template>
   <div class="space">
     <div class="header">
-      <el-form :ref="ruleForm" :inline="true" :rules="rules" :model="userSpaceForm" class="demo-form-inline">
+      <el-form :ref="ruleForm" :inline="true" :rules="rules" :model="userDocForm" class="demo-form-inline">
         <el-form-item prop="userId">
-          <el-select v-model="userSpaceForm.userId" filterable placeholder="请选择用户">
+          <el-select v-model="userDocForm.userId" filterable placeholder="请选择用户">
             <el-option
-              v-for="item in nonSpaceUserLists"
+              v-for="item in nonDocUserLists"
               :key="item.id"
               :label="item.name"
               :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-select v-model="userSpaceForm.privilege" style="width:160px">
+        <el-select v-model="userDocForm.privilege" style="width:160px">
           <el-option
             v-for="item in privilegeData"
             :key="item.value"
@@ -21,14 +21,14 @@
 
         <el-form-item prop="expireTime">
           <el-date-picker
-            v-model="userSpaceForm.expireTime"
+            v-model="userDocForm.expireTime"
             type="date"
             style="width:160px;"
             value-format="yyyy-MM-dd"
             placeholder="选择过期时间"/>
         </el-form-item>
 
-        <el-button style="float:right;margin-right:30px;" type="success" @click="addUserToSpace">加入空间</el-button>
+        <el-button style="float:right;margin-right:30px;" type="success" @click="addUserToDoc">加入</el-button>
       </el-form>
     </div>
     <el-table
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { userSpacePage, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/space/userSpace'
+import { userDocPage, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/doc/userDoc'
 export default {
   props: {
     docId: {
@@ -110,12 +110,12 @@ export default {
           label: '管理员'
         }
       ],
-      nonSpaceUserLists: [],
+      nonDocUserLists: [],
       state1: '',
       dialogTitle: '新增用户',
       dialogUserVisible: false,
       status: '',
-      userSpaceForm: this.init(),
+      userDocForm: this.init(),
       userLists: [],
       total: 0,
       listQuery: {
@@ -142,19 +142,19 @@ export default {
     init() {
       return {
         userId: '',
-        spaceId: this.spaceId,
+        docId: this.docId,
         privilege: 1,
         expireTime: ''
       }
     },
     page() {
-      userSpacePage(this.listQuery, this.spaceId).then(response => {
+      userDocPage(this.listQuery, this.docId).then(response => {
         this.userLists = response.data
         this.total = response.total
       })
     },
     spaceDelete(index, row) {
-      this.$confirm('此操作将[' + row.fullName + ']用户移除带空间?', '提示', {
+      this.$confirm('此操作将[' + row.fullName + ']用户移除该文档?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         typr: 'warning'
@@ -179,14 +179,14 @@ export default {
       this.page()
     },
     spaceNonUserAll() {
-      spaceNonUserAll(this.spaceId).then(res => {
-        this.nonSpaceUserLists = res.data
+      spaceNonUserAll(this.docId).then(res => {
+        this.nonDocUserLists = res.data
       })
     },
-    addUserToSpace() {
+    addUserToDoc() {
       this.$refs[this.ruleForm].validate((valid) => {
         if (valid) {
-          addOrUpdate(this.userSpaceForm).then(() => {
+          addOrUpdate(this.userDocForm).then(() => {
             this.$notify({
               title: '成功',
               message: '成员加入成功!',
@@ -194,7 +194,7 @@ export default {
             })
             this.spaceNonUserAll()
             this.page()
-            this.userSpaceForm = this.init()
+            this.userDocForm = this.init()
           })
         } else {
           return false

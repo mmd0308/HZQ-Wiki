@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzqing.admin.mapper.doc.UserDocMapper">
+
+
+    <resultMap id="baseResultDto" type="userdocdto">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="doc_id" property="docId" />
+        <result column="privilege" property="privilege" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime" />
+        <result column="fullName" property="fullName" />
+    </resultMap>
+
+    <sql id="tableName">
+        hw_user_doc
+    </sql>
+
+    <select id="selectList" resultMap="baseResultDto" parameterType="userdoc">
+        SELECT
+            s.id,
+            s.user_id,
+            s.doc_id,
+            s.privilege,
+            s.create_by,
+            s.create_time,
+            s.expire_time,
+            u.name as fullName
+        FROM
+            hw_user_doc  s
+        left join hw_user u on s.user_id = u.id
+        where
+            s.doc_id = #{docId}
+    </select>
+
+    <select id="selectUserListBySID" resultType="user" parameterType="int" >
+        SELECT
+            u.id,
+            u.name
+        FROM
+            hw_user u
+        where
+            u.id not in (select us.user_id from hw_user_doc us where us.doc_id =  #{docId})
+    </select>
+
+
+    <insert id="insert" parameterType="userSpace" >
+        INSERT INTO
+            <include refid="tableName"/>
+        (
+            user_id,
+            doc_id,
+            privilege,
+            create_by,
+            create_time,
+            expire_time
+        ) VALUE (
+            #{userId},
+            #{docId},
+            #{privilege},
+            #{createBy},
+            #{createTime},
+            #{expireTime}
+        )
+    </insert>
+
+    <delete id="deletedById" parameterType="string">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="doc">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="privilege != null ">
+                privilege = #{privilege},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

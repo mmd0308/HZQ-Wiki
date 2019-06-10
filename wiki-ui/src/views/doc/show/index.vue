@@ -42,7 +42,7 @@
         prop="privilege">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.privilege == null">拥有者</el-tag>
-          <!--   1 浏览者 2 编辑者 3 管理员 -->
+          <!--  0 拥有者 1 浏览者 2 编辑者 3 管理员 -->
           <el-tag v-if="scope.row.privilege == '1'" type="success">浏览者</el-tag>
           <el-tag v-if="scope.row.privilege == '2'" type="warning">编辑者</el-tag>
           <el-tag v-if="scope.row.privilege == '3'" type="danger">管理员</el-tag>

@@ -154,7 +154,7 @@ export default {
       })
     },
     spaceDelete(index, row) {
-      this.$confirm('此操作将[' + row.fullName + ']用户移除带空间?', '提示', {
+      this.$confirm('此操作将[' + row.fullName + ']用户移除该空间?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         typr: 'warning'

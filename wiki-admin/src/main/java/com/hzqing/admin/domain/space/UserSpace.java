@@ -20,7 +20,7 @@ public class UserSpace {
     private int spaceId;
 
     /**
-     * 空间成员操作权限   1 浏览者 2 编辑者 3 管理员
+     * 空间成员操作权限   0 拥有者 1 浏览者 2 编辑者 3 管理员
      */
     private int privilege;
 
