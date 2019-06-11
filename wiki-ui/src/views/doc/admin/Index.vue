@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column>
         <template slot-scope="scope">
-          <router-link to="/doc/set">
+          <router-link to="/set/doc">
             <h3>{{ scope.row.name }}</h3>
           </router-link>
         </template>

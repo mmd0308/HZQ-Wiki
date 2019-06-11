@@ -43,4 +43,9 @@ public class UserServiceImpl implements IUserService {
     public User selectByUserName(String username) {
         return userMapper.selectByUserName(username);
     }
+
+    @Override
+    public User get(int id) {
+        return userMapper.get(id);
+    }
 }

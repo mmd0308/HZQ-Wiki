@@ -19,4 +19,6 @@ public interface IUserService {
     int deletedById(String id);
 
     User selectByUserName(String username);
+
+    User get(int id);
 }

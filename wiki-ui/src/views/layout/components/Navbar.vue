@@ -20,7 +20,7 @@
           空间
         </el-menu-item>
         <!-- 只有admin拥有超级管理员权限 -->
-        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/index" >
+        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
           系统管理
         </el-menu-item>
       </el-menu>
@@ -40,7 +40,7 @@
           <template slot="title">
             <avatar style="float:left;margin-top:10px;" username="heng zhao qing" size="40" />
           </template>
-          <el-menu-item index="/" >个人中心</el-menu-item>
+          <el-menu-item index="/set/user" >个人中心</el-menu-item>
           <el-menu-item index="/login" @click="logout">退出登陆</el-menu-item>
         </el-submenu>
     </el-menu></div>

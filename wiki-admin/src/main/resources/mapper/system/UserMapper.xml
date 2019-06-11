@@ -12,6 +12,7 @@
         <result column="email" property="email"/>
         <result column="phone" property="phone"/>
         <result column="remark" property="remark" />
+        <result column="img" property="img" />
         <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
@@ -31,6 +32,7 @@
             email,
             phone,
             remark,
+            img,
             create_by,
             create_time,
             update_by,
@@ -44,6 +46,26 @@
         </where>
     </select>
 
+    <select id="get" resultMap="baseResult" parameterType="int">
+        select
+            id,
+            name,
+            username,
+            password,
+            email,
+            phone,
+            remark,
+            img,
+            create_by,
+            update_by,
+            update_time
+        from
+            <include refid="tableName"/>
+        where
+            id = #{id}
+    </select>
+
+
     <select id="selectByUserName" resultMap="baseResult" parameterType="string">
         select
             id,
@@ -53,6 +75,7 @@
             email,
             phone,
             remark,
+            img,
             create_by,
             update_by,
             update_time
@@ -72,6 +95,7 @@
             email,
             phone,
             remark,
+            img,
             create_by,
             create_time,
             update_by,
@@ -83,6 +107,7 @@
             #{email},
             #{phone},
             #{remark},
+            #{img},
             #{createBy},
             #{createTime},
             #{updateBy},
@@ -105,6 +130,9 @@
             </if>
             <if test="email != null and email != ''">
                 email = #{email},
+            </if>
+            <if test="img != null and img != ''">
+                img = #{img},
             </if>
             <if test="phone != null and phone != ''">
                 phone = #{phone},

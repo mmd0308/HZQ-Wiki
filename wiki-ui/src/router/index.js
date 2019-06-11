@@ -25,10 +25,7 @@ export const constantRouterMap = [
         path: 'test',
         component: () => import('@/views/dashboard/test')
       },
-      {
-        path: 'space',
-        component: () => import('@/views/space/show/index')
-      },
+      { path: 'space', component: () => import('@/views/space/show/index') },
       {
         path: 'doc',
         component: () => import('@/views/doc/show/index')
@@ -42,47 +39,20 @@ export const constantRouterMap = [
     name: 'Layout',
     hidden: true,
     children: [
-      {
-        path: 'layout',
-        component: () => import('@/views/doc/edit/Layout')
-      }
-      // {
-      //   path: 'edit',
-      //   component: () => import('@/views/doc/edit/Layout')
-      // }
-    ]
-  },
-  {
-    path: '/doc',
-    component: Layout,
-    hidden: true,
-    children: [
-      { path: 'set', component: () => import('@/views/doc/set/Layout') }
-    ]
-  },
-  {
-    // 空间设置
-    path: '/space',
-    component: Layout,
-    hidden: true,
-    children: [
-      { path: 'set', component: () => import('@/views/space/set/Layout') }
+      { path: 'layout', component: () => import('@/views/doc/edit/Layout') }
     ]
   },
   {
     path: '/set',
     component: Layout,
-    redirect: '/set/index',
-    name: 'Index',
     hidden: true,
     children: [
-      {
-        path: 'index',
-        component: () => import('@/views/setting/index')
-      }
+      { path: 'space', component: () => import('@/views/space/set/Layout') },
+      { path: 'doc', component: () => import('@/views/doc/set/Layout') },
+      { path: 'user', component: () => import('@/views/system/user/set/Layout') },
+      { path: 'system', component: () => import('@/views/setting/Layout') }
     ]
   },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 

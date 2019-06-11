@@ -68,7 +68,7 @@
         label="操作"
         width="50">
         <template slot-scope="scope">
-          <router-link :to="{ path:'/space/set', query: { spaceId: scope.row.id }}">
+          <router-link :to="{ path:'/set/space', query: { spaceId: scope.row.id }}">
             <i class="el-icon-setting"/>
           </router-link>
         </template>

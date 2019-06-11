@@ -5,31 +5,28 @@
     </div>
     <div class="right">
       <el-card>
-        <user-set v-if="checkRightTemp === 'personal'" />
+        <user v-if="checkRightTemp === 'user'" />
         <space v-if="checkRightTemp === 'space'" />
         <document v-if="checkRightTemp === 'document'" />
-        <user v-if="checkRightTemp === 'user'" />
       </el-card>
     </div>
   </div>
 </template>
 <script>
 import Sidebar from './components/Sidebar'
-import UserSet from './components/UserSet'
 import Space from '../space/admin/index'
-import Document from '../doc/index'
+import Document from '../doc/admin/Index'
 import User from '../system/user/index'
 export default {
   components: {
     Sidebar,
-    UserSet,
     Space,
     Document,
     User
   },
   data() {
     return {
-      checkRightTemp: 'personal'
+      checkRightTemp: 'user'
     }
   },
   methods: {

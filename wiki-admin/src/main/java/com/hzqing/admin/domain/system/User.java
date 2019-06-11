@@ -23,6 +23,12 @@ public class User extends Base {
     private String phone;
 
     /**
+     * 用户头像
+     */
+    private String img;
+
+
+    /**
      * 备注说明
      */
     private String remark;

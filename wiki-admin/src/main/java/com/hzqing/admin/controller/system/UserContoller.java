@@ -1,15 +1,23 @@
 package com.hzqing.admin.controller.system;
 
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.utils.DateUtils;
+import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.system.User;
+import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hzqing
@@ -18,6 +26,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserContoller extends BaseController {
+
+    @Value("${hzq.fs.path}")
+    protected String filePath;
+
     @Autowired
     private IUserService userService;
 
@@ -30,6 +42,17 @@ public class UserContoller extends BaseController {
         startPage(pageNum,pageSize);
         List<User> users = userService.selectList(user);
         return responseMessage(users);
+    }
+
+    /**
+     * 根据id获取对象
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    public ResponseMessage get(@PathVariable int id){
+        User user = userService.get(id);
+        return responseMessage(user);
     }
 
     /**
@@ -48,6 +71,19 @@ public class UserContoller extends BaseController {
         return responseMessage(res);
     }
 
+    /**
+     * 检查密码是否正确
+     * @param user
+     * @return
+     */
+    @PostMapping("/checkPass")
+    public ResponseMessage checkPass(@RequestBody User user){
+        User oUser = userService.get(user.getId());
+        boolean matches = passwordEncoder.matches(user.getPassword(),oUser.getPassword());
+        return responseMessage(matches);
+    }
+
+
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody User user){
         int res = -1;
@@ -64,5 +100,23 @@ public class UserContoller extends BaseController {
     public ResponseMessage deleted(@PathVariable String id) {
         int res = userService.deletedById(id);
         return responseMessage(res);
+    }
+    /**
+     * 上传图片，返回图片路径
+     * @param file
+     * @return
+     */
+    @PostMapping("/uploadImages")
+    public ResponseMessage uploadImages(MultipartFile file){
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String dataPaths =  DateUtils.getYearAndMonth() + "/";
+        String resPath = "user/" + userInfo.getId() + "/images/" + dataPaths;
+        String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        try {
+            FileUtil.uploadFile(file.getBytes(),filePath + resPath,fileName);
+        } catch (Exception e) {
+            System.out.println("UserContoller.uploadImages ------- 头像上传失败");
+        }
+        return new ResponseMessage().success("/fs/"+resPath + fileName);
     }
 }
