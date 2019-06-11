@@ -107,14 +107,13 @@
         LEFT JOIN
             hw_user_space u ON u.space_id = s.id
         where
-            s.create_by = #{createBy}
-            or find_in_set(s.id, (select space_id from hw_user_space where user_id = #{createBy}))
+            find_in_set(s.id, (select space_id from hw_user_space where user_id = #{createBy}))
     </select>
 
 
 
 
-    <insert id="insert" parameterType="space" >
+    <insert id="insert" parameterType="space"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
         INSERT INTO
             <include refid="tableName"/>
         (

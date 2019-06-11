@@ -14,6 +14,7 @@
         <el-select v-model="userSpaceForm.privilege" style="width:160px">
           <el-option
             v-for="item in privilegeData"
+            v-if="item.value != 0"
             :key="item.value"
             :label="item.label"
             :value="item.value"/>
@@ -97,6 +98,10 @@ export default {
   data() {
     return {
       privilegeData: [
+        {
+          value: 0,
+          label: '拥有者'
+        },
         {
           value: 1,
           label: '浏览者'

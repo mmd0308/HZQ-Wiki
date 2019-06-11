@@ -100,8 +100,7 @@
         LEFT JOIN
             hw_user_doc u ON u.doc_id = s.id
         where
-            s.create_by = #{createBy}
-            and s.space_id = #{spaceId}
+            s.space_id = #{spaceId}
             or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
     </select>
 
@@ -126,7 +125,7 @@
 
     </select>
 
-    <insert id="insert" parameterType="doc" >
+    <insert id="insert" parameterType="doc"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
         INSERT INTO hw_doc (
             name,
             space_id,

@@ -1,6 +1,7 @@
 package com.hzqing.admin.service.space.impl;
 
 import com.hzqing.admin.domain.space.Space;
+import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.mapper.space.SpaceMapper;
 import com.hzqing.admin.mapper.space.UserSpaceMapper;
@@ -8,6 +9,7 @@ import com.hzqing.admin.service.space.ISpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,7 +35,17 @@ public class SpaceServiceImpl implements ISpaceService {
 
     @Override
     public int insert(Space space) {
-        return spaceMapper.insert(space);
+       spaceMapper.insert(space);
+        // 新增空间的时候，插入拥有者
+        UserSpace userSpace = new UserSpace();
+        userSpace.setUserId(space.getCreateBy());
+        userSpace.setCreateTime(LocalDateTime.now());
+        userSpace.setSpaceId(space.getId());
+        userSpace.setPrivilege(0);
+        userSpace.setCreateBy(space.getCreateBy());
+        userSpace.setCreateTime(LocalDateTime.now());
+        userSpaceMapper.insert(userSpace);
+        return space.getId();
     }
 
     @Override
