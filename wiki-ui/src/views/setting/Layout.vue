@@ -8,12 +8,14 @@
         <user v-if="checkRightTemp === 'user'" />
         <space v-if="checkRightTemp === 'space'" />
         <document v-if="checkRightTemp === 'document'" />
+        <config-index v-if="checkRightTemp === 'config'" />
       </el-card>
     </div>
   </div>
 </template>
 <script>
 import Sidebar from './components/Sidebar'
+import ConfigIndex from './components/ConfigIndex'
 import Space from '../space/admin/index'
 import Document from '../doc/admin/Index'
 import User from '../system/user/index'
@@ -22,7 +24,8 @@ export default {
     Sidebar,
     Space,
     Document,
-    User
+    User,
+    ConfigIndex
   },
   data() {
     return {
