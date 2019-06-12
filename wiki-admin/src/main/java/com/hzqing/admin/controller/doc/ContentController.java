@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2019-05-30 09:44
  */
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/api/content")
 public class ContentController extends BaseController {
     @Autowired
     private IContentService contentService;

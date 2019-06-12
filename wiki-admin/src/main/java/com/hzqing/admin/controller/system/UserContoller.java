@@ -6,7 +6,6 @@ import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.domain.system.UserInfo;
-import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,7 @@ import java.util.UUID;
  * @date 2019-05-17 09:29
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserContoller extends BaseController {
 
     @Value("${hzq.fs.path}")

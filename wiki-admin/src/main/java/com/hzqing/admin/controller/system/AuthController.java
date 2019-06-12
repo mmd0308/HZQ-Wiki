@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author hzqing
  * @date 2019-05-17 10:39
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController extends BaseController {
 
     @Autowired
@@ -26,4 +29,12 @@ public class AuthController extends BaseController {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return responseMessage(userInfo);
     }
+
+    @GetMapping("/error")
+    public ResponseMessage error(){
+        Map map = new HashMap();
+        map.put("a","没有权限");
+        return responseMessage(map);
+    }
+
 }

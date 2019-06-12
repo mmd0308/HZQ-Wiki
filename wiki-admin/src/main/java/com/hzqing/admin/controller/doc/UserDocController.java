@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2019-05-20 08:26
  */
 @RestController
-@RequestMapping("/udoc")
+@RequestMapping("/api/udoc")
 public class UserDocController extends BaseController {
 
     @Autowired

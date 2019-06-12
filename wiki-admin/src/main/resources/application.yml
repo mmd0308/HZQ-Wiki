@@ -5,9 +5,9 @@ debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hzq_wiki?useSSL=false
-    username: root
-    password: root
+    url: jdbc:mysql://${MYSQL_HOST_URL:localhost}:${MYSQL_HOST_PORT:3306}/hzq_wiki?useSSL=false
+    username: ${MYSQL_HOST_USERNAME:root}
+    password: ${MYSQL_HOST_PASSWORD:root}
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     time-zone: GMT+8
@@ -43,4 +43,4 @@ hzq:
     username: root
     password: root
   fs:
-    path: '/Users/hzq/workspace/github/HZQ-Wiki/fs/'
+    path: ${WIKI_FS:'/Users/hzq/workspace/github/HZQ-Wiki/fs/'}

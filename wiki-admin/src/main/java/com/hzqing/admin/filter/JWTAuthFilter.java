@@ -47,12 +47,12 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        logger.info("JWTFiter" + request.getRequestURL());
         // 平台token
         String token = request.getHeader(ConstantSecurity.TOKEN_KEY);
         // token不存在，直接返回
         if (token == null || !token.startsWith(ConstantSecurity.TOKEN_PREFIX)) {
+            System.out.println("request = [" + request.getRequestURL() + "], response = [" + response + "], chain = [" + chain + "]");
+            System.out.println("JWTAuthFilter.doFilterInternal---- Token 不存在");
             chain.doFilter(request, response);
             return;
         }

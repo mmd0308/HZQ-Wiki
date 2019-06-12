@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
+
         <druid.version>1.1.16</druid.version>
         <lombok.version>1.18.2</lombok.version>
         <fastjson.version>1.2.56</fastjson.version>

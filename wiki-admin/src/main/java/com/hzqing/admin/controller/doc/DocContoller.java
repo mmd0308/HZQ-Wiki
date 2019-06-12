@@ -21,7 +21,7 @@ import java.util.UUID;
  * @date 2019-05-17 09:50
  */
 @RestController
-@RequestMapping("/doc")
+@RequestMapping("/api/doc")
 public class DocContoller extends BaseController {
 
     @Value("${hzq.fs.path}")

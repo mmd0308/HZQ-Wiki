@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2019-05-20 08:26
  */
 @RestController
-@RequestMapping("/uspace")
+@RequestMapping("/api/uspace")
 public class UserSpaceController extends BaseController {
 
     @Autowired

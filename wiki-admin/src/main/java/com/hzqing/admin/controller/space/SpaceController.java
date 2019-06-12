@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2019-05-20 08:26
  */
 @RestController
-@RequestMapping("/space")
+@RequestMapping("/api/space")
 public class SpaceController extends BaseController {
 
     @Autowired

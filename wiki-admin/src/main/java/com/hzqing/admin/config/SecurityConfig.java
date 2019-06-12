@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,6 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private IAuthService authService;
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/**");
+    }
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userInfoDetailsService).passwordEncoder(passwordEncoder());
@@ -56,20 +62,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/auth/login_error").permitAll()
                 .antMatchers("/fs/**").permitAll()
-                .antMatchers("/user/register").permitAll() //注册用户接口放行
+                .antMatchers("/api/user/register").permitAll() //注册用户接口放行
+                .antMatchers("/api/auth/error").permitAll()
                 .antMatchers("/druid/**").permitAll() // 放行所有druid资源
-                .antMatchers("/**").authenticated()
+                .antMatchers("/api/**").authenticated()
                 .and()
                 //前后端分离采用JWT 不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+              //  .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+               // .and()
                 .httpBasic()
                 .and()
                 .formLogin()
-                .loginPage("/auth/loginError")
-                .loginProcessingUrl("/login")
+                .loginPage("/api/auth/error")
+                .loginProcessingUrl("/api/login")
                 .successHandler(authenticationSuccess)
                 .failureHandler(authenticationFailure)
                 .and()
