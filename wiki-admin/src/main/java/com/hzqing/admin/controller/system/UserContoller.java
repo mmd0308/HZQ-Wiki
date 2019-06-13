@@ -88,6 +88,7 @@ public class UserContoller extends BaseController {
         int res = -1;
         user = (User) initAddOrUpdate(user);
         if ( user.getId() ==0){ //新增
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             res = userService.insert(user);
         }else {
             res = userService.update(user);

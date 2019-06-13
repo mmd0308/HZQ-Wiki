@@ -5,15 +5,20 @@ import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.domain.system.User;
+import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.dto.doc.UserDocDto;
 import com.hzqing.admin.dto.space.UserSpaceDto;
 import com.hzqing.admin.service.doc.IUserDocService;
 import com.hzqing.admin.service.space.IUserSpaceService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hzqing
@@ -26,6 +31,9 @@ public class UserDocController extends BaseController {
     @Autowired
     private IUserDocService userDocService;
 
+    @Autowired
+    private IUserSpaceService userSpaceService;
+
 
     @GetMapping("/page/{docId}")
     public ResponseMessage showPage(@PathVariable int docId, int pageNum, int pageSize, UserDoc userDoc){
@@ -33,6 +41,40 @@ public class UserDocController extends BaseController {
         userDoc.setDocId(docId);
         List<UserDocDto> spaces = userDocService.selectList(userDoc);
         return responseMessage(spaces);
+    }
+
+    /**
+     * 根据文档获取用户
+     * @param docId
+     * @param spaceId
+     * @return
+     */
+    @GetMapping("/all/{docId}/{spaceId}")
+    public ResponseMessage showPage(@PathVariable int docId, @PathVariable int spaceId){
+        UserSpace userSpace = new UserSpace();
+        userSpace.setSpaceId(spaceId);
+        List<UserSpaceDto> spaces = userSpaceService.selectList(userSpace);
+
+        UserDoc userDoc = new UserDoc();
+        userDoc.setDocId(docId);
+        List<UserDocDto> docs = userDocService.selectList(userDoc);
+
+        List<MemberDto> res = new ArrayList<>(spaces.size()+ docs.size());
+        spaces.forEach(item -> {
+            if (item.getPrivilege() != 0){
+                MemberDto memberDto = new MemberDto();
+                BeanUtils.copyProperties(item,memberDto);
+                res.add(memberDto);
+            }
+        });
+
+        docs.forEach(item ->{
+            MemberDto memberDto = new MemberDto();
+            BeanUtils.copyProperties(item,memberDto);
+            res.add(memberDto);
+        });
+
+        return responseMessage(res);
     }
 
     /**

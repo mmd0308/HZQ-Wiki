@@ -6,7 +6,7 @@
     <div class="right">
       <el-card>
         <base-set v-if="checkRightTemp === 'base'" :doc-id="docId" />
-        <member v-if="checkRightTemp === 'member'" :doc-id="docId"/>
+        <member v-if="checkRightTemp === 'member'" :doc-id="docId" :space-id="spaceId"/>
       </el-card>
     </div>
   </div>
@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       docId: this.$route.query.docId,
+      spaceId: this.$route.query.spaceId,
       checkRightTemp: 'base'
     }
   },

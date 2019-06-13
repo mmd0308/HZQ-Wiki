@@ -28,7 +28,6 @@
             value-format="yyyy-MM-dd"
             placeholder="选择过期时间"/>
         </el-form-item>
-
         <el-button style="float:right;margin-right:30px;" type="success" @click="addUserToSpace">加入空间</el-button>
       </el-form>
     </div>
@@ -63,7 +62,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="80">
-        <template slot-scope="scope">
+        <template v-if="scope.row.privilege != '0'" slot-scope="scope">
           <el-button
             size="mini"
             type="danger"
@@ -73,21 +72,11 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <div style="margin:10px 0 0 0;">
-      <el-pagination
-        :current-page="listQuery.pageNum"
-        :page-size="listQuery.pageSize"
-        :total="total"
-        layout="total,  prev, pager, next"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
-    </div>
   </div>
 </template>
 
 <script>
-import { userSpacePage, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/space/userSpace'
+import { userSpaceAll, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/space/userSpace'
 export default {
   props: {
     spaceId: {
@@ -98,22 +87,10 @@ export default {
   data() {
     return {
       privilegeData: [
-        {
-          value: 0,
-          label: '拥有者'
-        },
-        {
-          value: 1,
-          label: '浏览者'
-        },
-        {
-          value: 2,
-          label: '编辑者'
-        },
-        {
-          value: 3,
-          label: '管理员'
-        }
+        { value: 0, label: '拥有者' },
+        { value: 1, label: '浏览者' },
+        { value: 2, label: '编辑者' },
+        { value: 3, label: '管理员' }
       ],
       nonSpaceUserLists: [],
       state1: '',
@@ -122,10 +99,7 @@ export default {
       status: '',
       userSpaceForm: this.init(),
       userLists: [],
-      total: 0,
       listQuery: {
-        pageNum: 1,
-        pageSize: 10,
         name: ''
       },
       ruleForm: 'ruleForm',
@@ -153,9 +127,8 @@ export default {
       }
     },
     page() {
-      userSpacePage(this.listQuery, this.spaceId).then(response => {
+      userSpaceAll(this.listQuery, this.spaceId).then(response => {
         this.userLists = response.data
-        this.total = response.total
       })
     },
     spaceDelete(index, row) {
@@ -174,14 +147,6 @@ export default {
           this.spaceNonUserAll()
         })
       })
-    },
-    handleSizeChange(val) {
-      this.listQuery.pageSize = val
-      this.page()
-    },
-    handleCurrentChange(val) {
-      this.listQuery.pageNum = val
-      this.page()
     },
     spaceNonUserAll() {
       spaceNonUserAll(this.spaceId).then(res => {

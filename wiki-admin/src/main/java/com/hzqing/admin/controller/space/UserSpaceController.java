@@ -33,6 +33,19 @@ public class UserSpaceController extends BaseController {
     }
 
     /**
+     * 获取该空间的所有人员
+     * @param spaceId
+     * @param userSpace
+     * @return
+     */
+    @GetMapping("/all/{spaceId}")
+    public ResponseMessage all(@PathVariable int spaceId, UserSpace userSpace){
+        userSpace.setSpaceId(spaceId);
+        List<UserSpaceDto> spaces = userSpaceService.selectList(userSpace);
+        return responseMessage(spaces);
+    }
+
+    /**
      *  该空间不存在的用户
      * @param spaceId
      * @return

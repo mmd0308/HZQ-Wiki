@@ -68,17 +68,13 @@
             s.create_time,
             s.update_by,
             s.update_time,
-            u.privilege,
             hu.name as 'createName'
         from
             hw_doc s
         LEFT JOIN
-            hw_user_doc u ON u.doc_id = s.id
-        LEFT JOIN
 			hw_user hu on s.create_by = hu.id
         where
-            s.create_by = #{createBy}
-            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
+            find_in_set(s.id, (select group_concat(doc_id) from hw_user_doc where user_id = #{createBy}))
             or s.visit_level = #{visitLevel}
     </select>
 
@@ -101,7 +97,8 @@
             hw_user_doc u ON u.doc_id = s.id
         where
             s.space_id = #{spaceId}
-            or find_in_set(s.id, (select doc_id from hw_user_doc where user_id = #{createBy}))
+            and find_in_set(s.id, (select group_concat(doc_id) from hw_user_doc where user_id = #{createBy}))
+            and u.user_id = #{createBy}
     </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="doc">

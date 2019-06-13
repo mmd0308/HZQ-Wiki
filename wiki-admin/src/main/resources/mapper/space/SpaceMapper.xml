@@ -107,7 +107,8 @@
         LEFT JOIN
             hw_user_space u ON u.space_id = s.id
         where
-            find_in_set(s.id, (select space_id from hw_user_space where user_id = #{createBy}))
+            find_in_set(s.id, (select group_concat(space_id) from hw_user_space where user_id = #{createBy}))
+            and u.user_id = #{createBy}
     </select>
 
 

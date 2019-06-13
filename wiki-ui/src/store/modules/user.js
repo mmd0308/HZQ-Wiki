@@ -64,6 +64,7 @@ const user = {
           commit('SET_ID', data.id)
           resolve(response)
         }).catch(error => {
+          // reject('获取用户信息失败!' + error)
           reject('获取用户信息失败!' + error)
         })
       })

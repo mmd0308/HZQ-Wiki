@@ -8,6 +8,13 @@ export function userDocPage(query, id) {
   })
 }
 
+export function userDocAndSpaceAll(id, spaceId) {
+  return request({
+    url: '/api/udoc/all/' + id + '/' + spaceId,
+    method: 'get'
+  })
+}
+
 export function spaceNonUserAll(spaceId) {
   return request({
     url: '/api/udoc/spaceNonUserAll/' + spaceId,

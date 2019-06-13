@@ -8,6 +8,14 @@ export function userSpacePage(query, spaceId) {
   })
 }
 
+export function userSpaceAll(query, spaceId) {
+  return request({
+    url: '/api/uspace/all/' + spaceId,
+    method: 'get',
+    params: query
+  })
+}
+
 export function spaceNonUserAll(spaceId) {
   return request({
     url: '/api/uspace/spaceNonUserAll/' + spaceId,

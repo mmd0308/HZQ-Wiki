@@ -56,6 +56,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log('error 后台请求失败' + error) // for debug
+    alert('error 后台请求失败')
     // Message({
     //   message: error.message,
     //   type: 'error',

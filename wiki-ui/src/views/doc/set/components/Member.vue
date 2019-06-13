@@ -32,6 +32,7 @@
         <el-button style="float:right;margin-right:30px;" type="success" @click="addUserToDoc">加入</el-button>
       </el-form>
     </div>
+
     <el-table
       :data="userLists"
       style="width: 100%">
@@ -65,32 +66,28 @@
       <el-table-column label="操作" width="80">
         <template slot-scope="scope">
           <el-button
+            v-if="scope.row.privilege != '0' && scope.row.spaceId == null "
             size="mini"
             type="danger"
             @click="spaceDelete(scope.$index, scope.row)">
             <i class="el-icon-delete"/>
           </el-button>
+          <el-tag v-if="scope.row.spaceId != null" >组成员</el-tag>
         </template>
       </el-table-column>
     </el-table>
-
-    <div style="margin:10px 0 0 0;">
-      <el-pagination
-        :current-page="listQuery.pageNum"
-        :page-size="listQuery.pageSize"
-        :total="total"
-        layout="total,  prev, pager, next"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
-    </div>
   </div>
 </template>
 
 <script>
-import { userDocPage, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/doc/userDoc'
+import { userDocAndSpaceAll, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/doc/userDoc'
 export default {
   props: {
     docId: {
+      type: Number,
+      required: true
+    },
+    spaceId: {
       type: Number,
       required: true
     }
@@ -98,22 +95,10 @@ export default {
   data() {
     return {
       privilegeData: [
-        {
-          value: 0,
-          label: '拥有者'
-        },
-        {
-          value: 1,
-          label: '浏览者'
-        },
-        {
-          value: 2,
-          label: '编辑者'
-        },
-        {
-          value: 3,
-          label: '管理员'
-        }
+        { value: 0, label: '拥有者' },
+        { value: 1, label: '浏览者' },
+        { value: 2, label: '编辑者' },
+        { value: 3, label: '管理员' }
       ],
       nonDocUserLists: [],
       state1: '',
@@ -121,11 +106,10 @@ export default {
       dialogUserVisible: false,
       status: '',
       userDocForm: this.init(),
+      userSpaceLists: [],
       userLists: [],
       total: 0,
       listQuery: {
-        pageNum: 1,
-        pageSize: 10,
         name: ''
       },
       ruleForm: 'ruleForm',
@@ -153,9 +137,8 @@ export default {
       }
     },
     page() {
-      userDocPage(this.listQuery, this.docId).then(response => {
+      userDocAndSpaceAll(this.docId, this.spaceId).then(response => {
         this.userLists = response.data
-        this.total = response.total
       })
     },
     spaceDelete(index, row) {
@@ -174,14 +157,6 @@ export default {
           this.spaceNonUserAll()
         })
       })
-    },
-    handleSizeChange(val) {
-      this.listQuery.pageSize = val
-      this.page()
-    },
-    handleCurrentChange(val) {
-      this.listQuery.pageNum = val
-      this.page()
     },
     spaceNonUserAll() {
       spaceNonUserAll(this.docId).then(res => {

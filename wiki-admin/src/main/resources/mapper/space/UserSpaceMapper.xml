@@ -32,7 +32,7 @@
             u.name as fullName
         FROM
             hw_user_space  s
-        left join hw_user u on s.user_id = u.id
+        right join hw_user u on s.user_id = u.id
         where
             s.space_id = #{spaceId}
     </select>

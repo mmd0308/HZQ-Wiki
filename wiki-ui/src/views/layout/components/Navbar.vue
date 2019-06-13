@@ -13,7 +13,7 @@
         router="true"
         active-text-color="#ffd04b"
         @select="handleSelect">
-        <el-menu-item index="/">
+        <el-menu-item index="/dashboard">
           首页
         </el-menu-item>
         <el-menu-item index="/space" >
@@ -24,7 +24,6 @@
           系统管理
         </el-menu-item>
       </el-menu>
-
     </div>
     <div style="float:right;" >
       <el-menu
@@ -50,13 +49,12 @@
 import Avatar from 'vue-avatar'
 import { mapGetters } from 'vuex'
 export default {
-
   components: {
     Avatar
   },
   data() {
     return {
-      activeIndex: '/'
+      activeIndex: this.$router.currentRoute.path
     }
   },
   computed: {
@@ -67,7 +65,7 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+      this.activeIndex = key
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
@@ -81,7 +79,5 @@ export default {
 .navbar{
     width: 984px;
     margin: 0 auto;
-  .menu{
-  }
 }
 </style>

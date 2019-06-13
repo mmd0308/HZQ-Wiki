@@ -10,12 +10,14 @@
       :data="userLists"
       style="width: 100%">
       <el-table-column
+        width="110"
         label="用户名称">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
+        width="140"
         label="登陆账号">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.username }}</span>
@@ -28,21 +30,17 @@
         </template>
       </el-table-column>
       <el-table-column
+        width="120"
         label="电话">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="spaceToEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="spaceDelete(scope.$index, scope.row)">删除</el-button>
+      <el-table-column label="操作" width="130">
+        <!-- admin的账号允许删除和修改 -->
+        <template v-if="scope.row.id !== 1" slot-scope="scope">
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="spaceToEdit(scope.$index, scope.row)" />
+          <el-button type="danger" size="mini" icon="el-icon-delete" @click="spaceDelete(scope.$index, scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -68,7 +66,7 @@
         <el-form-item v-if="status == 'add'" label="密码" prop="password">
           <el-input v-model="userForm.password" type="password" style="width:80%"/>
         </el-form-item>
-        <el-form-item v-if="status == 'add'" label="密码" prop="checkPassword">
+        <el-form-item v-if="status == 'add'" label="确认密码" prop="checkPassword">
           <el-input v-model="userForm.checkPassword" type="password" style="width:80%"/>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -135,10 +133,10 @@ export default {
           { required: true, message: '请输入登陆账号', trigger: 'blur' }
         ],
         password: [
-          { validator: validatePassword, trigger: 'blur' }
+          { required: true, validator: validatePassword, trigger: 'blur' }
         ],
         checkPassword: [
-          { validator: validateCheckPassword, trigger: 'blur' }
+          { required: true, validator: validateCheckPassword, trigger: 'blur' }
         ],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
