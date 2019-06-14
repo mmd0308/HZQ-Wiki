@@ -32,6 +32,34 @@
         <result column="createName" property="createName" />
     </resultMap>
 
+    <select id="selectByIDandUserId" resultMap="baseResultDto" parameterType="doc">
+        SELECT
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            s.space_id,
+            s.img,
+            cu.name as 'createName',
+            uu.name as 'updateName',
+            ud.privilege
+        FROM
+            hw_doc s
+        left join
+            hw_user cu on cu.id = s.create_by
+        left join
+            hw_user uu on uu.id = s.update_by
+		left join
+			hw_user_doc ud on ud.doc_Id = s.id
+        where
+            s.id =  #{id}
+            and ud.user_id = #{createBy}
+    </select>
+
     <select id="get" resultMap="baseResultDto" parameterType="int">
         SELECT
             s.id,
@@ -68,7 +96,8 @@
             s.create_time,
             s.update_by,
             s.update_time,
-            hu.name as 'createName'
+            hu.name as 'createName',
+            (select privilege from hw_user_doc where user_id = #{createBy} and doc_id = s.id) as privilege
         from
             hw_doc s
         LEFT JOIN
@@ -96,9 +125,11 @@
         LEFT JOIN
             hw_user_doc u ON u.doc_id = s.id
         where
-            s.space_id = #{spaceId}
+             u.user_id = #{createBy}
             and find_in_set(s.id, (select group_concat(doc_id) from hw_user_doc where user_id = #{createBy}))
-            and u.user_id = #{createBy}
+            <if test="spaceId != null">
+                and  s.space_id = #{spaceId}
+            </if>
     </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="doc">

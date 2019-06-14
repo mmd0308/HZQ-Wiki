@@ -1,7 +1,7 @@
 <template>
   <div class="doc">
     <div v-for="(item,index) in docLists" :key="index" class="boxs">
-      <router-link :to="{ path: '/doc/layout', query: { docId: item.id, docName: item.name }}">
+      <router-link :to="{ path: '/doc/layout', query: { docId: item.id, docName: item.name, docPrivilege:item.privilege }}">
         <div class="icon">
           <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
           <img v-else :src="item.img" class="pic-404__child right">

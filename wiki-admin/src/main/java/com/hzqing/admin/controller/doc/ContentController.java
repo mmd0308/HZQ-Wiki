@@ -3,8 +3,13 @@ package com.hzqing.admin.controller.doc;
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Content;
+import com.hzqing.admin.domain.doc.Doc;
+import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.service.doc.IContentService;
+import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +24,8 @@ public class ContentController extends BaseController {
     @Autowired
     private IContentService contentService;
 
+    @Autowired
+    private IDocService docService;
 
     @GetMapping("/page")
     public ResponseMessage page(int pageNum, int pageSize, Content content){

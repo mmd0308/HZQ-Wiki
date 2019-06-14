@@ -1,7 +1,10 @@
 package com.hzqing.admin.dto.doc;
 
+import com.hzqing.admin.domain.doc.Content;
 import com.hzqing.admin.domain.doc.Doc;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author hzqing
@@ -18,4 +21,9 @@ public class DocDto extends Doc {
      * 作者或者创建名称
      */
     private String createName;
+
+    /**
+     * 文档内容
+     */
+    private List<Content> contents;
 }

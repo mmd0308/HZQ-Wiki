@@ -24,4 +24,6 @@ public interface DocMapper {
     DocDto get(int id);
 
     int deletedById(String id);
+
+    DocDto selectByIDandUserId(Doc doc);
 }

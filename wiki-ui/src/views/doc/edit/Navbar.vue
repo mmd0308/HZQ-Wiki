@@ -5,14 +5,14 @@
     </h3>
     <div style="position:absolute;right:20px;">
       <el-button size="small" type="primary">
-        <router-link to="/">
+        <router-link to="/dashboard">
           首页
         </router-link>
       </el-button>
-      <el-button v-if="docStatus == 'R'" size="small" type="success" @click="toEdit">
-        编辑
+      <!-- 可读模式或者浏览模式,允许编辑 -->
+      <el-button v-if="docStatus == 'R' && docPrivilege != '1'" size="small" type="success" @click="toEdit">
+        编辑 {{ docPrivilege }}
       </el-button>
-      <!-- <el-button size="small" type="danger">删除</el-button> -->
     </div>
   </div>
 </template>
@@ -26,12 +26,19 @@ export default {
     docName: {
       type: String,
       required: true
+    },
+    docPrivilege: {
+      type: Number,
+      required: true
     }
   },
   methods: {
     toEdit() {
       this.docStatus = 'E'
       this.$emit('editStatus', this.docStatus)
+    },
+    save() {
+      alert('k')
     }
   }
 }

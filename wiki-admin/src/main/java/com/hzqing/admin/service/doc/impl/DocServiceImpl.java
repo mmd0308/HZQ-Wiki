@@ -67,4 +67,9 @@ public class DocServiceImpl implements IDocService {
     public int deletedById(String id) {
         return docMapper.deletedById(id);
     }
+
+    @Override
+    public DocDto selectByIDandUserId(Doc doc) {
+        return docMapper.selectByIDandUserId(doc);
+    }
 }
