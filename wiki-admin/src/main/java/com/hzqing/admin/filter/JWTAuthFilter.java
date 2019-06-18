@@ -1,6 +1,9 @@
 package com.hzqing.admin.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzqing.admin.common.ConstantSecurity;
+import com.hzqing.admin.common.HttpStatus;
+import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.utils.JwtTokenUtil;
 import com.hzqing.admin.domain.system.UserInfo;
 import com.hzqing.admin.sercurity.service.UserInfoDetailsService;
@@ -9,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,9 +55,18 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(ConstantSecurity.TOKEN_KEY);
         // token不存在，直接返回
         if (token == null || !token.startsWith(ConstantSecurity.TOKEN_PREFIX)) {
-            System.out.println("request = [" + request.getRequestURL() + "], response = [" + response + "], chain = [" + chain + "]");
-            System.out.println("JWTAuthFilter.doFilterInternal---- Token 不存在");
-            chain.doFilter(request, response);
+            if (!request.getRequestURI().startsWith("/api")) { // 如果不是api开头的，直接放行
+                System.out.println("request = [" + request.getRequestURL() + "], response = [" + response + "], chain = [" + chain + "]");
+                chain.doFilter(request, response);
+                return;
+            }
+            // 自定义返回信息
+            ResponseMessage responseMessage = new ResponseMessage();
+            response.setContentType("text/json;charset=utf-8");
+            responseMessage.setMessage("登陆超时，请重新登陆！");
+            responseMessage.setCode(HttpStatus.FORBIDDEN);
+            String json = new ObjectMapper().writeValueAsString(responseMessage);
+            response.getWriter().write(json);
             return;
         }
         // 检验token是否正确

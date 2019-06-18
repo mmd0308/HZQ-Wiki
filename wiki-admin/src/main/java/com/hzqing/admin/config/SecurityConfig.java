@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/static/**","/druid/**","/fs/**","/api/user/register");
     }
 
     @Autowired
@@ -62,10 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/fs/**").permitAll()
-                .antMatchers("/api/user/register").permitAll() //注册用户接口放行
+                //.antMatchers("/api/user/register").permitAll() //注册用户接口放行
                 .antMatchers("/api/auth/error").permitAll()
-                .antMatchers("/druid/**").permitAll() // 放行所有druid资源
                 .antMatchers("/api/**").authenticated()
                 .and()
                 //前后端分离采用JWT 不需要session

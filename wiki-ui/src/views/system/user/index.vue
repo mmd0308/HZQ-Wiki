@@ -10,7 +10,7 @@
       :data="userLists"
       style="width: 100%">
       <el-table-column
-        width="110"
+        width="120"
         label="用户名称">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.name }}</span>
