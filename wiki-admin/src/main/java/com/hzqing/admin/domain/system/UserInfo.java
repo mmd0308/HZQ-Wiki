@@ -25,4 +25,9 @@ public class UserInfo {
 
     private String token;
 
+    /**
+     * 用户头像
+     */
+    private String img;
+
 }

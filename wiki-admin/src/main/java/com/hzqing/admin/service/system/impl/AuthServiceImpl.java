@@ -21,12 +21,8 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public UserInfo getUserInfo(String userName) {
         User user = userMapper.selectByUserName(userName);
-
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(user,userInfo);
-
-
-
         userInfo.setRoles(new String[]{"ROLE_1","ROLE_2"});
         userInfo.setResources(new String[]{"RES_1","RES_2"});
         return userInfo;

@@ -276,6 +276,13 @@ export default {
   }
 
 .doc-tree {
+  .tree-box{
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    top: 100px;
+    overflow: auto;
+  }
   .ztree{
     //margin-top: 10px;
     //background: #f0f6e4;

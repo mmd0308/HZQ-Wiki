@@ -62,6 +62,7 @@ const user = {
           commit('SET_NAME', data.name)
           commit('SET_USERNAME', data.username)
           commit('SET_ID', data.id)
+          commit('SET_AVATAR', data.img)
           resolve(response)
         }).catch(error => {
           // reject('获取用户信息失败!' + error)

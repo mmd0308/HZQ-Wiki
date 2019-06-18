@@ -17,16 +17,16 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-
 import $ from './assets/jquery/jquery-vendor.js' // 导入jquery
 import '../plugins/ztree/js/jquery.ztree.core.min.js'
 import '../plugins/ztree/js/jquery.ztree.excheck.min.js'
 import '../plugins/ztree/js/jquery.ztree.exedit.min.js'
 import '../plugins/ztree/css/zTreeStyle.css'
 
-// use
+Vue.use(ElementUI, { locale })
+
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
 /**
@@ -38,8 +38,6 @@ Vue.use(mavonEditor)
  * If you remove `../mock` it will automatically request easy-mock data.
  */
 import '../mock' // simulation data
-
-Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 

@@ -1,6 +1,8 @@
 package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.utils.DateUtils;
+import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Content;
 import com.hzqing.admin.domain.doc.Doc;
@@ -11,8 +13,10 @@ import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hzqing

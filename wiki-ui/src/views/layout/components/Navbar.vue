@@ -37,7 +37,7 @@
         @select="handleSelect">
         <el-submenu>
           <template slot="title">
-            <avatar style="float:left;margin-top:10px;" username="heng zhao qing" size="40" />
+            <avatar :username="username" :src="avatar" style="float:left;margin-top:10px;" size="40" />
           </template>
           <el-menu-item index="/set/user" >个人中心</el-menu-item>
           <el-menu-item index="/login" @click="logout">退出登陆</el-menu-item>
@@ -60,7 +60,8 @@ export default {
   computed: {
     ...mapGetters([
       'userId',
-      'username'
+      'username',
+      'avatar'
     ])
   },
   methods: {
