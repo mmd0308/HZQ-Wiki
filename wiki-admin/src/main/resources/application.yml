@@ -5,7 +5,7 @@ debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST_IP:localhost}:${MYSQL_HOST_PORT:3306}/${MYSQL_HOST_DB:hzq_wiki}?useSSL=false
+    url: jdbc:mysql://${MYSQL_HOST_IP:localhost}:${MYSQL_HOST_PORT:3306}/${MYSQL_HOST_DB:hzq_wiki}?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: ${MYSQL_HOST_USERNAME:root}
     password: ${MYSQL_HOST_PASSWORD:root}
     type: com.alibaba.druid.pool.DruidDataSource
