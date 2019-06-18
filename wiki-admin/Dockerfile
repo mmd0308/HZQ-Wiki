@@ -1,6 +1,6 @@
 FROM openjdk:11
 VOLUME /tmp
-VOLUME /fs
+VOLUME /tmp/fs
 ADD target/*.jar app.jar
 RUN sh -c 'touch /app.jar' \
 	&& echo $(date) > /image_built_at \

@@ -95,7 +95,9 @@ export default {
         title: '',
         sequence: 0,
         parentId: -1, // 表示顶级菜单
-        docId: this.docId
+        docId: this.docId,
+        contentHtml: ' ',
+        content: ' '
       }
     },
     initSetting() {

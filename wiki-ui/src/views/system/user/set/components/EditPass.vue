@@ -85,13 +85,14 @@ export default {
   methods: {
     init() {
       return {
-        id: '',
+        id: this.userId,
         password: '',
         oldPassword: '',
         checkPassword: ''
       }
     },
     update() {
+      this.userForm.id = this.userId
       this.$refs[this.ruleForm].validate((valid) => {
         if (valid) {
           addOrUpdate(this.userForm).then(() => {

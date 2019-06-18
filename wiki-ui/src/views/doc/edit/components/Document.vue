@@ -1,6 +1,12 @@
 <template>
   <div class="doc-edit hzq-wiki-height">
-    <mavon-editor v-if="docStatus == 'R'" v-model="contentForm.content" :subfield="false" :toolbars-flag="false" class="hzq-wiki-height" default-open="preview"/>
+    <mavon-editor
+      v-if="docStatus == 'R'"
+      v-model="contentForm.content"
+      :subfield="false"
+      :toolbars-flag="false"
+      class="hzq-wiki-height"
+      default-open="preview"/>
     <mavon-editor
       v-else
       v-model="contentForm.content"

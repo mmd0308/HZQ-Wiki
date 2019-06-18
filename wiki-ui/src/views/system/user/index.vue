@@ -105,7 +105,6 @@ export default {
       if (value === '') {
         callback(new Error('请再次输入密码'))
       } else if (value !== this.userForm.password) {
-        debugger
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
