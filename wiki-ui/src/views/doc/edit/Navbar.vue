@@ -36,9 +36,6 @@ export default {
     toEdit() {
       this.docStatus = 'E'
       this.$emit('editStatus', this.docStatus)
-    },
-    save() {
-      alert('k')
     }
   }
 }

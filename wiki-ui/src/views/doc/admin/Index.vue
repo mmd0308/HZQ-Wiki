@@ -156,7 +156,6 @@ export default {
         cancelButtonText: '取消',
         typr: 'warning'
       }).then(() => {
-        alert('k')
       })
     },
     handleEdit(index, row) {

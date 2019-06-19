@@ -41,10 +41,6 @@
             <svg-icon v-else icon-class="eye-open" />
           </span>
         </el-form-item>
-        <div class="tips">
-          <span style="margin-right:20px;">用户名: admin</span>
-          <span> 密码: hzqing.com</span>
-        </div>
         <el-button :loading="loading" type="primary" style="width:100%; border-radius: 25px;" @click.native.prevent="handleLogin">
           登 录
         </el-button>
@@ -231,12 +227,6 @@ export default {
       display: inline-block;
       height: 47px;
       width: 85%;
-    }
-    .tips {
-      font-size: 14px;
-      color: $light_gray;
-      margin: 20px 0px;
-      text-align: center;
     }
     .svg-container {
       padding: 6px 5px 6px 15px;
