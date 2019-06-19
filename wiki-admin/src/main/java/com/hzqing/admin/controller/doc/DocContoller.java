@@ -6,6 +6,7 @@ import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.dto.doc.DocDto;
+import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,19 @@ public class DocContoller extends BaseController {
         List<DocDto> docDtos = docService.selectListByID(doc);
         return responseMessage(docDtos);
     }
+
+    /**
+     * 查询该用户对当前文档的操作权限
+     * @return
+     */
+    @GetMapping("/docPrivilege")
+    public ResponseMessage docPrivilege(MemberDto memberDto){
+        Integer privilege = docService.selectPrivilegeById(memberDto);
+        if (privilege == null)
+            privilege = 1;
+        return responseMessage(privilege);
+    }
+
 
     /**
      * 根据id获取对象

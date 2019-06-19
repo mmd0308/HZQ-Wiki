@@ -215,4 +215,20 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <select id="selectPrivilegeById" resultType="int" parameterType="memberDto">
+        SELECT
+            privilege
+        FROM
+            hw_user_doc
+        WHERE
+            user_id = #{userId} AND doc_Id = #{docId}
+        UNION
+        SELECT
+            privilege
+        FROM
+            hw_user_space
+        WHERE
+            user_id = #{userId} AND space_id = #{spaceId}
+    </select>
 </mapper>

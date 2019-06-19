@@ -3,6 +3,7 @@ package com.hzqing.admin.service.doc;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.dto.doc.DocDto;
+import com.hzqing.admin.dto.doc.MemberDto;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface IDocService {
 
 
     DocDto selectByIDandUserId(Doc doc);
+
+    Integer selectPrivilegeById(MemberDto memberDto);
 }

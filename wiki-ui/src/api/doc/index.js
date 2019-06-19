@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function docPrivilege(query) {
+  return request({
+    url: '/api/doc/docPrivilege',
+    method: 'get',
+    params: query
+  })
+}
+
 export function page(query) {
   return request({
     url: '/api/doc/page',

@@ -13,24 +13,45 @@
 <script>
 import Navbar from './Navbar'
 import DocumentMain from './DocMain'
+import { docPrivilege } from '@/api/doc/index'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
   components: {
     Navbar,
     DocumentMain
   },
-
   data() {
     return {
       docStatus: 'R', // 状态为可读
       docName: this.$route.query.docName,
       docId: this.$route.query.docId,
-      docPrivilege: this.$route.query.docPrivilege
+      spaceId: this.$route.query.spaceId,
+      docPrivilege: '',
+      paramsPrivilege: {
+        userId: '',
+        spaceId: this.$route.query.spaceId,
+        docId: this.$route.query.docId
+      }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
+  },
+  created() {
+    this.getPrivilege()
   },
   methods: {
     editStatus(stat) {
       this.docStatus = stat
+    },
+    getPrivilege() {
+      this.paramsPrivilege.userId = this.userId
+      docPrivilege(this.paramsPrivilege).then(res => {
+        this.docPrivilege = res.data
+      })
     }
   }
 }

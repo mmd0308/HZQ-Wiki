@@ -3,6 +3,7 @@ package com.hzqing.admin.service.doc.impl;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.dto.doc.DocDto;
+import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
 import com.hzqing.admin.mapper.doc.UserDocMapper;
 import com.hzqing.admin.service.doc.IDocService;
@@ -71,5 +72,10 @@ public class DocServiceImpl implements IDocService {
     @Override
     public DocDto selectByIDandUserId(Doc doc) {
         return docMapper.selectByIDandUserId(doc);
+    }
+
+    @Override
+    public Integer selectPrivilegeById(MemberDto memberDto) {
+        return docMapper.selectPrivilegeById(memberDto);
     }
 }

@@ -18,9 +18,9 @@
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="文档名称">
-              <router-link to="/doc/layout">
+              <div @click="toLink(props.row)">
                 <span>{{ props.row.name }}</span>
-              </router-link>
+              </div>
             </el-form-item>
           </el-form>
         </template>
@@ -28,13 +28,12 @@
       <el-table-column
         label="文档名称"
         prop="name">
-        <template slot-scope="scope">
-          <router-link :to="{ path: '/doc/layout', query: { docId: scope.row.id, docName: scope.row.name,docPrivilege: scope.row.privilege }}">
+        <template slot-scope="scope" >
+          <div @click="toLink(scope.row)">
             {{ scope.row.name }}
-          </router-link>
+          </div>
         </template>
       </el-table-column>
-
       <el-table-column
         v-if="docVisitLevel === '0'"
         label="拥有权限"
@@ -48,7 +47,6 @@
           <el-tag v-if="scope.row.privilege == '3'" type="danger">管理员</el-tag>
         </template>
       </el-table-column>
-
       <el-table-column
         v-if="docVisitLevel === '0'"
         label="操作"
@@ -211,6 +209,16 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageNum = val
       this.page()
+    },
+    toLink(item) {
+      this.$router.push({
+        path: '/doc/layout',
+        query: {
+          docId: item.id,
+          docName: item.name,
+          spaceId: item.spaceId
+        }
+      })
     }
   }
 }

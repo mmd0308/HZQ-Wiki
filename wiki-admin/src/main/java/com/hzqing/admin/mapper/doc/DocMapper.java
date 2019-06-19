@@ -3,6 +3,7 @@ package com.hzqing.admin.mapper.doc;
 import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.dto.doc.DocDto;
+import com.hzqing.admin.dto.doc.MemberDto;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface DocMapper {
     int deletedById(String id);
 
     DocDto selectByIDandUserId(Doc doc);
+
+    Integer selectPrivilegeById(MemberDto memberDto);
 }
