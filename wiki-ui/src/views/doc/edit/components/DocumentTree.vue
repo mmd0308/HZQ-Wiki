@@ -1,6 +1,5 @@
 <template>
   <div class="doc-tree" style=" min-height: calc(100vh - 60px)">
-    <!-- {{ docStatus }} --  {{ docId }} -->
     <el-input
       v-if="docStatus == 'R'"
       v-model="filterText"
@@ -9,7 +8,7 @@
     <div v-else>
       <div style="text-align:center;margin:10px 0px">
         文档标题
-        <i class="el-icon-plus" @click="toAdd(null)"/>
+        <i class="el-icon-plus" @click="toAdd"/>
       </div>
       <hr style="margin:0px">
     </div>
@@ -18,6 +17,13 @@
       <div class="zTreeDemoBackground left">
         <ul id="treeContent" class="ztree"/>
       </div>
+    </div>
+    <div id="rMenu">
+      <ul>
+        <li id="m_add"> <el-button size="mini" @click="toAdd">添加文档</el-button></li>
+        <li id="m_edit"> <el-button style="width: 80px;" size="mini" @click="toEdit">编辑</el-button></li>
+        <li id="m_del"> <el-button style="width: 80px;" size="mini" @click="deleted">删除</el-button></li>
+      </ul>
     </div>
 
     <el-dialog :visible.sync="contentDialogFormVisible" :title="contentTitle" width="35%">
@@ -70,7 +76,8 @@ export default {
       },
       contentDialogFormVisible: false,
       contentTitle: '新增文档',
-      contentForm: this.initConentForm()
+      contentForm: this.initConentForm(),
+      checkContentId: null
     }
   },
   watch: {
@@ -106,15 +113,7 @@ export default {
           showLine: true,
           showIcon: false,
           selectedMulti: false,
-          dblClickExpand: true, // 双击展开
-          addHoverDom: null,
-          removeHoverDom: null
-        },
-        edit: {
-          enable: false, // 设置 zTree 是否处于编辑状态
-          editNameSelectAll: false, // 节点编辑名称 input 初次显示时,设置 txt 内容是否为全选状态。
-          showRemoveBtn: false,
-          showRenameBtn: false
+          dblClickExpand: true // 双击展开
         },
         data: {
           key: {
@@ -128,20 +127,9 @@ export default {
         },
         callback: {
           beforeDrag: this.beforeDragMethod, // 取消拖拽
-          beforeEditName: this.beforeEditNameMethod,
-          beforeRemove: this.beforeRemoveMethod,
-          beforeRename: this.beforeRenameMethod,
-          onClick: this.onClickMethod
+          onClick: this.onClickMethod,
+          onRightClick: this.onRightClickMethod
         }
-      }
-      if (this.docStatus === 'E') {
-        set.view.addHoverDom = this.addHoverDomMethod
-        set.view.removeHoverDom = this.removeHoverDomMethod
-
-        set.edit.enable = true
-        set.edit.editNameSelectAll = true
-        set.edit.showRemoveBtn = this.showRemoveBtnMethod
-        set.edit.showRenameBtn = this.showRenameBtnMethod
       }
       return set
     },
@@ -161,13 +149,14 @@ export default {
         this.selectContentTree(treeNode)
       })
     },
-    toAdd(parentId) {
+    toAdd() {
       // 初始化form表单
       this.contentForm = this.initConentForm()
-      if (parentId) {
-        this.contentForm.parentId = parentId
+      if (this.checkContentId) {
+        this.contentForm.parentId = this.checkContentId
       }
       this.contentDialogFormVisible = true
+      this.cancelRMenu()
     },
     addOrUpdate() {
       addOrUpdate(this.contentForm).then(res => {
@@ -179,54 +168,26 @@ export default {
     beforeDragMethod(treeId, treeNodes) {
       return false
     },
-    beforeEditNameMethod(treeId, treeNode) {
-      return true
-    },
-    beforeRemoveMethod(treeId, treeNode) {
-      this.$confirm('此操作将永久删除[' + treeNode.title + ']文档?', '提示', {
+    deleted() {
+      this.$confirm('此操作将永久删除[' + this.contentForm.title + ']文档?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         typr: 'warning'
       }).then(() => {
-        deletedById(treeNode.id).then(() => {
+        deletedById(this.checkContentId).then(() => {
           this.tree() // 刷新树
           this.$notify({
             title: '成功',
-            message: '文档[' + treeNode.title + ']删除成功!',
+            message: '文档[' + this.contentForm.title + ']删除成功!',
             type: 'success'
           })
         })
       })
-      return false // 返回false不执行onRemove
-    },
-    beforeRenameMethod(treeId, treeNode, newName, isCancel) {
-      if (newName === '') {
-        return false
-      }
-      // 修改名称
-      this.contentForm.id = treeNode.id
-      this.contentForm.title = newName
-      addOrUpdate(this.contentForm).then(res => {
-        this.$notify({
-          title: '成功',
-          message: '标题修改成功!',
-          type: 'success'
-        })
-        return true
-      })
+      return false
     },
     toEdit(treeNode) {
       this.contentDialogFormVisible = true
-      this.contentForm = this.initConentForm()
-    },
-    showRemoveBtnMethod(treeId, treeNode) {
-      if (!treeNode.children) { // 没有子节点显示删除按钮
-        return true
-      }
-      return false
-    },
-    showRenameBtnMethod(treeId, treeNode) {
-      return true
+      this.cancelRMenu()
     },
     onClickMethod(event, treeId, treeNode) {
       this.selectContentTree(treeNode)
@@ -234,24 +195,55 @@ export default {
     selectContentTree(treeNode) {
       bus.$emit('clickContentTree', treeNode)
     },
-    addHoverDomMethod(treeId, treeNode) {
-      var sObj = $('#' + treeNode.tId + '_span')
-      if (treeNode.editNameFlag || $('#addBtn_' + treeNode.tId).length > 0) return
-      var addStr = "<span class='button add' id='addBtn_" + treeNode.tId +	"' title='add node' onfocus='this.blur();'></span>"
-      sObj.after(addStr)
-      var btn = $('#addBtn_' + treeNode.tId)
-      var that = this
-      if (btn) {
-        btn.bind('click', function() {
-          that.toAdd(treeNode.id)
-          // var zTree = $.fn.zTree.getZTreeObj('treeContent')
-          // zTree.addNodes(treeNode, { id: 100, pId: treeNode.id, title: '新增文档节点' })
-          return false
-        })
+    onRightClickMethod(event, treeId, treeNode) {
+      if (this.docStatus !== 'E') return // 只有进入编辑模式,才能右击操作
+      // 避免编辑的时候,进入后台查询数据进行回现
+      this.contentForm.id = treeNode.id
+      this.contentForm.title = treeNode.title
+      this.contentForm.sequence = treeNode.sequence
+      this.contentForm.parentId = treeNode.parentId
+
+      if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
+        // 没有选中node时候,默认是添加最高级node节点
+        this.checkContentId = null
+        $.fn.zTree.getZTreeObj('treeContent').cancelSelectedNode() // 取消节点的选中状态。
+        this.showRMenu(treeNode, 'root', event.clientX, event.clientY)
+      } else if (treeNode && !treeNode.noR) {
+        // 选中节点节点添加node
+        this.checkContentId = treeNode.id
+        $.fn.zTree.getZTreeObj('treeContent').selectNode(treeNode)
+        this.showRMenu(treeNode, 'node', event.clientX, event.clientY)
       }
     },
-    removeHoverDomMethod(treeId, treeNode) {
-      $('#addBtn_' + treeNode.tId).unbind().remove()
+    showRMenu(treeNode, type, x, y) {
+      $('#rMenu ul').show()
+      if (type === 'root') {
+        $('#m_del').hide()
+        $('#m_edit').hide()
+      } else {
+        $('#m_edit').show()
+        $('#m_add').show()
+        console.log(treeNode.children)
+        if (!treeNode.children) {
+          $('#m_del').show()
+        } else {
+          $('#m_del').hide() // 有子元素,禁止删除
+        }
+      }
+      console.log(x + '-' + y)
+      y += document.body.scrollTop
+      x += document.body.scrollLeft
+      $('#rMenu').css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
+
+      $('body').bind('mousedown', this.onBodyMouseDown)
+    },
+    onBodyMouseDown(event) {
+      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
+        this.cancelRMenu()
+      }
+    },
+    cancelRMenu() {
+      $('#rMenu').css({ 'visibility': 'hidden' })
     },
     filterNode(val) {
       var filterZNode = []
@@ -330,6 +322,34 @@ export default {
     margin-left: 2px;
     margin-right: -1px;
     background-position: -144px 0;
+  }
+
+}
+#rMenu {
+  position:absolute;
+  visibility:hidden;
+  z-index: 9999;
+  top:0;
+  text-align: left;
+  padding: 2px;
+  }
+#rMenu ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+
+  li{
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+    list-style: none outside none;
+    background-color: #fff;
   }
 }
 

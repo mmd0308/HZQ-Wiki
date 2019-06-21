@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -107,7 +108,8 @@ public class UserContoller extends BaseController {
      * @return
      */
     @PostMapping("/uploadImages")
-    public ResponseMessage uploadImages(MultipartFile file){
+    public ResponseMessage uploadImages(MultipartFile file, HttpServletRequest request){
+        String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String dataPaths =  DateUtils.getYearAndMonth() + "/";
         String resPath = "user/" + userInfo.getId() + "/images/" + dataPaths;
@@ -117,6 +119,6 @@ public class UserContoller extends BaseController {
         } catch (Exception e) {
             System.out.println("UserContoller.uploadImages ------- 头像上传失败");
         }
-        return new ResponseMessage().success("/fs/"+resPath + fileName);
+        return new ResponseMessage().success(http + "/fs/"+resPath + fileName);
     }
 }

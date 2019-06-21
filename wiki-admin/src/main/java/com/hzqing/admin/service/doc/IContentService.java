@@ -17,4 +17,11 @@ public interface IContentService {
     int update(Content content);
 
     int deletedById(Integer id);
+
+    /**
+     * 根据Id获取
+     * @param id 文档内容id
+     * @return
+     */
+    Content get(int id);
 }

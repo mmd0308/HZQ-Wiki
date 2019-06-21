@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import { addOrUpdate } from '@/api/doc/content'
+import { addOrUpdate, get } from '@/api/doc/content'
 import bus from '@/assets/js/eventbus'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
@@ -39,8 +39,9 @@ export default {
     bus.$on('clickContentTree', function(treeNode) {
       self.contentForm.docId = treeNode.docId
       self.contentForm.id = treeNode.id
-      self.contentForm.content = treeNode.content
-      self.contentForm.contentHtml = treeNode.contentHtml
+      // self.contentForm.content = treeNode.content
+      // self.contentForm.contentHtml = treeNode.contentHtml
+      self.get(treeNode.id)
     })
   },
   methods: {
@@ -51,6 +52,11 @@ export default {
         content: '',
         contentHtml: ''
       }
+    },
+    get(id) {
+      get(id).then(res => {
+        this.contentForm = res.data
+      })
     },
     saveContent(value, render) {
       this.contentForm.content = value
@@ -74,7 +80,7 @@ export default {
       var that = this
       // 添加请求头
       axios.post('/api/doc/uploadImages', param, config).then(response => {
-        that.$refs.mavonEditor.$img2Url(pos, process.env.BASE_API + response.data.data)
+        that.$refs.mavonEditor.$img2Url(pos, response.data.data)
         that.$refs.mavonEditor.$refs.toolbar_left.$imgDelByFilename(pos)
       })
     }

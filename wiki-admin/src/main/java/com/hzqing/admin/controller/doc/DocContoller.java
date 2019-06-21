@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,7 +120,9 @@ public class DocContoller extends BaseController {
      * @return
      */
     @PostMapping("/uploadImages")
-    public ResponseMessage uploadImages(MultipartFile file, String docId){
+    public ResponseMessage uploadImages(MultipartFile file, String docId , HttpServletRequest request){
+        String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+
         String dataPaths =  DateUtils.getYearAndMonth() + "/";
         String resPath = "doc/" + docId + "/images/" + dataPaths;
         String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
@@ -128,6 +131,6 @@ public class DocContoller extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new ResponseMessage().success("/fs/"+resPath + fileName);
+        return new ResponseMessage().success(http + "/fs/"+resPath + fileName);
     }
 }

@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      uploadUrl: process.env.BASE_API + '/doc/uploadImages',
+      uploadUrl: '/api/doc/uploadImages',
       headers: {
         'Authorization': getToken()
       },
@@ -140,7 +140,7 @@ export default {
       this.docForm.img = imgDataUrl
     },
     cropUploadSuccess(jsonData, field) {
-      this.docForm.img = process.env.BASE_API + jsonData.data
+      this.docForm.img = jsonData.data
       this.showUpload = false
     },
     cropUploadFail(status, field) {

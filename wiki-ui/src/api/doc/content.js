@@ -15,6 +15,13 @@ export function catalogPage(query) {
   })
 }
 
+export function get(id) {
+  return request({
+    url: '/api/content/get/' + id,
+    method: 'get'
+  })
+}
+
 export function addOrUpdate(content) {
   return request({
     url: '/api/content/addOrUpdate',

@@ -53,7 +53,7 @@ export default {
       basicForm: this.init(),
       ruleForm: 'ruleForm',
       showUpload: false,
-      uploadUrl: process.env.BASE_API + '/user/uploadImages',
+      uploadUrl: '/api/user/uploadImages',
       headers: {
         'Authorization': getToken()
       },
@@ -118,7 +118,7 @@ export default {
       this.basicForm.img = imgDataUrl
     },
     cropUploadSuccess(jsonData, field) {
-      this.basicForm.img = process.env.BASE_API + jsonData.data
+      this.basicForm.img = jsonData.data
       this.showUpload = false
     },
     cropUploadFail(status, field) {

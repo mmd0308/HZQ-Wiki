@@ -39,4 +39,9 @@ public class ContentServiceImpl implements IContentService {
         return contentMapper.deletedById(id);
     }
 
+    @Override
+    public Content get(int id) {
+        return contentMapper.get(id);
+    }
+
 }

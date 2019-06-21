@@ -31,8 +31,6 @@
             title,
             sequence,
             version,
-            content,
-            content_html,
             create_time,
             update_by,
             update_time
@@ -46,6 +44,25 @@
                 parent_id = #{parentId}
             </if>
         </where>
+            order by sequence  asc
+    </select>
+
+    <select id="get" resultMap="baseResult" parameterType="int">
+        select
+            id,
+            doc_id,
+            parent_id,
+            title,
+            sequence,
+            version,
+            content,
+            content_html,
+            create_time,
+            update_by,
+            update_time
+        from
+            <include refid="tableName" />
+        where id = #{id}
     </select>
 
     <insert id="insert" parameterType="content"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
@@ -93,17 +110,14 @@
             <if test="title != null and title != ''">
                 title = #{title},
             </if>
+            <if test="sequence != null ">
+                sequence = #{sequence},
+            </if>
             <if test="content != null and content != ''">
                 content = #{content},
             </if>
             <if test="contentHtml != null and contentHtml != ''">
                 content_html = #{contentHtml},
-            </if>
-            <if test="createBy != null and createBy != ''">
-                create_by = #{createBy},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
             </if>
             <if test="updateBy != null and updateBy != ''">
                 update_by = #{updateBy},

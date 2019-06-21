@@ -38,6 +38,18 @@ public class ContentController extends BaseController {
         return responseMessage(contents);
     }
 
+    /**
+     * 根据Id获取信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    public ResponseMessage get(@PathVariable int id){
+        Content content = contentService.get(id);
+        return responseMessage(content);
+    }
+
+
     @GetMapping("/all/{docId}")
     public ResponseMessage all(@PathVariable Integer docId){
         Content content = new Content();
