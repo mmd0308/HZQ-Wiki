@@ -20,9 +20,9 @@
     </div>
     <div id="rMenu">
       <ul>
-        <li id="m_add"> <el-button size="mini" @click="toAdd">添加文档</el-button></li>
-        <li id="m_edit"> <el-button style="width: 80px;" size="mini" @click="toEdit">编辑</el-button></li>
-        <li id="m_del"> <el-button style="width: 80px;" size="mini" @click="deleted">删除</el-button></li>
+        <li id="m_add"> <el-button class="m_button" size="mini" @click="toAdd">添加文档</el-button></li>
+        <li id="m_edit"> <el-button class="m_button" size="mini" @click="toEdit">编辑</el-button></li>
+        <li id="m_del"> <el-button class="m_button" size="mini" @click="deleted">删除</el-button></li>
       </ul>
     </div>
 
@@ -159,6 +159,7 @@ export default {
     addOrUpdate() {
       addOrUpdate(this.contentForm).then(res => {
         this.contentDialogFormVisible = false
+        this.checkContentId = null
         this.tree(res.data)
       })
     },
@@ -195,11 +196,6 @@ export default {
     },
     onRightClickMethod(event, treeId, treeNode) {
       if (this.docStatus !== 'E') return // 只有进入编辑模式,才能右击操作
-      // 避免编辑的时候,进入后台查询数据进行回现
-      this.contentForm.id = treeNode.id
-      this.contentForm.title = treeNode.title
-      this.contentForm.sequence = treeNode.sequence
-      this.contentForm.parentId = treeNode.parentId
 
       if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
         // 没有选中node时候,默认是添加最高级node节点
@@ -207,6 +203,12 @@ export default {
         $.fn.zTree.getZTreeObj('treeContent').cancelSelectedNode() // 取消节点的选中状态。
         this.showRMenu(treeNode, 'root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
+        // 避免编辑的时候,进入后台查询数据进行回现
+        this.contentForm.id = treeNode.id
+        this.contentForm.title = treeNode.title
+        this.contentForm.sequence = treeNode.sequence
+        this.contentForm.parentId = treeNode.parentId
+
         // 选中节点节点添加node
         this.checkContentId = treeNode.id
         $.fn.zTree.getZTreeObj('treeContent').selectNode(treeNode)
@@ -221,7 +223,6 @@ export default {
       } else {
         $('#m_edit').show()
         $('#m_add').show()
-        console.log(treeNode.children)
         if (!treeNode.children) {
           $('#m_del').show()
         } else {
@@ -348,6 +349,10 @@ export default {
     cursor: pointer;
     list-style: none outside none;
     background-color: #fff;
+  }
+  .m_button{
+    width: 80px;
+    border-radius: 0px;
   }
 }
 

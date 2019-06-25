@@ -1,5 +1,5 @@
 <template>
-  <div class="hzq-wiki-main">
+  <div class="hzq-wiki-main-width">
     <div style="padding-bottom: 10px;">
       <el-radio-group v-model="spaceVisitLevel" @change="changeSpaceVisitLevel">
         <el-radio-button label="0">个人空间</el-radio-button>

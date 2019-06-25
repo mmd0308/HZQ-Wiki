@@ -88,30 +88,8 @@ export default {
       position: absolute;
       top: 15px;
     }
-    .desc{
-      position:relative;
-      top:202px;
-      font-size:13px;
-      margin:5px 15px;
-      overflow: hidden;
-      line-height: 20px;
-      max-height: 40px;
-    }
-    // 兼容火狐
-    .desc::after{
-      content: "...";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      padding-left: 50px;
-      background: -webkit-linear-gradient(left, transparent, #fff 55%);
-      background: -o-linear-gradient(right, transparent, #fff 55%);
-      background: -moz-linear-gradient(right, transparent, #fff 55%);
-      background: linear-gradient(to right, transparent, #fff 55%);
-    }
     .auth{
-      padding: 2px 0px;
-      line-height: 16px;
+      line-height: 20px;
       color:#666;
     }
   }

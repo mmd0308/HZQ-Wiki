@@ -1,6 +1,6 @@
 
 <template>
-  <div class="set hzq-wiki-main" style="background:blue;">
+  <div class="set hzq-wiki-main-width" style="background:blue;">
     <div class="left" style="background: pink">
       <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
     </div>

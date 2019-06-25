@@ -91,6 +91,7 @@
             s.name,
             s.space_id,
             s.remark,
+            s.img,
             s.visit_level,
             s.create_by,
             s.create_time,

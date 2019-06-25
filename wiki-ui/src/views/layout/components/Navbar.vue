@@ -77,8 +77,4 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.navbar{
-    width: 984px;
-    margin: 0 auto;
-}
 </style>

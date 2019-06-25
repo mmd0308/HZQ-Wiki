@@ -2,23 +2,26 @@
   <div class="app-wrapper">
     <el-container>
       <el-header>
-        <navbar/>
+        <navbar class="hzq-wiki-main-width"/>
       </el-header>
-      <el-main>
+      <el-main class="hzq-wiki-main-width">
         <app-main />
       </el-main>
+      <el-footer class="hzq-wiki-main-width">
+        <w-footer />
+      </el-footer>
     </el-container>
-
   </div>
 </template>
 
 <script>
-import { Navbar, AppMain } from './components'
+import { Navbar, AppMain, Footer } from './components'
 export default {
   name: 'Layout',
   components: {
     Navbar,
-    AppMain
+    AppMain,
+    WFooter: Footer
   },
   props: {
     docId: {
@@ -38,29 +41,10 @@ export default {
 @import "src/styles/mixin.scss";
 
 .el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
+  padding: 0px;
+}
+.el-main {
+  padding: 20px 0px 0px 0px;
 }
 
-// .app-wrapper {
-//   @include clearfix;
-//   position: relative;
-//   height: 100%;
-//   width: 100%;
-//   &.mobile.openSidebar {
-//     position: fixed;
-//     top: 0;
-//   }
-// }
-// .drawer-bg {
-//   background: #000;
-//   opacity: 0.3;
-//   width: 100%;
-//   top: 0;
-//   height: 100%;
-//   position: absolute;
-//   z-index: 999;
-// }
 </style>

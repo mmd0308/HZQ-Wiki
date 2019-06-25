@@ -16,9 +16,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard {
   &-container {
-    width: 984px;
     padding: 1px 00px 40px 00px;
-    margin: 0 auto;
   }
   &-text {
     font-size: 30px;

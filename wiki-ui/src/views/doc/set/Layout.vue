@@ -39,8 +39,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .set {
-    width: 984px;
-    margin: 0 auto;
     .left{
         width: 180px;
         float: left;
