@@ -6,13 +6,12 @@
       placeholder="输入关键字进行过滤"/>
 
     <div v-else>
-      <div style="text-align:center;margin:10px 0px">
+      <!-- <div style="text-align:center;margin:10px 0px">
         文档标题
         <i class="el-icon-plus" @click="toAdd"/>
-      </div>
-      <hr style="margin:0px">
+      </div> -->
+      <el-button style="width:100%;" @click="toAdd">添加文档 <i class="el-icon-plus" /></el-button>
     </div>
-
     <div class="tree-box">
       <div class="zTreeDemoBackground left">
         <ul id="treeContent" class="ztree"/>

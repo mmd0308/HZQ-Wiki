@@ -4,6 +4,7 @@
       v-if="docStatus == 'R'"
       v-model="contentForm.content"
       :subfield="false"
+      :scroll-style="true"
       :toolbars-flag="false"
       class="hzq-wiki-height"
       default-open="preview"/>
@@ -11,6 +12,7 @@
     <mavon-editor
       v-else
       ref="mavonEditor"
+      :scroll-style="true"
       v-model="contentForm.content"
       class="hzq-wiki-height"
       @imgAdd="imgAdd"
@@ -87,14 +89,14 @@ export default {
   }
 }
 </script>
-<style>
+<style rel="stylesheet/scss" lang="scss">
 .doc-edit{
-  position: absolute;
+  /* position: absolute;
   overflow: auto;
   top: 60px;
   bottom: 0px;
   right: 0px;
-  left: 280px;
+  left: 280px; */
 }
 </style>
 
