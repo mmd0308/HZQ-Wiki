@@ -1,7 +1,7 @@
 <template>
   <div class="space">
     <div class="header">
-      <el-input v-model="listQuery.name" style="width:300px" placeholder="请输入空间名称" class="input-with-select" @keyup.enter.native="page">
+      <el-input v-model="listQuery.name" style="width:300px" placeholder="请输入用户名称" class="input-with-select" @keyup.enter.native="page">
         <el-button slot="append" icon="el-icon-search"/>
       </el-input>
       <el-button style="float:right;margin-right:30px;" type="success" @click="spaceToAdd">新增</el-button>
@@ -9,15 +9,39 @@
     <el-table
       :data="userLists"
       style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline label-width="110px" class="demo-table-expand">
+            <el-form-item label="用户名称">
+              <span>{{ props.row.name }}</span>
+            </el-form-item>
+            <el-form-item label="用户登陆账号">
+              <span>{{ props.row.username }}</span>
+            </el-form-item>
+            <el-form-item label="用户邮箱">
+              <span>{{ props.row.email }}</span>
+            </el-form-item>
+            <el-form-item label="用户手机">
+              <span>{{ props.row.phone }}</span>
+            </el-form-item>
+            <el-form-item label="用户注册时间">
+              <span>{{ props.row.createTime }}</span>
+            </el-form-item>
+            <el-form-item label="备注">
+              <span>{{ props.row.remark }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column
-        width="120"
+        width="130"
         label="用户名称">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        width="140"
+        width="150"
         label="登陆账号">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.username }}</span>
@@ -27,13 +51,6 @@
         label="邮箱">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.email }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        width="120"
-        label="电话">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="130">
