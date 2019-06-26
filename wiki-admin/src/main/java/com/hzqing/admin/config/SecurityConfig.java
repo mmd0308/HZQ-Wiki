@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**","/druid/**","/fs/**","/api/user/register");
+        web.ignoring().antMatchers("/static/**","/druid/**","/fs/**","/api/user/register","/api/user/checkUsername");
     }
 
     @Autowired

@@ -83,7 +83,25 @@ public class UserContoller extends BaseController {
         return responseMessage(matches);
     }
 
+    /**
+     * 检查登陆账号是否可用
+     * @param username
+     * @return
+     */
+    @GetMapping("/checkUsername")
+    public ResponseMessage checkUsername(String username){
+        User user = userService.selectByUserName(username);
+        if (null == user){
+            return responseMessage(true);
+        }
+        return responseMessage(false);
+    }
 
+    /**
+     * 新增或者修改用户
+     * @param user
+     * @return
+     */
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody User user){
         int res = -1;

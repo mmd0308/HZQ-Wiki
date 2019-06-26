@@ -4,7 +4,7 @@
       <!-- <router-link :to="{ path: '/doc/layout', query: { docId: item.id, docName: item.name, docPrivilege:item.privilege }}"> -->
       <div class="icon">
         <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
-        <img v-else :src="item.img" class="pic-404__child right">
+        <img v-else :src="item.img" class="pic-404__child right" @error="imgError(item)">
       </div>
       <h2 style="position: relative;top:206px;font-size: 17px; margin:5px 15px;">
         {{ item.name }}
@@ -61,6 +61,9 @@ export default {
         this.docLists = response.data
         this.total = response.total
       })
+    },
+    imgError(item) {
+      item.img = null
     }
   }
 }

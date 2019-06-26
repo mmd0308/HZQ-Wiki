@@ -13,7 +13,13 @@ export function get(id) {
     method: 'get'
   })
 }
-
+export function checkUsername(username) {
+  return request({
+    url: '/api/user/checkUsername',
+    method: 'get',
+    params: { username }
+  })
+}
 export function checkPass(params) {
   return request({
     url: '/api/user/checkPass',

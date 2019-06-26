@@ -102,10 +102,23 @@
 </template>
 
 <script>
-import { registerUser } from '@/api/system/user/index'
+import { registerUser, checkUsername } from '@/api/system/user/index'
 export default {
   name: 'Login',
   data() {
+    var validateUsername = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入账号'))
+      } else {
+        checkUsername(value).then(res => {
+          if (!res.data) {
+            callback(new Error('该账号已经被使用'))
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
@@ -124,7 +137,7 @@ export default {
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       regRules: {
-        username: [{ required: true, trigger: 'blur', message: '请输入账号' }],
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },

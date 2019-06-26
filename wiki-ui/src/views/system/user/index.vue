@@ -105,9 +105,22 @@
 </template>
 
 <script>
-import { page, addOrUpdate, deletedById } from '@/api/system/user/index'
+import { page, addOrUpdate, deletedById, checkUsername } from '@/api/system/user/index'
 export default {
   data() {
+    var validateUsername = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入登陆账号'))
+      } else {
+        checkUsername(value).then(res => {
+          if (!res.data) {
+            callback(new Error('该账号已经被使用'))
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     var validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -146,7 +159,7 @@ export default {
           { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
         ],
         username: [
-          { required: true, message: '请输入登陆账号', trigger: 'blur' }
+          { required: true, validator: validateUsername, trigger: 'blur' }
         ],
         password: [
           { required: true, validator: validatePassword, trigger: 'blur' }
