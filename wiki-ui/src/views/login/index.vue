@@ -63,19 +63,12 @@
           <el-input v-model="regForm.username" type="text" auto-complete="on" placeholder="登陆账号" />
         </el-form-item>
 
-        <el-form-item prop="phone">
+        <!-- <el-form-item prop="phone">
           <span class="svg-container svg-container_login">
             <svg-icon icon-class="phone" />
           </span>
           <el-input v-model="regForm.phone" type="text" auto-complete="on" placeholder="手机号" />
-        </el-form-item>
-
-        <el-form-item prop="email">
-          <span class="svg-container svg-container_login">
-            <svg-icon icon-class="reg-email" />
-          </span>
-          <el-input v-model="regForm.email" type="text" auto-complete="on" placeholder="邮箱" />
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item prop="password">
           <span class="svg-container">
@@ -93,6 +86,14 @@
             <svg-icon v-else icon-class="eye-open" />
           </span>
         </el-form-item>
+
+        <el-form-item prop="email">
+          <span class="svg-container svg-container_login">
+            <svg-icon icon-class="reg-email" />
+          </span>
+          <el-input v-model="regForm.email" type="text" auto-complete="on" placeholder="邮箱" />
+        </el-form-item>
+
         <el-button :loading="loading" type="primary" style="width:100%; border-radius: 25px;" @click.native.prevent="handleRegister">
           注 册
         </el-button>
@@ -108,7 +109,7 @@ export default {
   data() {
     var validateUsername = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入账号'))
+        callback(new Error('请输入账号!'))
       } else {
         checkUsername(value).then(res => {
           if (!res.data) {
@@ -120,6 +121,9 @@ export default {
       }
     }
     const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码!'))
+      }
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
