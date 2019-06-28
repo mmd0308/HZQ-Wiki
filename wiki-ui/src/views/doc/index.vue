@@ -6,10 +6,10 @@
         <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
         <img v-else :src="item.img" class="pic-404__child right" @error="imgError(item)">
       </div>
-      <h2 style="position: relative;top:206px;font-size: 17px; margin:5px 15px;">
+      <h2 class="title">
         {{ item.name }}
       </h2>
-      <div style="position: relative;top:206px;font-size: 12px; margin:5px 15px;">
+      <div class="desc" >
         <span v-if="item.createName != null" class="auth">
           作者:{{ item.createName }}
         </span>
@@ -26,15 +26,17 @@
 <script>
 import { dashboardPage } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
+import $ from 'jquery'
 export default {
   data() {
     return {
       listQuery: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 12,
         visitLevel: '1'
       },
-      docLists: []
+      docLists: [],
+      total: 0
     }
   },
   computed: {
@@ -58,12 +60,34 @@ export default {
     },
     showDocPage() {
       dashboardPage(this.listQuery, this.userId).then(response => {
-        this.docLists = response.data
-        this.total = response.total
+        if (this.docLists.length === 0) {
+          this.docLists = response.data
+          this.total = response.total
+        } else {
+          response.data.forEach(item => {
+            this.docLists.push(item)
+          })
+        }
+        const that = this
+        $(window).on('scroll', function() { // 给window绑定scroll触底事件
+          if ($(window).scrollTop() + $(window).height() + 1 >= $(document).height()) {
+            if (that.total > that.docLists.length) { // 表示还有数据没有加载
+              that.listQuery.pageNum = that.listQuery.pageNum + 1
+              that.showDocPage()
+            }
+          }
+        })
       })
     },
     imgError(item) {
       item.img = null
+    },
+    handleSizeChange() {
+
+    },
+    handleCurrentChange(val) {
+      this.listQuery.pageNum = val
+      this.showDocPage()
     }
   }
 }
@@ -73,7 +97,7 @@ export default {
 .doc {
   .boxs{
     width: 247px;
-    height: 290px;
+    height: 294px;
     min-width: 245px;
     float: left;
     display: block;
@@ -81,20 +105,36 @@ export default {
     min-height: 120px;
     overflow: hidden;
     cursor: pointer;
-    margin-left: -1px;
     margin-top: -1px;
     border: 1px solid #e4ebf0;
     padding: 0;
     .icon{
-      width: 100%;
-      height: 209px;
       position: absolute;
-      top: 15px;
+      top: 0px;
+      img{
+        width: 247px;
+        height: 220px;
+      }
+    }
+    .title{
+      position: relative;
+      top:220px;
+      font-size: 17px;
+      margin:5px 15px;
+    }
+    .desc{
+      position: relative;
+      top:220px;
+      font-size: 12px;
+      margin:5px 15px;
     }
     .auth{
-      line-height: 20px;
+      line-height: 18px;
       color:#666;
     }
+  }
+  .boxs:nth-of-type(4n+2){
+  margin-left: -1px;
   }
 }
 </style>

@@ -41,7 +41,7 @@ export default {
 @import "src/styles/mixin.scss";
 
 .el-footer {
-  padding: 0px;
+  padding: 20px 0px 0px 0px;
 }
 .el-main {
   padding: 20px 0px 0px 0px;
