@@ -195,7 +195,7 @@
             <if test="remark != null and remark != ''">
                 remark = #{remark},
             </if>
-            <if test="visitLevel != null and visitLevel != ''">
+            <if test="visitLevel != null">
                 visit_level = #{visitLevel},
             </if>
             <if test="img != null and img != ''">

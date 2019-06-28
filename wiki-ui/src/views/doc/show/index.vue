@@ -73,18 +73,9 @@
 
     <!-- 新增或者修改项目 -->
     <el-dialog :visible.sync="dialogDocVisible" :title="dialogTitle" width="40%">
-      <el-form :model="docForm" label-width="100px" >
+      <el-form :model="docForm" :ref="ruleForm" :rules="rules" label-width="100px" >
         <el-form-item label="文档名称" prop="name">
           <el-input v-model="docForm.name" style="width:80%"/>
-        </el-form-item>
-        <el-form-item label="所属空间" prop="spaceId">
-          <el-select v-model="docForm.spaceId" placeholder="请选择" style="width:80%">
-            <el-option
-              v-for="item in spaceLists"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"/>
-          </el-select>
         </el-form-item>
         <el-form-item label="访问级别" prop="visitLevel">
           <el-select v-model="docForm.visitLevel" placeholder="请选择" style="width:80%">
@@ -100,7 +91,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
@@ -109,30 +100,25 @@
 </template>
 <script>
 import { page, addOrUpdate, showDocPage } from '@/api/doc/index'
-import { showPage } from '@/api/space/index'
 import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       dialogTitle: '新增文档',
       dialogDocVisible: false,
-      docForm: {
-        name: '',
-        spaceId: '',
-        visitLevel: 0,
-        remark: ''
+      docForm: this.init(),
+      ruleForm: 'ruleForm',
+      rules: {
+        name: [
+          { required: true, message: '请输入文档名称', trigger: 'blur' }
+        ]
       },
       visitLevels: [
-        {
-          value: 0,
-          label: '私有空间'
-        }, {
-          value: 1,
-          label: '共享空间'
-        }],
+        { value: 0, label: '私有文档' },
+        { value: 1, label: '共享文档' }
+      ],
       docVisitLevel: '0',
       docLists: [],
-      spaceLists: [],
       spaceId: '',
       total: 0,
       listQuery: {
@@ -140,10 +126,6 @@ export default {
         pageSize: 10,
         visitLevel: '0',
         spaceId: ''
-      },
-      spacelistQuery: {
-        pageNum: 1,
-        pageSize: 100
       }
     }
   },
@@ -161,6 +143,14 @@ export default {
     }
   },
   methods: {
+    init() {
+      return {
+        name: '',
+        spaceId: '',
+        visitLevel: 0,
+        remark: ''
+      }
+    },
     page() {
       this.listQuery.visitLevel = this.docVisitLevel
       page(this.listQuery).then(response => {
@@ -175,11 +165,6 @@ export default {
         this.total = response.total
       })
     },
-    spaceAll() {
-      showPage(this.spacelistQuery, this.userId).then(response => {
-        this.spaceLists = response.data
-      })
-    },
     changeDocVisitLevel(val) {
       if (val === '0') {
         this.showDocPage()
@@ -190,15 +175,20 @@ export default {
     docToAdd() {
       this.dialogDocVisible = true
       this.docForm.spaceId = this.spaceId
-      this.spaceAll()
     },
     addOrUpdate() {
-      addOrUpdate(this.docForm).then(() => {
-        this.dialogDocVisible = false
-        if (this.docVisitLevel === '0') {
-          this.showDocPage()
+      this.$refs[this.ruleForm].validate((valid) => {
+        if (valid) {
+          addOrUpdate(this.docForm).then(() => {
+            if (this.docVisitLevel === '0') {
+              this.showDocPage()
+            } else {
+              this.page()
+            }
+            this.cancel()
+          })
         } else {
-          this.page()
+          return false
         }
       })
     },
@@ -219,6 +209,10 @@ export default {
           spaceId: item.spaceId
         }
       })
+    },
+    cancel() {
+      this.dialogDocVisible = false
+      this.docForm = this.init()
     }
   }
 }
