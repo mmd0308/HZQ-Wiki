@@ -7,6 +7,16 @@ HZQ-WIKI 是一个轻量级的企业知识分享与团队协同软件，可用�
 - 账号: guest
 - 密码: guest
 
+## 项目截图
+
+| ![zhifubo](./docs/images/11.png) | ![wx](./docs/images/22.png)|
+| :-:| :-: |
+| ![zhifubo](./docs/images/33.png) | ![wx](./docs/images/44.png)|
+| ![zhifubo](./docs/images/55.png) | ![wx](./docs/images/66.png)|
+| ![zhifubo](./docs/images/77.png) | ![wx](./docs/images/88.png)|
+| ![zhifubo](./docs/images/99.png) | |
+
+
 
 
 
