@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzqing.admin.mapper.log.LoginLogMapper">
+
+
+    <resultMap id="baseResult" type="loginlog">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="ip" property="ip" />
+        <result column="browser" property="browser" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="system" property="system" />
+    </resultMap>
+
+    <sql id="tableName">
+        hw_login_log
+    </sql>
+
+    <select id="selectList" resultMap="baseResult" parameterType="loginlog">
+        SELECT
+            id,
+            username,
+            ip,
+            browser,
+            create_by,
+            create_time,
+            system
+        FROM
+            <include refid="tableName"/>
+        order by create_time desc
+    </select>
+
+    <insert id="insert" parameterType="loginlog" >
+        INSERT INTO
+            <include refid="tableName"/>
+        (
+            username,
+            ip,
+            browser,
+            create_by,
+            create_time,
+            system
+        ) VALUE (
+            #{username},
+            #{ip},
+            #{browser},
+            #{createBy},
+            #{createTime},
+            #{system}
+        )
+    </insert>
+
+</mapper>

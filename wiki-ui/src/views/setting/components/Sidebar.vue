@@ -4,6 +4,9 @@
       <li :class="{clickSiber:clickSidber === 'user'}" @click="clickSiberItem('user')">
         <span>用户管理</span>
       </li>
+      <li :class="{clickSiber:clickSidber === 'loginlog'}" @click="clickSiberItem('loginlog')">
+        <span>登陆日志</span>
+      </li>
       <li :class="{clickSiber:clickSidber === 'config'}" @click="clickSiberItem('config')">
         <span>配置管理</span>
       </li>

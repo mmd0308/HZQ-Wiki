@@ -6,8 +6,7 @@
     <div class="right">
       <el-card>
         <user v-if="checkRightTemp === 'user'" />
-        <space v-if="checkRightTemp === 'space'" />
-        <document v-if="checkRightTemp === 'document'" />
+        <login-log v-if="checkRightTemp === 'loginlog'" />
         <config-index v-if="checkRightTemp === 'config'" />
       </el-card>
     </div>
@@ -16,16 +15,14 @@
 <script>
 import Sidebar from './components/Sidebar'
 import ConfigIndex from './components/ConfigIndex'
-import Space from '../space/admin/index'
-import Document from '../doc/admin/Index'
+import LoginLog from './components/LoginLog'
 import User from '../system/user/index'
 export default {
   components: {
     Sidebar,
-    Space,
-    Document,
     User,
-    ConfigIndex
+    ConfigIndex,
+    LoginLog
   },
   data() {
     return {
