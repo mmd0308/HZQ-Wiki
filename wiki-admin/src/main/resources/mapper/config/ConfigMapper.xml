@@ -8,9 +8,6 @@
         <id column="id" property="id"/>
         <result column="key" property="key"/>
         <result column="value" property="value"/>
-        <result column="remark" property="remark" />
-        <result column="create_by" property="createBy"/>
-        <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -19,74 +16,44 @@
         hw_config
     </sql>
 
-    <select id="selectList" resultMap="baseResult" parameterType="config">
+    <select id="selectList" resultMap="baseResult">
         select
             id,
             `key`,
             `value`,
-            remark,
-            create_by,
-            create_time,
             update_by,
             update_time
         from
             <include refid="tableName"/>
-        <where>
-            <if test="key != null and key != ''">
-                `key` = #{key}
-            </if>
-        </where>
     </select>
 
-    <insert id="insert" parameterType="config" >
-        INSERT INTO
+    <update id="updateBatch" parameterType="list">
+        update
             <include refid="tableName"/>
-        (
-            `key`,
-            `value`,
-            remark,
-            create_by,
-            create_time,
-            update_by,
-            update_time
-        ) VALUE (
-            #{key},
-            #{value},
-            #{remark},
-            #{createBy},
-            #{createTime},
-            #{updateBy},
-            #{updateTime}
-        )
-    </insert>
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="value = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.value != null and item.value != ''">
+                        when `key` = #{item.key} then #{item.value}
+                    </if>
+                </foreach>
+            </trim>
 
-    <delete id="deletedById" parameterType="string">
-        DELETE FROM
-            <include refid="tableName"/>
-        WHERE id = #{id}
-    </delete>
+            <trim prefix="update_by = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `key` = #{item.key} then #{item.updateBy}
+                </foreach>
+            </trim>
 
-    <update id="update" parameterType="config">
-        UPDATE
-            <include refid="tableName"/>
-        <set>
-            <if test="key != null and key != ''">
-                `key` = #{key},
-            </if>
-            <if test="value != null and value != ''">
-                `value` = #{value},
-            </if>
-            <if test="remark != null and remark != ''">
-                remark = #{remark},
-            </if>
-            <if test="updateBy != null and updateBy != ''">
-                update_by = #{updateBy},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime}
-            </if>
-        </set>
-        WHERE id = #{id}
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `key` = #{item.key} then #{item.updateTime}
+                </foreach>
+            </trim>
+        </trim>
+        where `key` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.key}
+        </foreach>
     </update>
-
 </mapper>

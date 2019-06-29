@@ -7,12 +7,18 @@
       <span>&nbsp;·&nbsp;</span>
       <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">项目源码</a></span>
       <span>&nbsp;·&nbsp;</span>
-      <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">京ICP备XXXXXXXX号-X</a></span>
+      <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">{{ keepToRecord }}</a></span>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters([
+      'keepToRecord'
+    ])
+  }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>

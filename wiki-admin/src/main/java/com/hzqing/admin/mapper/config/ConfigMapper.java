@@ -9,11 +9,8 @@ import java.util.List;
  * @date 2019-05-17 09:55
  */
 public interface ConfigMapper {
-    List<Config> selectList(Config config);
 
-    int update(Config config);
+    List<Config> selectList();
 
-    int insert(Config config);
-
-    int deletedById(String id);
+    int updateBatch(List<Config> toList);
 }

@@ -17,7 +17,10 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          next()
+          // 加载系统的配置文件
+          store.dispatch('HWConfig').then(() => {
+            next()
+          })
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')

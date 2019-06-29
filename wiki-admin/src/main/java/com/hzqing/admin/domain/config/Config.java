@@ -19,6 +19,4 @@ public class Config  extends Base {
 
     private String value;
 
-    private String remark;
-
 }

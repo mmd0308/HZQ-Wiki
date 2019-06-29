@@ -1,31 +1,16 @@
 import request from '@/utils/request'
 
-export function page(query) {
+export function form() {
   return request({
-    url: '/api/config/page',
-    method: 'get',
-    params: query
-  })
-}
-
-export function checkKey(key) {
-  return request({
-    url: '/api/config/checkKey/' + key,
+    url: '/api/config/form',
     method: 'get'
   })
 }
 
-export function addOrUpdate(params) {
+export function update(params) {
   return request({
-    url: '/api/config/addOrUpdate',
+    url: '/api/config/update',
     method: 'post',
     data: params
-  })
-}
-
-export function deletedById(id) {
-  return request({
-    url: '/api/config/deleted/' + id,
-    method: 'delete'
   })
 }

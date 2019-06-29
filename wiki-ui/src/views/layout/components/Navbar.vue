@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <h1 class="show-navbar-title" style="margin:0px;line-height:60px;float:left;font-size:20px;padding-right:40px;"><a href="/" class="router-link-active">
-      HZQ-Wiki
+      {{ title }}
     </a></h1>
     <div class="menu" style="float:left">
       <el-menu
@@ -61,7 +61,8 @@ export default {
     ...mapGetters([
       'userId',
       'username',
-      'avatar'
+      'avatar',
+      'title'
     ])
   },
   methods: {
