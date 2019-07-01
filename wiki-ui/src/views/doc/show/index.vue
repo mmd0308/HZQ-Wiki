@@ -202,7 +202,7 @@ export default {
     },
     toLink(item) {
       this.$router.push({
-        path: '/doc/layout',
+        path: '/edit/doc',
         query: {
           docId: item.id,
           docName: item.name,

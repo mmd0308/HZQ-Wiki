@@ -3,14 +3,21 @@ package com.hzqing.admin.controller.base;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.utils.DateUtils;
+import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.domain.base.Base;
 import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.domain.system.UserInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hzqing
@@ -18,6 +25,9 @@ import java.util.List;
  */
 
 public class BaseController {
+
+    @Value("${hzq.fs.path}")
+    protected String filePath;
 
     public BaseController() {
     }
@@ -47,5 +57,25 @@ public class BaseController {
         return new ResponseMessage(code, data,message,0);
     }
 
+    /**
+     * 上传图片
+     * @param file
+     * @param type
+     * @param id
+     * @param request
+     * @return
+     */
+    public ResponseMessage uploadImages(MultipartFile file,String type, String id , HttpServletRequest request){
+        String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+        String dataPaths =  DateUtils.getYearAndMonth() + "/";
+        String resPath = type + "/" + id + "/images/" + dataPaths;
+        String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        try {
+            FileUtil.uploadFile(file.getBytes(),filePath + resPath,fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseMessage().success(http + "/fs/"+resPath + fileName);
+    }
 
 }

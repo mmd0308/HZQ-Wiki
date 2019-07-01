@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzqing.admin.mapper.article.ArticleMapper">
+
+    <resultMap id="baseResult" type="article">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content" />
+        <result column="content_html" property="contentHtml" />
+        <result column="sequence" property="sequence" />
+        <result column="hw_desc" property="hwDesc" />
+        <result column="hw_state" property="hwState" />
+        <result column="hw_up" property="hwUp" />
+        <result column="user_id" property="userId" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+
+    <select id="get" resultMap="baseResult" parameterType="int">
+        SELECT
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            s.space_id,
+            s.img,
+            cu.name as 'createName',
+            uu.name as 'updateName'
+        FROM
+            hw_article s
+        left join
+            hw_user cu on cu.id = s.create_by
+        left join
+            hw_user uu on uu.id = s.update_by
+        where
+            s.id = #{id}
+    </select>
+
+
+    <select id="selectList" resultMap="baseResult" parameterType="doc">
+        SELECT
+            id,
+            title,
+            content,
+            content_html,
+            sequence,
+            hw_desc,
+            hw_state,
+            hw_up,
+            user_id,
+            create_by,
+            create_time,
+            update_time
+        FROM
+            hw_article
+    </select>
+
+    <insert id="insert" parameterType="article"  useGeneratedKeys="true"  keyProperty="id"  >
+        INSERT INTO hw_article (
+            title,
+            content,
+            content_html,
+            sequence,
+            hw_desc,
+            hw_state,
+            hw_up,
+            user_id,
+            create_by,
+            create_time,
+            update_time
+        ) VALUE (
+            #{title},
+            #{content},
+            #{contentHtml},
+            #{sequence},
+            #{hwDesc},
+            #{hwState},
+            #{hwUp},
+            #{userId},
+            #{createBy},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+    <delete id="deletedById" parameterType="int">
+        DELETE FROM hw_article
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="article">
+        UPDATE hw_article
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+
+            <if test="contentHtml != null and contentHtml != ''">
+                content_html = #{contentHtml},
+            </if>
+            <if test="hwDesc != null and hwDesc != ''">
+                hw_desc = #{hwDesc},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

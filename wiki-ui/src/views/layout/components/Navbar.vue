@@ -16,6 +16,9 @@
         <el-menu-item index="/dashboard">
           首页
         </el-menu-item>
+        <el-menu-item index="/article" >
+          文章
+        </el-menu-item>
         <el-menu-item index="/space" >
           空间
         </el-menu-item>

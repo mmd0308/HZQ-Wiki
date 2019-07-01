@@ -17,29 +17,21 @@ export const constantRouterMap = [
     name: 'Dashboard',
     hidden: true,
     children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index')
-      },
-      {
-        path: 'test',
-        component: () => import('@/views/dashboard/test')
-      },
+      { path: 'dashboard', component: () => import('@/views/dashboard/index') },
+      { path: 'test', component: () => import('@/views/dashboard/test') },
       { path: 'space', component: () => import('@/views/space/show/index') },
-      {
-        path: 'doc',
-        component: () => import('@/views/doc/show/index')
-      }
+      { path: 'doc', component: () => import('@/views/doc/show/index') },
+      { path: 'article', component: () => import('@/views/article/show/Layout') }
     ]
   },
   {
-    path: '/doc',
+    path: '/edit',
     component: EmptyLayout,
-    redirect: '/doc/layout',
     name: 'Layout',
     hidden: true,
     children: [
-      { path: 'layout', component: () => import('@/views/doc/edit/Layout') }
+      { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
+      { path: 'article', component: () => import('@/views/article/edit/Layout') }
     ]
   },
   {
