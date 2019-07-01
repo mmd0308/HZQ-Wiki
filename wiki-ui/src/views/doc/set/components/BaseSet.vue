@@ -32,8 +32,8 @@
     </el-row>
 
     <my-upload
-      :width="230"
-      :height="190"
+      :width="247"
+      :height="220"
       :url="uploadUrl"
       :headers="headers"
       v-model="showUpload"
@@ -72,7 +72,7 @@ export default {
         docId: this.docId
       },
       docZh: {
-        preview: '头像预览11'
+        preview: '文档封面预览'
       },
       docForm: this.init(),
       ruleForm: 'ruleForm',
