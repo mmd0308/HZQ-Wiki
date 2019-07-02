@@ -23,7 +23,7 @@ public class Article extends Base {
      */
     private Integer sequence;
 
-    private String desc;
+    private String hwDesc;
 
     /**
      * 状态 1 草稿 2 发布

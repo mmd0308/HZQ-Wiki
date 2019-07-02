@@ -1,5 +1,6 @@
 package com.hzqing.admin.service.article.impl;
 
+import com.hzqing.admin.common.utils.ReplaceStrUtil;
 import com.hzqing.admin.domain.article.Article;
 import com.hzqing.admin.mapper.article.ArticleMapper;
 import com.hzqing.admin.service.article.IArticleService;
@@ -26,11 +27,16 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public int insert(Article article) {
-        return articleMapper.insert(article);
+        articleMapper.insert(article);
+        return article.getId();
     }
 
     @Override
     public int update(Article article) {
+        if (null != article.getContentHtml() && article.getContentHtml() != "") {
+            String desc = ReplaceStrUtil.delHtmlTag(article.getContentHtml());
+            article.setHwDesc(desc.length() > 150 ? desc.substring(0, 150) : desc);
+        }
         return articleMapper.update(article);
     }
 

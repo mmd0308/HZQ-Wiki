@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar">
-    <ul>
-      <li>
+    <ul class="itme-ul">
+      <li class="time-li">
         <router-link to="/edit/article">
-          <el-button type="primary" style="width:100%;">新增文档</el-button>
+          <el-button type="primary" style="width:100%;">我要发文</el-button>
         </router-link>
       </li>
-      <li>
+      <li style="display: none;">
         <div >
           待开发...
         </div>
@@ -41,10 +41,10 @@ export default {
     padding: 0px;
     overflow: auto;
     height: fit-content;
-    ul {
+    .itme-ul {
         padding: 0px;
         margin: 0px;
-        li{
+        .time-li{
             height: 50px;
             font-size: 14px;
             line-height: 50px;
@@ -53,7 +53,7 @@ export default {
             padding: 0px 15px;
             display: block;
         }
-        li + li{
+        .time-li + .time-li{
           margin-top: 10px;
           border: #ff7d44 1px solid;
         }

@@ -1,7 +1,7 @@
 
 <template>
   <div class="set hzq-wiki-main-width" style="background:blue;">
-    <div class="left" style="background: pink">
+    <div class="left">
       <hw-article />
     </div>
     <div class="right">

@@ -1,15 +1,66 @@
 <template>
   <div class="article">
-    文章展示
+    <div v-for="(item,index) in articleLists" :key="index" class="item">
+
+      <div style="height: 22px;">
+        <span class="article_title">
+          {{ item.title }}
+        </span>
+        <!-- <el-tag size="mini" type="warning">置顶</el-tag> -->
+      </div>
+      <div class="article_description">
+        {{ item.hwDesc }}
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
+import { page } from '@/api/article/article'
 export default {
-
+  data() {
+    return {
+      articleLists: [],
+      total: 0,
+      listQuery: {
+        pageNum: 1,
+        pageSize: 15,
+        hwState: '2'
+      }
+    }
+  },
+  created() {
+    this.page()
+  },
+  methods: {
+    page() {
+      page(this.listQuery).then(response => {
+        this.articleLists = response.data
+        this.total = response.total
+      })
+    }
+  }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss">
+.article{
+  .item{
+    padding: 20px 0 8px;
 
-<style>
-
+    .article_description{
+      margin-bottom: 20px;
+      font-size: 14px;
+      margin-top: 16px;
+      color: rgba(0,0,0,.65);
+      font-family: PingFang SC;
+      font-weight: 400;
+      line-height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+    }
+  }
+}
 </style>

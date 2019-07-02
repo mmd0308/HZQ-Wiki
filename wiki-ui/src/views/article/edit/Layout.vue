@@ -1,25 +1,20 @@
 <template>
   <div class="app-doc">
     <el-container>
-      <el-header>
-        <navbar :doc-status="docStatus" :doc-name="docName" :doc-privilege = "docPrivilege" @editStatus="editStatus"/>
-      </el-header>
       <el-main style="padding:0px;  min-height: calc(100vh - 60px)">
-        <document-main :doc-status="docStatus" :doc-id="docId" />
+        <hw-article />
       </el-main>
     </el-container>
   </div>
 </template>
 <script>
-import Navbar from './Navbar'
-import DocumentMain from './DocMain'
+import { Article } from './components'
 import { docPrivilege } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
   components: {
-    Navbar,
-    DocumentMain
+    HwArticle: Article
   },
   data() {
     return {
