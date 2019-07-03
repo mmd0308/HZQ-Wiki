@@ -18,10 +18,25 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
+    <resultMap id="baseResultDto" type="articledto">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content" />
+        <result column="content_html" property="contentHtml" />
+        <result column="sequence" property="sequence" />
+        <result column="hw_desc" property="hwDesc" />
+        <result column="hw_state" property="hwState" />
+        <result column="hw_up" property="hwUp" />
+        <result column="user_id" property="userId" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="createName" property="createName" />
+    </resultMap>
 
 
 
-    <select id="get" resultMap="baseResult" parameterType="int">
+    <select id="get" resultMap="baseResultDto" parameterType="int">
         SELECT
             s.id,
             s.title,
@@ -34,7 +49,7 @@
             s.user_id,
             s.create_by,
             s.create_time,
-            s.update_time
+            s.update_time,
             cu.name as 'createName'
         FROM
             hw_article s
@@ -45,20 +60,28 @@
     </select>
 
 
-    <select id="selectList" resultMap="baseResult" parameterType="doc">
+    <select id="selectList" resultMap="baseResultDto" parameterType="article">
         SELECT
-            id,
-            title,
-            sequence,
-            hw_desc,
-            hw_state,
-            hw_up,
-            user_id,
-            create_by,
-            create_time,
-            update_time
+            s.id,
+            s.title,
+            s.sequence,
+            s.hw_desc,
+            s.hw_state,
+            s.hw_up,
+            s.user_id,
+            s.create_by,
+            s.create_time,
+            s.update_time,
+            cu.name as 'createName'
         FROM
-            hw_article
+            hw_article s
+        left join
+            hw_user cu on cu.id = s.create_by
+        <where>
+            <if test="hwState != null">
+                hw_state = #{hwState}
+            </if>
+        </where>
     </select>
 
     <insert id="insert" parameterType="article"  useGeneratedKeys="true"  keyProperty="id"  >

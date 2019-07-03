@@ -1,27 +1,14 @@
 <template>
   <div class="sidebar">
-    <ul class="itme-ul">
-      <li class="time-li">
-        <router-link to="/edit/article">
-          <el-button type="primary" style="width:100%;">我要发文</el-button>
-        </router-link>
-      </li>
-      <li style="display: none;">
-        <div >
-          待开发...
-        </div>
+    <ul>
+      <li :class="{clickSiber:clickSidber === 'drafts'}" @click="clickSiberItem('drafts')">
+        <span>草稿箱-{{ clickSidber }}</span>
       </li>
     </ul>
   </div>
 </template>
 <script>
 export default {
-  props: {
-    createBar: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       clickSidber: this.createBar
@@ -39,26 +26,27 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .sidebar{
     padding: 0px;
+    background: #fff;
     overflow: auto;
     height: fit-content;
-    .itme-ul {
+    ul {
         padding: 0px;
         margin: 0px;
-        .time-li{
+        li{
             height: 50px;
+            border-bottom: 1px solid #e5e5e5;
             font-size: 14px;
             line-height: 50px;
         }
-        .time-li:hover{
-          background: none;
+        li:hover{
+            background: #ff7d44;
+        }
+        .clickSiber{
+            background: #ff7d44;
         }
         span {
             padding: 0px 15px;
             display: block;
-        }
-        .time-li + .time-li{
-          margin-top: 10px;
-          border: #ff7d44 1px solid;
         }
     }
 }

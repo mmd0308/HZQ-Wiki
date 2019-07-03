@@ -21,7 +21,18 @@ export const constantRouterMap = [
       { path: 'test', component: () => import('@/views/dashboard/test') },
       { path: 'space', component: () => import('@/views/space/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
-      { path: 'article', component: () => import('@/views/article/show/Layout') }
+      {
+        path: 'article',
+        component: () => import('@/views/article/show/Layout')
+      }
+    ]
+  },
+  {
+    path: '/read',
+    component: Layout,
+    hidden: true,
+    children: [
+      { path: 'article/:id', component: () => import('@/views/article/read/Article') }
     ]
   },
   {
@@ -42,7 +53,8 @@ export const constantRouterMap = [
       { path: 'space', component: () => import('@/views/space/set/Layout') },
       { path: 'doc', component: () => import('@/views/doc/set/Layout') },
       { path: 'user', component: () => import('@/views/system/user/set/Layout') },
-      { path: 'system', component: () => import('@/views/setting/Layout') }
+      { path: 'system', component: () => import('@/views/setting/Layout') },
+      { path: 'article', component: () => import('@/views/article/set/Layout') }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

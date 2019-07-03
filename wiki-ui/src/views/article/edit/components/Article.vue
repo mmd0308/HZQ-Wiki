@@ -7,6 +7,9 @@
       <input v-model="articleForm.title" placeholder="请输入文章标题" class="title" >
       <ul style="float:right">
         <li>
+          {{ saveState }}
+        </li>
+        <li>
           <el-button>草稿</el-button>
         </li>
         <li>
@@ -14,7 +17,6 @@
         </li>
       </ul>
     </div>
-
     <mavon-editor
       ref="mavonEditor"
       :scroll-style="true"
@@ -31,13 +33,30 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
-      articleForm: this.init()
+      saveState: '尚未保存',
+      articleForm: this.init(),
+      timeOut: null
+    }
+  },
+  watch: {
+    articleForm: {
+      handler: function(val) {
+        this.saveState = '保存中...'
+        if (this.timeOut != null) {
+          clearTimeout(this.timeOut)
+        }
+        var that = this
+        this.timeOut = setTimeout(function() {
+          that.addOrUpdate()
+        }, 1000)
+      },
+      deep: true
     }
   },
   methods: {
     init() {
       return {
-        id: null,
+        id: '',
         title: '',
         content: '',
         contentHtml: '',
@@ -49,37 +68,46 @@ export default {
       this.articleForm.content = value
       this.articleForm.contentHtml = render
       this.articleForm.hwState = '1'
-      addOrUpdate(this.articleForm).then(res => {
-        if (this.articleForm.id == null) { // 表示新增
-          this.articleForm.id = res.data
-        }
-        // 保存成功返回id
-        this.$notify({
-          title: '成功',
-          message: '保存成功!',
-          type: 'success'
-        })
-      })
+      this.addOrUpdate()
     },
+    // 发布文章
     updateArticle() {
-      this.articleForm.hwState = '2'
-      addOrUpdate(this.articleForm).then(res => {
-        if (this.articleForm.id == null) { // 表示新增
-          this.articleForm.id = res.data
-        }
-        // 保存成功返回id
-        this.$notify({
-          title: '成功',
-          message: '已经发布!',
-          type: 'success'
+      if (this.rulesForm()) {
+        this.articleForm.hwState = '2'
+        addOrUpdate(this.articleForm).then(res => {
+          this.$router.push({ path: '/read/article/' + this.articleForm.id })
         })
-      })
+      }
+    },
+    addOrUpdate() {
+      if (this.rulesForm()) {
+        addOrUpdate(this.articleForm).then(res => {
+        // 保存成功返回id
+          if (this.articleForm.id === '') { // 表示新增
+            this.articleForm.id = res.data
+          }
+          this.saveState = '保存完成'
+        })
+      }
+    },
+    rulesForm() {
+      if (this.articleForm.content === '') {
+        this.$notify({
+          title: '失败',
+          message: '内容不能为空!',
+          type: 'error',
+          duration: 2000
+        })
+        return false
+      } else {
+        return true
+      }
     },
     imgAdd(pos, $file) {
       this.changeSave = false
       const param = new FormData() // 创建form对象
       param.append('file', $file) // 通过append向form对象添加数据
-      param.append('articleId', this.contentForm.id)
+      param.append('articleId', this.articleForm.id)
       const config = {
         headers: { 'Content-Type': 'multipart/form-data', 'Authorization': getToken() }
       }
@@ -118,6 +146,7 @@ export default {
     }
     ul li {
       float: left;
+      line-height: 40px;
     }
     li + li {
       margin-left:10px;

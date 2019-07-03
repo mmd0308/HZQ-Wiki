@@ -1,25 +1,26 @@
-
 <template>
-  <div class="set hzq-wiki-main-width" style="background:blue;">
+  <div class="set" >
     <div class="left">
-      <hw-article />
+      <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
     </div>
     <div class="right">
-      <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
+      <el-card>
+        <article-drafts v-if="checkRightTemp === 'drafts'"/>
+      </el-card>
     </div>
   </div>
 </template>
 <script>
 import Sidebar from './components/Sidebar'
-import HwArticle from './components/ArticleLists'
+import ArticleDrafts from './components/ArticleDrafts'
 export default {
   components: {
     Sidebar,
-    HwArticle
+    ArticleDrafts
   },
   data() {
     return {
-      checkRightTemp: 'personal'
+      checkRightTemp: 'drafts'
     }
   },
   methods: {
@@ -27,18 +28,19 @@ export default {
       this.checkRightTemp = data
     }
   }
+
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .set {
     .left{
-        width: 787px;
+        width: 180px;
         float: left;
     }
     .right{
         float: right;
-        width: 180px;
+        width: 780px;
     }
 }
 </style>

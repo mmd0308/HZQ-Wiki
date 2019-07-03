@@ -1,15 +1,25 @@
 <template>
   <div class="article">
-    <div v-for="(item,index) in articleLists" :key="index" class="item">
+    <div v-for="(item,index) in articleLists" v-if="item.title != ''" :key="index" class="item" >
 
       <div style="height: 22px;">
-        <span class="article_title">
-          {{ item.title }}
-        </span>
+        <router-link :to="{path:'read/article/' + item.id}">
+          <span class="article_title" style="font-weight: 800;">
+            {{ item.title }}
+          </span>
+        </router-link>
         <!-- <el-tag size="mini" type="warning">置顶</el-tag> -->
       </div>
       <div class="article_description">
         {{ item.hwDesc }}
+      </div>
+      <div class="article_auth">
+        <span>
+          作者: {{ item.createName }}
+        </span>
+        <span>
+          创建时间: {{ item.createTime }}
+        </span>
       </div>
 
     </div>
@@ -47,7 +57,7 @@ export default {
 .article{
   .item{
     padding: 20px 0 8px;
-
+    border-bottom:1px solid #e4ebf0;
     .article_description{
       margin-bottom: 20px;
       font-size: 14px;
@@ -61,6 +71,16 @@ export default {
       display: -webkit-box;
       -webkit-line-clamp: 2;
     }
+    .article_auth{
+      font-size: 12px;
+      color: rgba(0,0,0,.65);
+      span + span{
+        padding-left: 10px;
+      }
+    }
+  }
+  .item:last-child{
+    border-bottom: none;
   }
 }
 </style>
