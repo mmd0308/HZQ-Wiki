@@ -2,13 +2,22 @@
   <div class="sidebar">
     <ul>
       <li :class="{clickSiber:clickSidber === 'drafts'}" @click="clickSiberItem('drafts')">
-        <span>草稿箱-{{ clickSidber }}</span>
+        <span>草稿箱</span>
+      </li>
+      <li :class="{clickSiber:clickSidber === 'release'}" @click="clickSiberItem('release')">
+        <span>已经发布</span>
       </li>
     </ul>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    createBar: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       clickSidber: this.createBar

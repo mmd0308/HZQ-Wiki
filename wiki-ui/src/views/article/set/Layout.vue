@@ -6,6 +6,7 @@
     <div class="right">
       <el-card>
         <article-drafts v-if="checkRightTemp === 'drafts'"/>
+        <article-release v-if="checkRightTemp === 'release'"/>
       </el-card>
     </div>
   </div>
@@ -13,10 +14,12 @@
 <script>
 import Sidebar from './components/Sidebar'
 import ArticleDrafts from './components/ArticleDrafts'
+import ArticleRelease from './components/ArticleRelease'
 export default {
   components: {
     Sidebar,
-    ArticleDrafts
+    ArticleDrafts,
+    ArticleRelease
   },
   data() {
     return {

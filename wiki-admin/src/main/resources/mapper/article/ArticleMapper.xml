@@ -81,7 +81,11 @@
             <if test="hwState != null">
                 hw_state = #{hwState}
             </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
         </where>
+        order by s.update_time desc
     </select>
 
     <insert id="insert" parameterType="article"  useGeneratedKeys="true"  keyProperty="id"  >
@@ -112,7 +116,7 @@
         )
     </insert>
 
-    <delete id="deletedById" parameterType="int">
+    <delete id="deletedById" parameterType="string">
         DELETE FROM hw_article
         WHERE id = #{id}
     </delete>
@@ -129,6 +133,9 @@
 
             <if test="contentHtml != null and contentHtml != ''">
                 content_html = #{contentHtml},
+            </if>
+            <if test="hwState != null">
+                hw_state = #{hwState},
             </if>
             <if test="hwDesc != null and hwDesc != ''">
                 hw_desc = #{hwDesc},

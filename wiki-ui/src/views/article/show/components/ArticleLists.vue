@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { page } from '@/api/article/article'
+import { release } from '@/api/article/article'
 export default {
   data() {
     return {
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     page() {
-      page(this.listQuery).then(response => {
+      release(this.listQuery).then(response => {
         this.articleLists = response.data
         this.total = response.total
       })

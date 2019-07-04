@@ -3,8 +3,10 @@ package com.hzqing.admin.controller.article;
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.article.Article;
+import com.hzqing.admin.domain.system.UserInfo;
 import com.hzqing.admin.service.article.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +34,18 @@ public class ArticleContoller extends BaseController {
         Article article = articleService.get(id);
         return responseMessage(article);
     }
+    @GetMapping("/release")
+    public ResponseMessage release(int pageNum, int pageSize, Article article){
+        startPage(pageNum,pageSize);
+        List<Article> docs = articleService.selectList(article);
+        return responseMessage(docs);
+    }
 
     @GetMapping("/page")
     public ResponseMessage page(int pageNum, int pageSize, Article article){
         startPage(pageNum,pageSize);
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        article.setUserId(userInfo.getId());
         List<Article> docs = articleService.selectList(article);
         return responseMessage(docs);
     }
@@ -44,6 +54,7 @@ public class ArticleContoller extends BaseController {
     public ResponseMessage addOrUpdate(@RequestBody Article article){
         int res = -1;
         article = (Article) initAddOrUpdate(article);
+        article.setUserId(article.getCreateBy());
         if (article.getId() == null){ //新增
             res = articleService.insert(article);
         }else {

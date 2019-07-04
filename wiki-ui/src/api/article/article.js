@@ -1,4 +1,11 @@
 import request from '@/utils/request'
+export function release(query) {
+  return request({
+    url: '/api/article/release',
+    method: 'get',
+    params: query
+  })
+}
 
 export function page(query) {
   return request({

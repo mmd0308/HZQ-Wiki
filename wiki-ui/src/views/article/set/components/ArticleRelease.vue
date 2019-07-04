@@ -44,7 +44,7 @@ export default {
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        hwState: '1'
+        hwState: '2'
       },
       artilceLists: []
     }

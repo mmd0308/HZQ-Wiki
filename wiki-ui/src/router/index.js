@@ -42,7 +42,8 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
-      { path: 'article', component: () => import('@/views/article/edit/Layout') }
+      { path: 'article', component: () => import('@/views/article/edit/Layout') },
+      { path: 'article/:id', component: () => import('@/views/article/edit/Layout') }
     ]
   },
   {

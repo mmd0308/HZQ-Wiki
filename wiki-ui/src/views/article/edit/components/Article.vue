@@ -4,13 +4,15 @@
       <router-link to="/article">
         <i class="el-icon-arrow-left back"/>
       </router-link>
-      <input v-model="articleForm.title" placeholder="请输入文章标题" class="title" >
+      <input v-model="title" placeholder="请输入文章标题" class="title" >
       <ul style="float:right">
         <li>
           {{ saveState }}
         </li>
         <li>
-          <el-button>草稿</el-button>
+          <router-link to="/set/article">
+            <el-button>草稿</el-button>
+          </router-link>
         </li>
         <li>
           <el-button type="primary" @click="updateArticle">发布文章</el-button>
@@ -22,12 +24,13 @@
       :scroll-style="true"
       v-model="articleForm.content"
       class="hzq-wiki-height"
+      @change="contentChange"
       @imgAdd="imgAdd"
       @save="saveContent"/>
   </div>
 </template>
 <script>
-import { addOrUpdate } from '@/api/article/article'
+import { addOrUpdate, get } from '@/api/article/article'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 export default {
@@ -35,22 +38,29 @@ export default {
     return {
       saveState: '尚未保存',
       articleForm: this.init(),
-      timeOut: null
+      timeOut: null,
+      title: ''
     }
   },
   watch: {
-    articleForm: {
+    title: {
       handler: function(val) {
         this.saveState = '保存中...'
         if (this.timeOut != null) {
           clearTimeout(this.timeOut)
         }
+        this.articleForm.title = this.title
         var that = this
         this.timeOut = setTimeout(function() {
           that.addOrUpdate()
         }, 1000)
       },
       deep: true
+    }
+  },
+  created() {
+    if (this.$route.params.id != null && this.$route.params.id !== '') {
+      this.get()
     }
   },
   methods: {
@@ -64,11 +74,32 @@ export default {
         hwUp: '0'
       }
     },
+    get() {
+      get(this.$route.params.id).then(res => {
+        this.articleForm = res.data
+      })
+    },
+    contentChange(value, render) {
+      this.saveState = '保存中...'
+      if (this.timeOut != null) {
+        clearTimeout(this.timeOut)
+      }
+      this.articleForm.title = this.title
+      this.articleForm.content = value
+      this.articleForm.contentHtml = render
+      this.articleForm.hwState = '1'
+      var that = this
+      this.timeOut = setTimeout(function() {
+        that.addOrUpdate()
+      }, 1000)
+    },
     saveContent(value, render) {
       this.articleForm.content = value
       this.articleForm.contentHtml = render
       this.articleForm.hwState = '1'
-      this.addOrUpdate()
+      if (this.rulesForm()) {
+        this.addOrUpdate()
+      }
     },
     // 发布文章
     updateArticle() {
@@ -80,21 +111,19 @@ export default {
       }
     },
     addOrUpdate() {
-      if (this.rulesForm()) {
-        addOrUpdate(this.articleForm).then(res => {
+      addOrUpdate(this.articleForm).then(res => {
         // 保存成功返回id
-          if (this.articleForm.id === '') { // 表示新增
-            this.articleForm.id = res.data
-          }
-          this.saveState = '保存完成'
-        })
-      }
+        if (this.articleForm.id === '') { // 表示新增
+          this.articleForm.id = res.data
+        }
+        this.saveState = '保存完成'
+      })
     },
     rulesForm() {
-      if (this.articleForm.content === '') {
+      if (this.articleForm.content === '' && this.articleForm.title === '') {
         this.$notify({
           title: '失败',
-          message: '内容不能为空!',
+          message: '内容和标题不能同时为空!',
           type: 'error',
           duration: 2000
         })
