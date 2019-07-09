@@ -18,9 +18,9 @@
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="文档名称">
-              <div @click="toLink(props.row)">
-                <span>{{ props.row.name }}</span>
-              </div>
+              <router-link :to="{ path: '/edit/' + scope.row.spaceId + '/doc/' + scope.row.id}">
+                {{ scope.row.name }}
+              </router-link>
             </el-form-item>
           </el-form>
         </template>
@@ -29,9 +29,9 @@
         label="文档名称"
         prop="name">
         <template slot-scope="scope" >
-          <div @click="toLink(scope.row)">
+          <router-link :to="{ path: '/edit/' + scope.row.spaceId + '/doc/' + scope.row.id}">
             {{ scope.row.name }}
-          </div>
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column
@@ -52,7 +52,7 @@
         label="操作"
         width="50">
         <template slot-scope="scope">
-          <router-link :to="{ path:'/set/doc', query: { docId: scope.row.id, spaceId: scope.row.spaceId }}">
+          <router-link :to="{ path:'/set/' + scope.row.spaceId + '/doc/' + scope.row.id}">
             <i class="el-icon-setting"/>
           </router-link>
         </template>
@@ -135,7 +135,7 @@ export default {
     ])
   },
   created() {
-    this.spaceId = this.$route.query.spaceId
+    this.spaceId = this.$route.params.spaceId
     if (this.docVisitLevel === '0') {
       this.showDocPage()
     } else {
@@ -199,16 +199,6 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageNum = val
       this.page()
-    },
-    toLink(item) {
-      this.$router.push({
-        path: '/edit/doc',
-        query: {
-          docId: item.id,
-          docName: item.name,
-          spaceId: item.spaceId
-        }
-      })
     },
     cancel() {
       this.dialogDocVisible = false

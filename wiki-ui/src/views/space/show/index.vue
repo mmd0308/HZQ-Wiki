@@ -43,7 +43,7 @@
         label="空间名称"
         prop="name">
         <template slot-scope="scope">
-          <router-link :to="{ path: '/doc', query: { spaceId: scope.row.id }}">
+          <router-link :to="{ path: scope.row.id + '/doc'}">
             {{ scope.row.name }}
           </router-link>
         </template>

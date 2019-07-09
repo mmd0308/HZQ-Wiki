@@ -10,9 +10,9 @@ cp -r ../wiki-ui/dist/* ../wiki-admin/src/main/resources/static/
 
 mvn clean package -Dmaven.test.skip=true
 
-docker rmi mmd0308/wiki-admin:v1.3.0
+docker rmi mmd0308/wiki-admin:v1.4.0
 
-docker build -t mmd0308/wiki-admin:v1.3.0 .
+docker build -t mmd0308/wiki-admin:v1.4.0 .
 
 rm -rf  src/main/resources/static/*
 

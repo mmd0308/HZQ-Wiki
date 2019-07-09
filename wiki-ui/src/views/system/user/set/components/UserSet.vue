@@ -3,7 +3,7 @@
     <el-form :ref="ruleForm" :model="basicForm" :rules="rules" label-position="right" label-width="100px">
       <el-form-item label="用户头像">
         <div @click="showUserImg">
-          <avatar :src="basicForm.img" :username="basicForm.username" size="80" />
+          <avatar :src="basicForm.img" :username="basicForm.username" :size="80" />
         </div>
       </el-form-item>
       <el-form-item label="用户名称" prop="name">
@@ -20,7 +20,7 @@
       </el-form-item>
     </el-form>
     <el-row class="row">
-      <el-button type="success" round size="medium" @click="update">保 存</el-button>
+      <el-button size="medium" type="success" round @click="update">保 存</el-button>
     </el-row>
 
     <my-upload

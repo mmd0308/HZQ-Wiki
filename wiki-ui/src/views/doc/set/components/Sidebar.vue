@@ -16,14 +16,11 @@ export default {
     createBar: {
       type: String,
       default: ''
-    },
-    docId: {
-      type: Number,
-      required: true
     }
   },
   data() {
     return {
+      docId: this.$route.params.id,
       clickSidber: this.createBar
     }
   },

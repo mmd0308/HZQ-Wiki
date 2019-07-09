@@ -18,8 +18,9 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       { path: 'dashboard', component: () => import('@/views/dashboard/index') },
-      { path: 'test', component: () => import('@/views/dashboard/test') },
+      // { path: 'test', component: () => import('@/views/dashboard/test') },
       { path: 'space', component: () => import('@/views/space/show/index') },
+      { path: ':spaceId/doc', component: () => import('@/views/doc/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
       {
         path: 'article',
@@ -41,7 +42,8 @@ export const constantRouterMap = [
     name: 'Layout',
     hidden: true,
     children: [
-      { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
+      // { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
+      { path: ':spaceId/doc/:id', component: () => import('@/views/doc/edit/Layout') },
       { path: 'article', component: () => import('@/views/article/edit/Layout') },
       { path: 'article/:id', component: () => import('@/views/article/edit/Layout') }
     ]
@@ -52,7 +54,7 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       { path: 'space', component: () => import('@/views/space/set/Layout') },
-      { path: 'doc', component: () => import('@/views/doc/set/Layout') },
+      { path: ':spaceId/doc/:id', component: () => import('@/views/doc/set/Layout') },
       { path: 'user', component: () => import('@/views/system/user/set/Layout') },
       { path: 'system', component: () => import('@/views/setting/Layout') },
       { path: 'article', component: () => import('@/views/article/set/Layout') }

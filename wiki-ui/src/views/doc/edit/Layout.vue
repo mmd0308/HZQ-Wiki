@@ -2,10 +2,10 @@
   <div class="app-doc">
     <el-container>
       <el-header>
-        <navbar :doc-status="docStatus" :doc-name="docName" :doc-privilege = "docPrivilege" @editStatus="editStatus"/>
+        <navbar :doc-status="docStatus" @editStatus="editStatus"/>
       </el-header>
       <el-main style="padding:0px;  min-height: calc(100vh - 60px)">
-        <document-main :doc-status="docStatus" :doc-id="docId" />
+        <document-main :doc-status="docStatus" />
       </el-main>
     </el-container>
   </div>
@@ -13,8 +13,6 @@
 <script>
 import Navbar from './Navbar'
 import DocumentMain from './DocMain'
-import { docPrivilege } from '@/api/doc/index'
-import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
   components: {
@@ -23,35 +21,12 @@ export default {
   },
   data() {
     return {
-      docStatus: 'R', // 状态为可读
-      docName: this.$route.query.docName,
-      docId: this.$route.query.docId,
-      spaceId: this.$route.query.spaceId,
-      docPrivilege: '',
-      paramsPrivilege: {
-        userId: '',
-        spaceId: this.$route.query.spaceId,
-        docId: this.$route.query.docId
-      }
+      docStatus: 'R' // 状态为可读 E编辑
     }
-  },
-  computed: {
-    ...mapGetters([
-      'userId'
-    ])
-  },
-  created() {
-    this.getPrivilege()
   },
   methods: {
     editStatus(stat) {
       this.docStatus = stat
-    },
-    getPrivilege() {
-      this.paramsPrivilege.userId = this.userId
-      docPrivilege(this.paramsPrivilege).then(res => {
-        this.docPrivilege = res.data
-      })
     }
   }
 }

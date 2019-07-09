@@ -1,8 +1,7 @@
 <template>
   <div class="basicSet">
-    <el-form :ref="ruleForm" :model="docForm" :rules="rules" label-position="right" label-width="100px">
+    <el-form :ref="ruleForm" :model="docForm" label-position="right" label-width="100px">
       <el-form-item label="文档封面">
-
         <img
           v-if="docForm.img"
           :src="docForm.img"
@@ -39,7 +38,7 @@
       v-model="showUpload"
       :lang-ext="docZh"
       :params="uploadParams"
-      no-circle="true"
+      :no-circle="true"
       field="file"
       img-format="png"
       @crop-success="cropSuccess"
@@ -56,14 +55,9 @@ export default {
   components: {
     'my-upload': myUpload
   },
-  props: {
-    docId: {
-      type: Number,
-      required: true
-    }
-  },
   data() {
     return {
+      docId: this.$route.params.id,
       uploadUrl: '/api/doc/uploadImages',
       headers: {
         'Authorization': getToken()

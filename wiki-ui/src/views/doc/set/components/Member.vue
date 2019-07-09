@@ -82,18 +82,10 @@
 <script>
 import { userDocAndSpaceAll, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/doc/userDoc'
 export default {
-  props: {
-    docId: {
-      type: Number,
-      required: true
-    },
-    spaceId: {
-      type: Number,
-      required: true
-    }
-  },
   data() {
     return {
+      docId: this.$route.params.id,
+      spaceId: this.$route.params.spaceId,
       privilegeData: [
         { value: 0, label: '拥有者' },
         { value: 1, label: '浏览者' },

@@ -1,28 +1,27 @@
 <template>
   <div class="doc">
-    <div v-for="(item,index) in docLists" :key="index" class="boxs" @click="toLink(item)">
-      <!-- <router-link :to="{ path: '/doc/layout', query: { docId: item.id, docName: item.name, docPrivilege:item.privilege }}"> -->
-      <div class="icon">
-        <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
-        <img v-else :src="item.img" class="pic-404__child right" @error="imgError(item)">
-      </div>
-      <h2 class="title">
-        {{ item.name }}
-      </h2>
-      <div class="desc" >
-        <span v-if="item.createName != null" class="auth">
-          作者:{{ item.createName }}
-        </span>
-        <br>
-        <span class="auth">
-          创建时间:{{ item.createTime }}
-        </span>
-      </div>
-      <!-- </router-link> -->
+    <div v-for="(item,index) in docLists" :key="index" class="boxs">
+      <router-link :to="{ path: '/edit/' + item.spaceId + '/doc/' + item.id}">
+        <div class="icon">
+          <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
+          <img v-else :src="item.img" class="pic-404__child right" @error="imgError(item)">
+        </div>
+        <h2 class="title">
+          {{ item.name }}
+        </h2>
+        <div class="desc" >
+          <span v-if="item.createName != null" class="auth">
+            作者:{{ item.createName }}
+          </span>
+          <br>
+          <span class="auth">
+            创建时间:{{ item.createTime }}
+          </span>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
-
 <script>
 import { dashboardPage } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
@@ -48,16 +47,6 @@ export default {
     this.showDocPage()
   },
   methods: {
-    toLink(item) {
-      this.$router.push({
-        path: '/edit/doc',
-        query: {
-          docId: item.id,
-          docName: item.name,
-          spaceId: item.spaceId
-        }
-      })
-    },
     showDocPage() {
       dashboardPage(this.listQuery, this.userId).then(response => {
         if (this.docLists.length === 0) {

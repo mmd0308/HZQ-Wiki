@@ -1,16 +1,18 @@
 <template>
   <div class="navbar">
-    <h1 class="show-navbar-title" style="margin:0px;line-height:60px;float:left;font-size:20px;padding-right:40px;"><a href="/" class="router-link-active">
-      {{ title }}
-    </a></h1>
+    <h1 class="show-navbar-title" style="margin:0px;line-height:60px;float:left;font-size:20px;padding-right:40px;">
+      <a href="/" class="router-link-active">
+        {{ title }}
+      </a>
+    </h1>
     <div class="menu" style="float:left">
       <el-menu
         :default-active="activeIndex"
+        :router="true"
         class="el-menu-demo"
         mode="horizontal"
         background-color="#545c64"
         text-color="#fff"
-        router="true"
         active-text-color="#ffd04b"
         @select="handleSelect">
         <el-menu-item index="/dashboard">
@@ -31,16 +33,16 @@
     <div style="float:right;" >
       <el-menu
         :default-active="activeIndex"
+        :router="true"
         class="el-menu-demo"
         mode="horizontal"
         background-color="#545c64"
         text-color="#fff"
-        router="true"
         active-text-color="#ffd04b"
         @select="handleSelect">
-        <el-submenu>
+        <el-submenu index="/">
           <template slot="title">
-            <avatar :username="username" :src="avatar" style="float:left;margin-top:10px;" size="40" />
+            <avatar :username="username" :src="avatar" :size="40" style="float:left;margin-top:10px;" />
           </template>
           <el-menu-item index="/set/user" >个人中心</el-menu-item>
           <el-menu-item index="/set/article" >文章管理</el-menu-item>
@@ -81,5 +83,3 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-</style>

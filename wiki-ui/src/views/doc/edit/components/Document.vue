@@ -16,6 +16,7 @@
       v-model="contentForm.content"
       class="hzq-wiki-height"
       @imgAdd="imgAdd"
+      @change="contentChange"
       @save="saveContent"/>
   </div>
 </template>
@@ -33,16 +34,22 @@ export default {
   },
   data() {
     return {
-      contentForm: this.init()
+      contentForm: this.init(),
+      timeOut: null,
+      saveState: '已保存'
+    }
+  },
+  watch: {
+    saveState: {
+      handler: function(val) {
+        bus.$emit('editDocSaveState', val)
+      },
+      deep: true
     }
   },
   mounted() {
     const self = this
     bus.$on('clickContentTree', function(treeNode) {
-      self.contentForm.docId = treeNode.docId
-      self.contentForm.id = treeNode.id
-      // self.contentForm.content = treeNode.content
-      // self.contentForm.contentHtml = treeNode.contentHtml
       self.get(treeNode.id)
     })
   },
@@ -60,15 +67,26 @@ export default {
         this.contentForm = res.data
       })
     },
+    contentChange(value, render) {
+      this.saveState = '保存中...'
+      if (this.timeOut != null) {
+        clearTimeout(this.timeOut)
+      }
+      this.contentForm.content = value
+      this.contentForm.contentHtml = render
+      var that = this
+      this.timeOut = setTimeout(function() {
+        that.addOrUpdate()
+      }, 500)
+    },
     saveContent(value, render) {
       this.contentForm.content = value
       this.contentForm.contentHtml = render
+      this.addOrUpdate()
+    },
+    addOrUpdate() {
       addOrUpdate(this.contentForm).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '保存成功!',
-          type: 'success'
-        })
+        this.saveState = '保存成功'
       })
     },
     imgAdd(pos, $file) {
@@ -89,14 +107,3 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss">
-.doc-edit{
-  /* position: absolute;
-  overflow: auto;
-  top: 60px;
-  bottom: 0px;
-  right: 0px;
-  left: 280px; */
-}
-</style>
-

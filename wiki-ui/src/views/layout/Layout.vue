@@ -22,24 +22,11 @@ export default {
     Navbar,
     AppMain,
     WFooter: Footer
-  },
-  props: {
-    docId: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-
-    }
   }
 }
 </script>
-
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import "src/styles/mixin.scss";
-
 .el-footer {
   padding: 20px 0px 0px 0px;
 }

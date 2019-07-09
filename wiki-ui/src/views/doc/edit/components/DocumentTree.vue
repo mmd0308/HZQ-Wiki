@@ -36,12 +36,13 @@
             v-model="contentForm.sequence"
             type="number"
             min="10"
-            max="100"/>
+            max="100"
+            @keyup.enter.native="addOrUpdate"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="contentDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addOrUpdate">确 定</el-button>
+        <el-button type="primary" @click="addOrUpdate" >确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -56,14 +57,11 @@ export default {
     docStatus: {
       type: String,
       required: true
-    },
-    docId: {
-      type: Number,
-      required: true
     }
   },
   data() {
     return {
+      docId: this.$route.params.id,
       setting: this.initSetting(),
       zNodes: [],
       filterText: '',

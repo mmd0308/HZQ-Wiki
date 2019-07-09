@@ -1,12 +1,12 @@
 <template>
   <div class="set" style="background:blue;">
     <div class="left" style="background: pink">
-      <sidebar :create-bar="checkRightTemp" :doc-id="docId" @getRightTemp="getRightTemp" />
+      <sidebar :create-bar="checkRightTemp" @getRightTemp="getRightTemp" />
     </div>
     <div class="right">
       <el-card>
-        <base-set v-if="checkRightTemp === 'base'" :doc-id="docId" />
-        <member v-if="checkRightTemp === 'member'" :doc-id="docId" :space-id="spaceId"/>
+        <base-set v-if="checkRightTemp === 'base'" />
+        <member v-if="checkRightTemp === 'member'" />
       </el-card>
     </div>
   </div>
@@ -23,8 +23,6 @@ export default {
   },
   data() {
     return {
-      docId: this.$route.query.docId,
-      spaceId: this.$route.query.spaceId,
       checkRightTemp: 'base'
     }
   },
@@ -33,7 +31,6 @@ export default {
       this.checkRightTemp = data
     }
   }
-
 }
 </script>
 
