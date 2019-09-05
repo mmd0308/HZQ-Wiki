@@ -15,7 +15,8 @@ import java.util.Map;
  * @date 2019-05-21 10:03
  */
 public class JwtTokenUtil {
-    public JwtTokenUtil() {
+    private JwtTokenUtil() {
+        throw new RuntimeException("工具类不能实例话");
     }
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 

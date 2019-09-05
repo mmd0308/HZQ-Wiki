@@ -2,15 +2,10 @@ package com.hzqing.admin.controller.config;
 
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.config.Config;
 import com.hzqing.admin.dto.config.ConfigDto;
 import com.hzqing.admin.service.config.IConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author hzqing

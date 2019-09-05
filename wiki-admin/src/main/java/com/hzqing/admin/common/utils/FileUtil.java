@@ -8,6 +8,11 @@ import java.io.FileOutputStream;
  * @date 2019-06-10 08:53
  */
 public class FileUtil {
+
+    private FileUtil() {
+        throw new RuntimeException("工具类不能实例话");
+    }
+
     /**
      * 上传文件
      * @param file

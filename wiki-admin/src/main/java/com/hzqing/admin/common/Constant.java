@@ -6,7 +6,7 @@ package com.hzqing.admin.common;
  */
 public class Constant {
     private Constant(){
-
+        throw new RuntimeException("常量类，允许实例化");
     }
     /**
      * 超级管理员账号

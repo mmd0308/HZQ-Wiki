@@ -8,6 +8,10 @@ import java.util.Date;
  * @date 2019-06-10 08:54
  */
 public class DateUtils {
+    private DateUtils() {
+        throw new RuntimeException("工具类不能实例话");
+    }
+
     private static final SimpleDateFormat yearAandMonth = new SimpleDateFormat("yyyyMM");
 
     /**

@@ -55,7 +55,8 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(ConstantSecurity.TOKEN_KEY);
         // token不存在，直接返回
         if (token == null || !token.startsWith(ConstantSecurity.TOKEN_PREFIX)) {
-            if (!request.getRequestURI().startsWith("/api")) { // 如果不是api开头的，直接放行
+            // 如果不是api开头的，直接放行
+            if (!request.getRequestURI().startsWith("/api")) {
                 System.out.println("request = [" + request.getRequestURL() + "], response = [" + response + "], chain = [" + chain + "]");
                 chain.doFilter(request, response);
                 return;

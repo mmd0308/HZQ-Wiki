@@ -10,7 +10,7 @@ import java.util.List;
 public class TreeUtil {
 
   private TreeUtil() {
-    throw new IllegalStateException("错误：不能被实例化");
+      throw new RuntimeException("工具类不能实例话");
   }
 
 

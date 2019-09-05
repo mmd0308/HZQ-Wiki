@@ -6,7 +6,7 @@ package com.hzqing.admin.common;
  */
 public class ConstantSecurity {
     private ConstantSecurity(){
-        throw new IllegalStateException("错误：不能被初始化");
+        throw new RuntimeException("常量类，允许实例化");
     }
 
 

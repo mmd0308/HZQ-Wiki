@@ -6,7 +6,7 @@ package com.hzqing.admin.common;
  */
 public class ConstantConfig {
     private ConstantConfig(){
-
+        throw new RuntimeException("常量类，允许实例化");
     }
 
     /**

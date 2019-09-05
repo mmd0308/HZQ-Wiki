@@ -55,7 +55,7 @@ public class ArticleContoller extends BaseController {
         int res = -1;
         article = (Article) initAddOrUpdate(article);
         article.setUserId(article.getCreateBy());
-        if (article.getId() == null){ //新增
+        if (article.getId() == null){
             res = articleService.insert(article);
         }else {
             article.setCreateBy(null);
