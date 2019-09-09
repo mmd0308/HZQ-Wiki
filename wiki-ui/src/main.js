@@ -18,7 +18,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import $ from './assets/jquery/jquery-vendor.js' // 导入jquery
-import '../plugins/ztree/js/jquery.ztree.core.min.js'
+import '../plugins/ztree/js/jquery.ztree.core.js'
 import '../plugins/ztree/js/jquery.ztree.excheck.min.js'
 import '../plugins/ztree/js/jquery.ztree.exedit.min.js'
 import '../plugins/ztree/css/zTreeStyle.css'

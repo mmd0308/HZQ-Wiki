@@ -1,27 +1,29 @@
 <template>
   <div class="doc-tree" style=" min-height: calc(100vh - 60px)">
-    <el-input
-      v-if="docStatus == 'R'"
-      v-model="filterText"
-      placeholder="输入关键字进行过滤"/>
-
+    <el-input v-if="docStatus == 'R'" v-model="filterText" placeholder="输入关键字进行过滤" />
     <div v-else>
-      <!-- <div style="text-align:center;margin:10px 0px">
-        文档标题
-        <i class="el-icon-plus" @click="toAdd"/>
-      </div> -->
-      <el-button style="width:100%;" @click="toAdd">添加文档 <i class="el-icon-plus" /></el-button>
+      <el-button style="width:100%;" @click="toAdd">添加文档
+        <i class="el-icon-plus" />
+      </el-button>
     </div>
+
     <div class="tree-box">
       <div class="zTreeDemoBackground left">
-        <ul id="treeContent" class="ztree"/>
+        <ul id="treeContent" class="ztree" />
       </div>
     </div>
+
     <div id="rMenu">
       <ul>
-        <li id="m_add"> <el-button class="m_button" size="mini" @click="toAdd">添加文档</el-button></li>
-        <li id="m_edit"> <el-button class="m_button" size="mini" @click="toEdit">编辑</el-button></li>
-        <li id="m_del"> <el-button class="m_button" size="mini" @click="deleted">删除</el-button></li>
+        <li id="m_add">
+          <el-button class="m_button" size="mini" @click="toAdd">添加文档</el-button>
+        </li>
+        <li id="m_edit">
+          <el-button class="m_button" size="mini" @click="toEdit">编辑</el-button>
+        </li>
+        <li id="m_del">
+          <el-button class="m_button" size="mini" @click="deleted">删除</el-button>
+        </li>
       </ul>
     </div>
 
@@ -31,18 +33,12 @@
           <el-input v-model="contentForm.title" />
         </el-form-item>
         <el-form-item label="文档排序">
-          <el-input
-            id="tentacles"
-            v-model="contentForm.sequence"
-            type="number"
-            min="10"
-            max="100"
-            @keyup.enter.native="addOrUpdate"/>
+          <el-input id="tentacles" v-model="contentForm.sequence" type="number" min="10" max="100" @keyup.enter.native="addOrUpdate" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="contentDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addOrUpdate" >确 定</el-button>
+        <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -134,7 +130,8 @@ export default {
         $.fn.zTree.init($('#treeContent'), this.initSetting(), res.data)
         const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
         var treeNode
-        if (conId) { // 根据id进行选中
+        if (conId) {
+          // 根据id进行选中
           treeNode = zTree_Menu.getNodeByParam('id', conId)
         } else {
           // 首次加载数据,或者没有制定选择时候,默认选择第一个
@@ -165,11 +162,15 @@ export default {
       return false
     },
     deleted() {
-      this.$confirm('此操作将永久删除[' + this.contentForm.title + ']文档?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        typr: 'warning'
-      }).then(() => {
+      this.$confirm(
+        '此操作将永久删除[' + this.contentForm.title + ']文档?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          typr: 'warning'
+        }
+      ).then(() => {
         deletedById(this.checkContentId).then(() => {
           this.tree() // 刷新树
           this.$notify({
@@ -186,7 +187,25 @@ export default {
       this.cancelRMenu()
     },
     onClickMethod(event, treeId, treeNode) {
-      this.selectContentTree(treeNode)
+      // 只有是父亲级别节点进行展开
+      if (treeNode.isParent) {
+        console.log(treeNode.open)
+        var zTree = $.fn.zTree.getZTreeObj('treeContent')
+        // 展开节点
+        zTree.expandNode(treeNode)
+        // 修改图标
+        var icon_bottom = 'hzq-tree-right-icon-bottom-' + treeNode.tId
+        var icon_right = 'hzq-tree-right-icon-right-' + treeNode.tId
+        if (treeNode.open) {
+          $('#' + icon_bottom).css('display', 'block')
+          $('#' + icon_right).css('display', 'none')
+        } else {
+          $('#' + icon_right).css('display', 'block')
+          $('#' + icon_bottom).css('display', 'none')
+        }
+      } else {
+        this.selectContentTree(treeNode)
+      }
     },
     selectContentTree(treeNode) {
       bus.$emit('clickContentTree', treeNode)
@@ -194,7 +213,11 @@ export default {
     onRightClickMethod(event, treeId, treeNode) {
       if (this.docStatus !== 'E') return // 只有进入编辑模式,才能右击操作
 
-      if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
+      if (
+        !treeNode &&
+        event.target.tagName.toLowerCase() !== 'button' &&
+        $(event.target).parents('a').length === 0
+      ) {
         // 没有选中node时候,默认是添加最高级node节点
         this.checkContentId = null
         $.fn.zTree.getZTreeObj('treeContent').cancelSelectedNode() // 取消节点的选中状态。
@@ -229,17 +252,22 @@ export default {
       console.log(x + '-' + y)
       y += document.body.scrollTop
       x += document.body.scrollLeft
-      $('#rMenu').css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
+      $('#rMenu').css({ top: y + 'px', left: x + 'px', visibility: 'visible' })
 
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onBodyMouseDown(event) {
-      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
+      if (
+        !(
+          event.target.id === 'rMenu' ||
+          $(event.target).parents('#rMenu').length > 0
+        )
+      ) {
         this.cancelRMenu()
       }
     },
     cancelRMenu() {
-      $('#rMenu').css({ 'visibility': 'hidden' })
+      $('#rMenu').css({ visibility: 'hidden' })
     },
     filterNode(val) {
       var filterZNode = []
@@ -255,47 +283,38 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss">
 .custom-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
-  }
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
 
 .doc-tree {
-  .tree-box{
+  .tree-box {
     position: absolute;
     left: 0;
     bottom: 0px;
     top: 100px;
     overflow: auto;
   }
-  .ztree{
-    //margin-top: 10px;
-    //background: #f0f6e4;
-    padding: 0px;
-    width: 280px;
-    min-height: calc(100vh - 100px);
-    overflow-y: scroll;
-    overflow-x: auto;
-  }
+  // .ztree {
+  //   width: 280px;
+  //   min-height: calc(100vh - 100px);
+  //   overflow-y: scroll;
+  //   overflow-x: auto;
+  // }
   .ztree li {
     padding: 0;
     margin: 0;
     list-style: none;
-    line-height: 30px;
+    line-height: 36px;
     text-align: left;
     white-space: nowrap;
     outline: 0;
   }
-  .ztree li ul{
-    margin: 0px;
-    padding: 0 0 0 10px
-  }
-  .ztree li a{
-    width: 280px;
-    height: 30px;
+  .ztree li a {
     padding-top: 0px;
     margin: 0;
     text-decoration: none;
@@ -306,29 +325,27 @@ export default {
     background: #ff7d44;
   }
 
-  .ztree li a.curSelectedNode{
+  .ztree li a.curSelectedNode {
     background-color: #ff7d44;
     border: 0;
-    height: 30px;
   }
   .ztree li span.button {
     vertical-align: middle;
   }
-  .ztree li span.button.add{
+  .ztree li span.button.add {
     margin-left: 2px;
     margin-right: -1px;
     background-position: -144px 0;
   }
-
 }
 #rMenu {
-  position:absolute;
-  visibility:hidden;
+  position: absolute;
+  visibility: hidden;
   z-index: 9999;
-  top:0;
+  top: 0;
   text-align: left;
   padding: 2px;
-  }
+}
 #rMenu ul {
   margin: 0;
   padding: 0;
@@ -340,18 +357,17 @@ export default {
   font-family: inherit;
   vertical-align: baseline;
 
-  li{
+  li {
     margin: 0px;
     padding: 0px;
     cursor: pointer;
     list-style: none outside none;
     background-color: #fff;
   }
-  .m_button{
+  .m_button {
     width: 80px;
     border-radius: 0px;
   }
 }
-
 </style>
 
