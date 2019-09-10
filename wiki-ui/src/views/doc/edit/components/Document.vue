@@ -1,7 +1,7 @@
 <template>
   <div class="doc-edit hzq-wiki-height">
     <mavon-editor v-if="docStatus == 'R'" v-model="contentForm.content" :subfield="false" :scroll-style="true" :toolbars-flag="false" :external-link="externalLink" class="hzq-wiki-height" default-open="preview" />
-    <mavon-editor v-else ref="mavonEditor" :scroll-style="true" v-model="contentForm.content" class="hzq-wiki-height" @imgAdd="imgAdd" @change="contentChange" @save="saveContent" />
+    <mavon-editor v-else ref="mavonEditor" :scroll-style="true" v-model="contentForm.content" :external-link="externalLink" class="hzq-wiki-height" @imgAdd="imgAdd" @change="contentChange" @save="saveContent" />
   </div>
 </template>
 <script>

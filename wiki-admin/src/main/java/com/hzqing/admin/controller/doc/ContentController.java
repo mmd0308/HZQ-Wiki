@@ -54,7 +54,8 @@ public class ContentController extends BaseController {
     public ResponseMessage addOrUpdate(@RequestBody Content content){
         int res = -1;
         content = (Content) initAddOrUpdate(content);
-        if (content.getId() == null){ //新增
+        //新增
+        if (content.getId() == null){
             res = contentService.insert(content);
         }else {
             content.setCreateBy(null);
@@ -68,7 +69,8 @@ public class ContentController extends BaseController {
         Content content = new Content();
         content.setParentId(id);
         List<Content> contents = contentService.selectList(content);
-        if (contents.size()>0) { // 表示有子节点，不能删除
+        // 表示有子节点，不能删除
+        if (contents.size()>0) {
             return responseMessage(500,-1,"有子集文档，不能删除！");
         }
         int res = contentService.deletedById(id);

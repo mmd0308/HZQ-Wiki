@@ -1,7 +1,6 @@
 package com.hzqing.admin.domain.doc;
 
 import com.hzqing.admin.domain.base.Base;
-import com.hzqing.admin.domain.base.TreeNode;
 import lombok.Data;
 
 /**
@@ -38,5 +37,15 @@ public class Content extends Base {
      * 文档内容 html格式
      */
     private String contentHtml;
+
+    /**
+     * 文档类型: A 文章(默认) D 目录 H 链接
+     */
+    private String docType;
+
+    /**
+     * 是否为目录
+     */
+    private boolean parent;
 
 }

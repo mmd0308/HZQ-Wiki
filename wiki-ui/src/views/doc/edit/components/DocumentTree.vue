@@ -32,6 +32,14 @@
         <el-form-item label="文档名称">
           <el-input v-model="contentForm.title" />
         </el-form-item>
+        <el-form-item label="文档类型">
+          <el-select v-if="contentFormStatus === 'edit'" v-model="contentForm.docType" disabled="true" placeholder="请选择" style="width:100%">
+            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <el-select v-else v-model="contentForm.docType" placeholder="请选择" style="width:100%">
+            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="文档排序">
           <el-input id="tentacles" v-model="contentForm.sequence" type="number" min="10" max="100" @keyup.enter.native="addOrUpdate" />
         </el-form-item>
@@ -69,8 +77,19 @@ export default {
       },
       contentDialogFormVisible: false,
       contentTitle: '新增文档',
+      contentFormStatus: 'add',
       contentForm: this.initConentForm(),
-      checkContentId: null
+      checkContentId: null,
+      typeOptions: [
+        {
+          value: 'A',
+          label: '文章'
+        },
+        {
+          value: 'D',
+          label: '目录'
+        }
+      ]
     }
   },
   watch: {
@@ -95,7 +114,8 @@ export default {
         title: '',
         sequence: 0,
         parentId: -1, // 表示顶级菜单
-        docId: this.docId
+        docId: this.docId,
+        docType: 'A'
       }
     },
     initSetting() {
@@ -108,7 +128,8 @@ export default {
         },
         data: {
           key: {
-            name: 'title'
+            name: 'title',
+            isParent: 'parent'
           },
           simpleData: {
             enable: true,
@@ -148,6 +169,7 @@ export default {
         this.contentForm.parentId = this.checkContentId
       }
       this.contentDialogFormVisible = true
+      this.contentFormStatus = 'add'
       this.cancelRMenu()
     },
     addOrUpdate() {
@@ -184,11 +206,12 @@ export default {
     },
     toEdit(treeNode) {
       this.contentDialogFormVisible = true
+      this.contentFormStatus = 'edit'
       this.cancelRMenu()
     },
     onClickMethod(event, treeId, treeNode) {
       // 只有是父亲级别节点进行展开
-      if (treeNode.isParent) {
+      if (treeNode.parent) {
         console.log(treeNode.open)
         var zTree = $.fn.zTree.getZTreeObj('treeContent')
         // 展开节点
@@ -212,7 +235,6 @@ export default {
     },
     onRightClickMethod(event, treeId, treeNode) {
       if (this.docStatus !== 'E') return // 只有进入编辑模式,才能右击操作
-
       if (
         !treeNode &&
         event.target.tagName.toLowerCase() !== 'button' &&
@@ -236,25 +258,41 @@ export default {
       }
     },
     showRMenu(treeNode, type, x, y) {
-      $('#rMenu ul').show()
-      if (type === 'root') {
-        $('#m_del').hide()
-        $('#m_edit').hide()
-      } else {
-        $('#m_edit').show()
-        $('#m_add').show()
-        if (!treeNode.children) {
-          $('#m_del').show()
-        } else {
-          $('#m_del').hide() // 有子元素,禁止删除
-        }
-      }
-      console.log(x + '-' + y)
+      // 选择需要展示的按钮
+      this.checkShowRMenu(treeNode, type)
       y += document.body.scrollTop
       x += document.body.scrollLeft
       $('#rMenu').css({ top: y + 'px', left: x + 'px', visibility: 'visible' })
 
       $('body').bind('mousedown', this.onBodyMouseDown)
+    },
+    checkShowRMenu(treeNode, type) {
+      // 默认展示所有
+      $('#rMenu ul').show()
+      // 如果没有选择节点
+      if (type === 'root') {
+        $('#m_add').show()
+        $('#m_del').hide()
+        $('#m_edit').hide()
+        return
+      }
+      // 如果不是目录,不允许新增子集
+      if (!treeNode.parent) {
+        $('#m_add').hide()
+        $('#m_del').show()
+        $('#m_edit').show()
+        return
+      } else {
+        // 目录
+        $('#m_add').show()
+        $('#m_edit').show()
+        // 判断目录下面是否有文档存在,如果没有可以删除
+        if (!treeNode.children) {
+          $('#m_del').show()
+        } else {
+          $('#m_del').hide()
+        }
+      }
     },
     onBodyMouseDown(event) {
       if (
@@ -356,7 +394,6 @@ export default {
   font-size: 100%;
   font-family: inherit;
   vertical-align: baseline;
-
   li {
     margin: 0px;
     padding: 0px;

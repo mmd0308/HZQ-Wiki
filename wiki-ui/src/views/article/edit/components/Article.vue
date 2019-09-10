@@ -1,10 +1,10 @@
 <template>
-  <div class="article-edit hzq-wiki-height" >
+  <div class="article-edit hzq-wiki-height">
     <div class="header">
       <router-link to="/article">
-        <i class="el-icon-arrow-left back"/>
+        <i class="el-icon-arrow-left back" />
       </router-link>
-      <input v-model="title" placeholder="请输入文章标题" class="title" >
+      <input v-model="title" placeholder="请输入文章标题" class="title">
       <ul style="float:right">
         <li>
           {{ saveState }}
@@ -19,14 +19,7 @@
         </li>
       </ul>
     </div>
-    <mavon-editor
-      ref="mavonEditor"
-      :scroll-style="true"
-      v-model="articleForm.content"
-      class="hzq-wiki-height"
-      @change="contentChange"
-      @imgAdd="imgAdd"
-      @save="saveContent"/>
+    <mavon-editor ref="mavonEditor" :scroll-style="true" v-model="articleForm.content" :external-link="externalLink" class="hzq-wiki-height" @change="contentChange" @imgAdd="imgAdd" @save="saveContent" />
   </div>
 </template>
 <script>
@@ -39,7 +32,33 @@ export default {
       saveState: '尚未保存',
       articleForm: this.init(),
       timeOut: null,
-      title: ''
+      title: '',
+      externalLink: {
+        markdown_css: function() {
+          // 这是你的markdown css文件路径
+          return '/static/markdown/github-markdown.min.css'
+        },
+        hljs_js: function() {
+          // 这是你的hljs文件路径
+          return '/static/highlightjs/highlight.min.js'
+        },
+        hljs_css: function(css) {
+          // 这是你的代码高亮配色文件路径
+          return '/static/highlightjs/styles/' + css + '.min.css'
+        },
+        hljs_lang: function(lang) {
+          // 这是你的代码高亮语言解析路径
+          return '/static/highlightjs/languages/' + lang + '.min.js'
+        },
+        katex_css: function() {
+          // 这是你的katex配色方案路径路径
+          return '/static/katex/katex.min.css'
+        },
+        katex_js: function() {
+          // 这是你的katex.js路径
+          return '/static/katex/katex.min.js'
+        }
+      }
     }
   },
   watch: {
@@ -113,7 +132,8 @@ export default {
     addOrUpdate() {
       addOrUpdate(this.articleForm).then(res => {
         // 保存成功返回id
-        if (this.articleForm.id === '') { // 表示新增
+        if (this.articleForm.id === '') {
+          // 表示新增
           this.articleForm.id = res.data
         }
         this.saveState = '保存完成'
@@ -138,7 +158,10 @@ export default {
       param.append('file', $file) // 通过append向form对象添加数据
       param.append('articleId', this.articleForm.id)
       const config = {
-        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': getToken() }
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: getToken()
+        }
       }
       var that = this
       // 添加请求头
@@ -153,24 +176,24 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .article-edit {
   background: #fff;
-  .header{
-    .back{
+  .header {
+    .back {
       line-height: 3;
       font-weight: bold;
-      padding: 0 10px 0 20px
+      padding: 0 10px 0 20px;
     }
-    .title{
-      border:none;
-      height:50px;
-      font-size:20px;
+    .title {
+      border: none;
+      height: 50px;
+      font-size: 20px;
       width: 60%;
       outline: none;
     }
     ul {
-      list-style:none; /* 将默认的列表符号去掉 */
-      padding:0; /* 将默认的内边距去掉 */
-      margin:0; /* 将默认的外边距去掉 */
-      margin-top:5px;
+      list-style: none; /* 将默认的列表符号去掉 */
+      padding: 0; /* 将默认的内边距去掉 */
+      margin: 0; /* 将默认的外边距去掉 */
+      margin-top: 5px;
       margin-right: 20px;
     }
     ul li {
@@ -178,10 +201,9 @@ export default {
       line-height: 40px;
     }
     li + li {
-      margin-left:10px;
+      margin-left: 10px;
     }
   }
-
 }
 </style>
 

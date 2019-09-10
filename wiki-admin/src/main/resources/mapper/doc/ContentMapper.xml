@@ -17,6 +17,8 @@
         <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
+        <result column="doc_type" property="docType" />
+        <result column="parent" property="parent" />
     </resultMap>
 
     <sql id="tableName">
@@ -33,7 +35,9 @@
             version,
             create_time,
             update_by,
-            update_time
+            update_time,
+            doc_type,
+            (case when doc_type =  "D"  then true else false end)as parent
         from 
             <include refid="tableName" />
         <where>
@@ -59,7 +63,8 @@
             content_html,
             create_time,
             update_by,
-            update_time
+            update_time,
+            doc_type
         from
             <include refid="tableName" />
         where id = #{id}
@@ -80,7 +85,8 @@
             create_by,
             create_time,
             update_by,
-            update_time
+            update_time,
+            doc_type
         ) VALUE (
             #{id},
             #{docId},
@@ -93,7 +99,8 @@
             #{createBy},
             #{createTime},
             #{updateBy},
-            #{updateTime}
+            #{updateTime},
+            #{docType}
         )
     </insert>
 
