@@ -1318,8 +1318,8 @@
 
         if (isParent) {
           html.push("<span style='float:right;margin: 5px;' >" +
-            "<embed id='hzq-tree-right-icon-right-" + node.tId + "' style='width:16px;height:16px;margin:5px 0px;' src='../../../src/icons/svg/right.svg' type='image/svg+xml' />" +
-            "<embed id='hzq-tree-right-icon-bottom-" + node.tId + "' style='display:none;width:16px;height:16px;margin:5px 0px;' src='../../../src/icons/svg/bottom.svg' type='image/svg+xml' />" +
+            "<embed id='hzq-tree-right-icon-right-" + node.tId + "' style='width:16px;height:16px;margin:5px 0px;' src='../../../static/ztree/img/right.svg' type='image/svg+xml' />" +
+            "<embed id='hzq-tree-right-icon-bottom-" + node.tId + "' style='display:none;width:16px;height:16px;margin:5px 0px;' src='../../../static/ztree/img/bottom.svg' type='image/svg+xml' />" +
             '</span>')
         }
       },
