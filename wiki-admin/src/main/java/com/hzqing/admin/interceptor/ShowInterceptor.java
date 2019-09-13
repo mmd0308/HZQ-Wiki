@@ -3,6 +3,7 @@ package com.hzqing.admin.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.hzqing.admin.domain.system.UserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,16 +29,19 @@ public class ShowInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("ShowInterceptor.preHandle " + request.getServletPath());
+        log.info("ShowInterceptor.preHandle  ServletPath" + request.getServletPath() + "method: " + request.getMethod() );
 
         if (show){
-            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            log.info("ShowInterceptor.preHandle " + userInfo);
+            String authorization = request.getHeader("Authorization");
+            // 表示已经登陆
+            if (StringUtils.isNotEmpty(authorization)) {
+                UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                if (userInfo.getUsername().equals("admin") || userInfo.getUsername().equals("hengzhaoqing")) {
+                    return  true;
+                }
+            }
             // 非get请求，进行操作
-            if(!request.getMethod().matches(HttpMethod.GET.name())
-                && !userInfo.getUsername().equals("admin")
-                && !userInfo.getUsername().equals("hengzhaoqing")
-            ){
+            if(!request.getMethod().matches(HttpMethod.GET.name())){
                 HashMap<String,String> res = new HashMap<>();
                 res.put("code","500");
                 res.put("message","演示系统，禁止修改");

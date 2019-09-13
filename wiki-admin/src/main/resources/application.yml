@@ -43,4 +43,4 @@ hzq:
     password: root
   fs:
     path: ${WIKI_FS:/tmp/fs/}
-  show: true
+  show: false
