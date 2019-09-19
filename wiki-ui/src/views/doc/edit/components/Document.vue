@@ -1,7 +1,7 @@
 <template>
   <div class="doc-edit hzq-wiki-height">
-    <mavon-editor v-if="docStatus == 'R'" v-model="contentForm.content" :subfield="false" :scroll-style="true" :toolbars-flag="false" :external-link="externalLink" class="hzq-wiki-height" default-open="preview" />
-    <mavon-editor v-else ref="mavonEditor" :scroll-style="true" v-model="contentForm.content" :external-link="externalLink" class="hzq-wiki-height" @imgAdd="imgAdd" @change="contentChange" @save="saveContent" />
+    <mavon-editor v-if="docStatus == 'R'" :ishljs="true" v-model="contentForm.content" :subfield="false" :scroll-style="true" :toolbars-flag="false" :external-link="externalLink" class="hzq-wiki-height" default-open="preview" />
+    <mavon-editor v-else ref="mavonEditor" :ishljs="true" :scroll-style="true" v-model="contentForm.content" :external-link="externalLink" class="hzq-wiki-height" @imgAdd="imgAdd" @change="contentChange" @save="saveContent" />
   </div>
 </template>
 <script>
@@ -30,13 +30,15 @@ export default {
           // 这是你的hljs文件路径
           return '/static/highlightjs/highlight.min.js'
         },
-        hljs_css: function(css) {
+        hljs_css: function() {
           // 这是你的代码高亮配色文件路径
-          return '/static/highlightjs/styles/' + css + '.min.css'
+          // return '/static/highlightjs/styles/' + css + '.min.css'
+          return '/static/highlightjs/styles/github.min.css'
         },
-        hljs_lang: function(lang) {
+        hljs_lang: function() {
           // 这是你的代码高亮语言解析路径
-          return '/static/highlightjs/languages/' + lang + '.min.js'
+          // return '/static/highlightjs/languages/' + lang + '.min.js'
+          return '/static/highlightjs/languages/highlight.min.js'
         },
         katex_css: function() {
           // 这是你的katex配色方案路径路径

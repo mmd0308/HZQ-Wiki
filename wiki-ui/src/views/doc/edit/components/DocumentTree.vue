@@ -337,12 +337,6 @@ export default {
     top: 100px;
     overflow: auto;
   }
-  // .ztree {
-  //   width: 280px;
-  //   min-height: calc(100vh - 100px);
-  //   overflow-y: scroll;
-  //   overflow-x: auto;
-  // }
   .ztree li {
     padding: 0;
     margin: 0;
@@ -358,6 +352,7 @@ export default {
     text-decoration: none;
     vertical-align: top;
     display: inline-block;
+    overflow: hidden;
   }
   .ztree li a:hover {
     background: #ff7d44;
