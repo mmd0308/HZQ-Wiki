@@ -1,6 +1,5 @@
 server:
   port: 8080
-debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -43,4 +42,3 @@ hzq:
     password: root
   fs:
     path: ${WIKI_FS:/tmp/fs/}
-  show: false

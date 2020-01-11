@@ -24,6 +24,7 @@ public class ArticleContoller extends BaseController {
 
     @Autowired
     private IArticleService articleService;
+
     /**
      * 根据id获取对象
      * @param id
