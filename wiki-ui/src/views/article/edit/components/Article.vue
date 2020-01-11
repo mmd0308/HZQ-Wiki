@@ -19,7 +19,15 @@
         </li>
       </ul>
     </div>
-    <mavon-editor ref="mavonEditor" :scroll-style="true" v-model="articleForm.content" :external-link="externalLink" class="hzq-wiki-height" @change="contentChange" @imgAdd="imgAdd" @save="saveContent" />
+    <mavon-editor
+      ref="mavonEditor"
+      :scroll-style="true"
+      :code-style="code_style"
+      v-model="articleForm.content"
+      class="hzq-wiki-height"
+      @change="contentChange"
+      @imgAdd="imgAdd"
+      @save="saveContent" />
   </div>
 </template>
 <script>
@@ -33,32 +41,7 @@ export default {
       articleForm: this.init(),
       timeOut: null,
       title: '',
-      externalLink: {
-        markdown_css: function() {
-          // 这是你的markdown css文件路径
-          return '/static/markdown/github-markdown.min.css'
-        },
-        hljs_js: function() {
-          // 这是你的hljs文件路径
-          return '/static/highlightjs/highlight.min.js'
-        },
-        hljs_css: function(css) {
-          // 这是你的代码高亮配色文件路径
-          return '/static/highlightjs/styles/' + css + '.min.css'
-        },
-        hljs_lang: function(lang) {
-          // 这是你的代码高亮语言解析路径
-          return '/static/highlightjs/languages/' + lang + '.min.js'
-        },
-        katex_css: function() {
-          // 这是你的katex配色方案路径路径
-          return '/static/katex/katex.min.css'
-        },
-        katex_js: function() {
-          // 这是你的katex.js路径
-          return '/static/katex/katex.min.js'
-        }
-      }
+      code_style: 'dark'
     }
   },
   watch: {
