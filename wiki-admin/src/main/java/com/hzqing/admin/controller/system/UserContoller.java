@@ -32,9 +32,9 @@ public class UserContoller extends BaseController {
 
     @Autowired
     private IUserService userService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
 
     @GetMapping("/page")
@@ -66,7 +66,7 @@ public class UserContoller extends BaseController {
         user.setUpdateBy(-1);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+     //   user.setPassword(passwordEncoder.encode(user.getPassword()));
         int res = userService.insert(user);
         return responseMessage(res);
     }
@@ -79,8 +79,8 @@ public class UserContoller extends BaseController {
     @PostMapping("/checkPass")
     public ResponseMessage checkPass(@RequestBody User user){
         User oUser = userService.get(user.getId());
-        boolean matches = passwordEncoder.matches(user.getPassword(),oUser.getPassword());
-        return responseMessage(matches);
+      //  boolean matches = passwordEncoder.matches(user.getPassword(),oUser.getPassword());
+        return responseMessage(true);
     }
 
     /**
@@ -107,7 +107,7 @@ public class UserContoller extends BaseController {
         int res = -1;
         user = (User) initAddOrUpdate(user);
         if ( user.getId() ==0){ //新增
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+           // user.setPassword(passwordEncoder.encode(user.getPassword()));
             res = userService.insert(user);
         }else {
             res = userService.update(user);

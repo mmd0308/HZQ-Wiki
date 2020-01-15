@@ -1,6 +1,7 @@
 package com.hzqing.admin.dto.article;
 
-import com.hzqing.admin.domain.article.Article;
+
+import com.hzqing.admin.model.entity.article.Article;
 
 /**
  * @author hzqing

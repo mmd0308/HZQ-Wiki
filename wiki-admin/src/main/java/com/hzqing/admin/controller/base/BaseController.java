@@ -29,11 +29,6 @@ public class BaseController {
     public BaseController() {
     }
 
-
-
-
-
-
     protected Object initAddOrUpdate(Base base){
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         base.setCreateTime(LocalDateTime.now());

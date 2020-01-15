@@ -1,7 +1,7 @@
 package com.hzqing.admin.sercurity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzqing.admin.common.ConstantSecurity;
+import com.hzqing.admin.common.constants.ConstantSecurity;
 import com.hzqing.admin.common.HttpStatus;
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.utils.JwtTokenUtil;

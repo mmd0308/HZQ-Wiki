@@ -1,4 +1,4 @@
-package com.hzqing.admin.common;
+package com.hzqing.admin.common.constants;
 
 /**
  * @author hzqing

@@ -1,6 +1,6 @@
 package com.hzqing.admin.service.config.impl;
 
-import com.hzqing.admin.common.ConstantConfig;
+import com.hzqing.admin.common.constants.ConstantConfig;
 import com.hzqing.admin.domain.config.Config;
 import com.hzqing.admin.domain.system.UserInfo;
 import com.hzqing.admin.dto.config.ConfigDto;

@@ -16,3 +16,4 @@ docker build -t mmd0308/wiki-admin:v1.5.0 .
 
 rm -rf  src/main/resources/static/*
 
+# -beta.5

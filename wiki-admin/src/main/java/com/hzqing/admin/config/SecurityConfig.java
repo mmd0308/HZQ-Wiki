@@ -26,8 +26,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * @author hzqing
  * @date 2018/10/27 14:37
  */
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

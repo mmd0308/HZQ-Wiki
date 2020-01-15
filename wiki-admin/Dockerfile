@@ -7,6 +7,7 @@ RUN sh -c 'touch /app.jar' \
 	&& /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 ENV JAVA_OPTS="\
             -server \
-            -Xmx128m \
-            -Xms256m"
+            -Xms128m \
+            -Xmx256m
+            "
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]

@@ -15,45 +15,10 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <resultMap id="baseResultDto" type="spacedto">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="remark" property="remark" />
-        <result column="visit_level" property="visitLevel" />
-        <result column="create_by" property="createBy"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_by" property="updateBy"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="privilege" property="privilege"/>
-        <result column="createName" property="createName" />
-        <result column="updateName" property="updateName" />
-    </resultMap>
 
     <sql id="tableName">
         hw_space
     </sql>
-
-    <select id="get" resultMap="baseResultDto" parameterType="int">
-        SELECT
-            s.id,
-            s.name,
-            s.remark,
-            s.visit_level,
-            s.create_by,
-            s.create_time,
-            s.update_by,
-            s.update_time,
-            cu.name as 'createName',
-            uu.name as 'updateName'
-        FROM
-            hw_space s
-        left join
-            hw_user cu on cu.id = s.create_by
-        left join
-            hw_user uu on uu.id = s.update_by
-        where
-            s.id = #{id}
-    </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="space">
         SELECT
@@ -81,34 +46,6 @@
                 and s.visit_level = #{visitLevel}
             </if>
         </where>
-    </select>
-
-    <!--     根据用户id，获取该用户的所有空间-->
-    <select id="selectListByUserId" resultMap="baseResultDto" parameterType="spacedto">
-        SELECT
-            distinct
-            s.id,
-            s.name,
-            s.remark,
-            s.visit_level,
-            s.create_by,
-            s.create_time,
-            s.update_by,
-            s.update_time,
-            u.privilege,
-            cu.name as 'createName',
-            uu.name as 'updateName'
-        FROM
-        hw_space s
-        left join
-            hw_user cu on cu.id = s.create_by
-        left join
-            hw_user uu on uu.id = s.update_by
-        LEFT JOIN
-            hw_user_space u ON u.space_id = s.id
-        where
-            find_in_set(s.id, (select group_concat(space_id) from hw_user_space where user_id = #{createBy}))
-            and u.user_id = #{createBy}
     </select>
 
 

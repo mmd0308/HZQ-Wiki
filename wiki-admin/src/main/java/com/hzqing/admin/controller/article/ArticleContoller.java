@@ -1,73 +1,106 @@
 package com.hzqing.admin.controller.article;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.exception.ExceptionProcessUtils;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.article.Article;
-import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.service.article.IArticleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author hzqing
  * @date 2019-07-1 18:55
  */
+@Api(tags = "文章管理模块")
+@Slf4j
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/api/wiki/articles")
 public class ArticleContoller extends BaseController {
 
 
     @Autowired
     private IArticleService articleService;
 
-    /**
-     * 根据id获取对象
-     * @param id
-     * @return
-     */
-    @GetMapping("/get/{id}")
-    public ResponseMessage get(@PathVariable int id){
-        Article article = articleService.get(id);
+    @ApiOperation(value = "根据文章id，获取文章。如果是当前用户，直接返回，如果是admin，只能返回已经发布的文章。----存在bug")
+    @GetMapping("/{id}")
+    public ResponseMessage getById(@PathVariable int id){
+        Article article = articleService.getById(id);
         return responseMessage(article);
     }
-    @GetMapping("/release")
-    public ResponseMessage release(int pageNum, int pageSize, Article article){
-        startPage(pageNum,pageSize);
-        List<Article> docs = articleService.selectList(article);
-        return responseMessage(docs);
-    }
 
-    @GetMapping("/page")
-    public ResponseMessage page(int pageNum, int pageSize, Article article){
-        startPage(pageNum,pageSize);
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        article.setUserId(userInfo.getId());
-        List<Article> docs = articleService.selectList(article);
-        return responseMessage(docs);
-    }
 
-    @PostMapping("/addOrUpdate")
-    public ResponseMessage addOrUpdate(@RequestBody Article article){
-        int res = -1;
-        article = (Article) initAddOrUpdate(article);
-        article.setUserId(article.getCreateBy());
-        if (article.getId() == null){
-            res = articleService.insert(article);
-        }else {
-            article.setCreateBy(null);
-            res = articleService.update(article);
+    @ApiOperation(value = "获取该博客分页查询，如果是已经登陆的，获取该用户的所有博客，如果是admin，获取所有用户的已发布博客")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "num", value = "页码", required = true, paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
+    })
+    @GetMapping("/page/{num}/{size}")
+    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, Article article){
+        // 默认返回值
+        RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
+        try {
+//            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            if (null != userInfo ){
+//                if (userInfo.getUsername().equals(Constant.ADMIN_USER_NAME)){
+//                    // 如果是admin登陆，获取所有的已经发布的文章
+//                    article.setHwState(2);
+//                }else {
+//                    article.setUserId(userInfo.getId());
+//                }
+//            }
+
+            Page<Article> articlePage = articleService.getPage(num,size,article);
+            result.setData(articlePage);
+        }catch (Exception e){
+            log.error("ArticleContoller.page occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
         }
-        return responseMessage(res);
+        return result;
     }
 
-    @DeleteMapping("deleted/{id}")
-    public ResponseMessage deleted(@PathVariable String id) {
-        int res = articleService.deletedById(id);
+    @ApiOperation(value = "创建博客")
+    @PostMapping
+    public RestResult<Integer> create(@RequestBody Article article){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int id = articleService.create(article);
+            result.setData(id);
+        } catch (Exception e) {
+            log.error("ArticleContoller.create occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "根据id，更新博客")
+    @PutMapping("/{id}")
+    public RestResult modifyById(@PathVariable int id, @RequestBody Article article){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+           articleService.modifyById(article);
+        } catch (Exception e) {
+            log.error("ArticleContoller.modify occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "根据id，删除博客")
+    @DeleteMapping("/{id}")
+    public ResponseMessage removedById(@PathVariable int id) {
+        int res = articleService.removedById(id);
         return responseMessage(res);
     }
 
