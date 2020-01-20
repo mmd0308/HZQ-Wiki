@@ -6,7 +6,9 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
+import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
+import com.hzqing.admin.model.params.ArticleRelease;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -47,20 +49,10 @@ public class ArticleContoller extends BaseController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, Article article){
+    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticleDto article){
         // 默认返回值
         RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
         try {
-//            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            if (null != userInfo ){
-//                if (userInfo.getUsername().equals(Constant.ADMIN_USER_NAME)){
-//                    // 如果是admin登陆，获取所有的已经发布的文章
-//                    article.setHwState(2);
-//                }else {
-//                    article.setUserId(userInfo.getId());
-//                }
-//            }
-
             Page<Article> articlePage = articleService.getPage(num,size,article);
             result.setData(articlePage);
         }catch (Exception e){
@@ -83,6 +75,23 @@ public class ArticleContoller extends BaseController {
         }
         return result;
     }
+
+    @ApiOperation(value = "文章发布")
+    @PostMapping("/release")
+    public RestResult<Integer> createRelease(@RequestBody ArticleRelease articleRelease){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            log.info("ArticleContoller.createRelease ",articleRelease);
+
+            articleService.createRelease(articleRelease);
+        } catch (Exception e) {
+            log.error("ArticleContoller.createRelease occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+
 
     @ApiOperation(value = "根据id，更新博客")
     @PutMapping("/{id}")

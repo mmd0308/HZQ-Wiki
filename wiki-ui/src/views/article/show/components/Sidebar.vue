@@ -2,7 +2,7 @@
   <div class="sidebar">
     <ul class="itme-ul">
       <li class="time-li">
-        <router-link to="/edit/article">
+        <router-link to="/write/article">
           <el-button type="primary" style="width:100%;height:100%">我要发文</el-button>
         </router-link>
       </li>
@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/auth'
 export default {
   props: {
     createBar: {
@@ -24,6 +25,7 @@ export default {
   },
   data() {
     return {
+      token: getToken(),
       clickSidber: this.createBar
     }
   },

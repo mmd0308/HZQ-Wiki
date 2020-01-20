@@ -1,13 +1,9 @@
 package com.hzqing.admin.service.space.impl;
 
-import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.domain.space.UserSpace;
-import com.hzqing.admin.domain.system.User;
-import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.dto.space.UserSpaceDto;
-import com.hzqing.admin.mapper.space.SpaceMapper;
 import com.hzqing.admin.mapper.space.UserSpaceMapper;
-import com.hzqing.admin.service.space.ISpaceService;
+import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.space.IUserSpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

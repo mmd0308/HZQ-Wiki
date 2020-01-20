@@ -7,7 +7,10 @@ package com.hzqing.admin.common.constants;
 public enum RestResultCodeConstants {
 
     SUCCESS                         ("200","成功！"),
-    SYS_ERROR                       ("10500", "系统错误！");
+    SYS_ERROR                       ("10500", "系统错误！"),
+
+    TOKEN_ERROR                    ("10610", "Token 错误"),
+    TOKEN_EXPIRE                    ("10620", "Token 过期");
 
     private String code;
 

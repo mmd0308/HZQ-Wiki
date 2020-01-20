@@ -13,19 +13,17 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    redirect: '/index',
+    name: 'Index',
     hidden: true,
     children: [
-      { path: 'dashboard', component: () => import('@/views/dashboard/index') },
+      { path: 'index', component: () => import('@/views/index/index') },
       // { path: 'test', component: () => import('@/views/dashboard/test') },
       { path: 'space', component: () => import('@/views/space/show/index') },
       { path: ':spaceId/doc', component: () => import('@/views/doc/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
-      {
-        path: 'article',
-        component: () => import('@/views/article/show/Layout')
-      }
+      { path: 'articles', component: () => import('@/views/article/show/Layout') },
+      { path: 'admin', component: () => import('@/views/admin/index') }
     ]
   },
   {
@@ -37,7 +35,7 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/edit',
+    path: '/write',
     component: EmptyLayout,
     name: 'Layout',
     hidden: true,

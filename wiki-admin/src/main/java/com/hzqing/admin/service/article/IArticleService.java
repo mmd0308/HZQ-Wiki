@@ -1,7 +1,9 @@
 package com.hzqing.admin.service.article;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
+import com.hzqing.admin.model.params.ArticleRelease;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ public interface IArticleService {
      * @param article
      * @return
      */
-    Page<Article> getPage(int num, int size, Article article);
+    Page<Article> getPage(int num, int size, ArticleDto article);
 
     /**
      * 新增
@@ -53,4 +55,11 @@ public interface IArticleService {
      * @param article
      */
     void modifyById(Article article);
+
+    /**
+     * 发布文章，并且删除原先的标签，关联已经存在的标签，新建不存的标签
+     * @param articleRelease
+     */
+    void createRelease(ArticleRelease articleRelease);
+
 }

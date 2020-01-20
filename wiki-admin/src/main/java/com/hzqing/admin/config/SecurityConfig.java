@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -26,8 +25,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * @author hzqing
  * @date 2018/10/27 14:37
  */
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -64,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 //.antMatchers("/api/user/register").permitAll() //注册用户接口放行
                 .antMatchers("/api/auth/error").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/**").permitAll()
                 .and()
                 //前后端分离采用JWT 不需要session
               //  .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -81,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置没有权限返回的数据
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
         ;
+       // http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
     }
 
 

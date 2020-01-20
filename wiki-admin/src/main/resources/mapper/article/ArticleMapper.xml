@@ -19,5 +19,32 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <sql id="columnName">
+        id,
+        title,
+        content,
+        content_html,
+        sequence,
+        hw_desc
+    </sql>
+    
+    <select id="selectPageByStateOrTag" parameterType="articledto" resultMap="baseResult">
+        select
+            id,
+            title,
+            sequence,
+            hw_desc,
+            create_time
+        from hw_article
+        <where>
+            hw_state = #{articledto.hwState}
+            <if test="articledto.tagId != null and articledto.tagId != ''">
+               and find_in_set(id, (
+                    select group_concat(article_id) from hw_article_tag where tag_id = #{articledto.tagId}
+                ))
+            </if>
+        </where>
+
+    </select>
 
 </mapper>

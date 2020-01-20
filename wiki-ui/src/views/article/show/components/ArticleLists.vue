@@ -1,7 +1,17 @@
 <template>
   <div class="article">
-    <div v-for="(item,index) in articleLists" v-if="item.title != ''" :key="index" class="item" >
+    <div>
+      <el-button type="info" size="mini" plain @click="clickTag(null)">全部</el-button>
 
+      <div v-for="(item,index) in tagsLists" :key="index" style="display: inline;">
+        <el-divider direction="vertical"/>
+        <el-button type="info" size="mini" plain @click="clickTag(item.id)">
+          {{ item.name }}
+        </el-button>
+      </div>
+    </div>
+
+    <div v-for="(item,index) in articleLists" v-if="item.title != ''" :key="index" class="item" >
       <div style="height: 22px;">
         <router-link :to="{path:'read/article/' + item.id}">
           <span class="article_title" style="font-weight: 800;">
@@ -27,28 +37,41 @@
 </template>
 
 <script>
-import { release } from '@/api/article/article'
+import { showPage } from '@/api/article/article'
+import { showAll } from '@/api/article/tag'
 export default {
   data() {
     return {
+      moudle: 'articles',
       articleLists: [],
+      tagsLists: [],
       total: 0,
       listQuery: {
         pageNum: 1,
         pageSize: 15,
-        hwState: '2'
+        tagId: null
       }
     }
   },
   created() {
-    this.page()
+    this.showPage()
+    this.showTagsAll()
   },
   methods: {
-    page() {
-      release(this.listQuery).then(response => {
-        this.articleLists = response.data
-        this.total = response.total
+    showPage() {
+      showPage(this.listQuery).then(res => {
+        this.articleLists = res.records
+        this.total = res.total
       })
+    },
+    showTagsAll() {
+      showAll().then(res => {
+        this.tagsLists = res
+      })
+    },
+    clickTag(id) {
+      this.listQuery.tagId = id
+      this.showPage()
     }
   }
 }

@@ -132,8 +132,8 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: 'admin'
       },
       regForm: this.initReg(),
       loginRules: {

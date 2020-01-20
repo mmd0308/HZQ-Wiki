@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzqing.admin.mapper.article.TagMapper">
+
+
+    <insert id="insertForBatch" parameterType="list">
+        insert into hw_tag
+            (name)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (
+                #{item.name}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByNames" resultType="tag" parameterType="list">
+        select * from hw_tag where find_in_set(name,
+        <foreach collection="tagNames" item="tagNames" separator="," open="'" close="'">
+            #{tagNames}
+        </foreach>
+        )
+    </select>
+
+</mapper>

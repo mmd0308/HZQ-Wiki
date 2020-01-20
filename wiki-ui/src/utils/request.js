@@ -27,14 +27,16 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.code !== 200) {
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 2 * 1000
-      })
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+    // 如果数据响应结果不是200
+    if (res.code !== 200 && res.code !== '200') {
+      // Message({
+      //   message: res.message,
+      //   type: 'error',
+      //   duration: 2 * 1000
+      // })
+
+      // 10610:非法的token; 10620:Token 过期了;
+      if (res.code === '10610' || res.code === '10620') {
         MessageBox.confirm(
           '你已被登出，可以取消继续留在该页面，或者重新登录',
           '确定登出',
@@ -46,12 +48,13 @@ service.interceptors.response.use(
         ).then(() => {
           store.dispatch('FedLogOut').then(() => {
             location.reload() // 为了重新实例化vue-router对象 避免bug
+            location.href = '/login'
           })
         })
       }
       return Promise.reject('error')
     } else {
-      return response.data
+      return res.data
     }
   },
   error => {

@@ -37,10 +37,9 @@ const user = {
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data)
-          commit('SET_TOKEN', data)
+        login(username, userInfo.password).then(res => {
+          setToken(res)
+          commit('SET_TOKEN', res)
           resolve()
         }).catch(error => {
           reject(error)
@@ -51,9 +50,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
-          const data = response.data
-
+        getInfo().then(data => {
           if (data.roles && data.roles.length > 0) {
             commit('SET_ROLES', data.roles)
           } else {
@@ -63,7 +60,8 @@ const user = {
           commit('SET_USERNAME', data.username)
           commit('SET_ID', data.id)
           commit('SET_AVATAR', data.img)
-          resolve(response)
+
+          resolve(data)
         }).catch(error => {
           // reject('获取用户信息失败!' + error)
           reject('获取用户信息失败!' + error)

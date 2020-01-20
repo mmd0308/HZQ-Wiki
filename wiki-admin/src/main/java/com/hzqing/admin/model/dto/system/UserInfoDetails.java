@@ -1,10 +1,11 @@
-package com.hzqing.admin.domain.system;
+package com.hzqing.admin.model.dto.system;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+
 /**
  * @author hzqing
  * @date 2019-05-21 10:47

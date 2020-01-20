@@ -15,7 +15,7 @@
           </router-link>
         </li>
         <li>
-          <el-button type="primary" @click="updateArticle">发布文章</el-button>
+          <el-button type="primary" @click="preRelease">发布</el-button>
         </li>
       </ul>
     </div>
@@ -28,20 +28,78 @@
       @change="contentChange"
       @imgAdd="imgAdd"
       @save="saveContent" />
+
+    <el-drawer
+      :visible.sync="drawer"
+      size="25%"
+      direction="rtl"
+      title="文章设置">
+      <div class="article-drawer__content">
+        <el-form :model="articleRelease">
+          <!-- <el-divider content-position="left">基本设置</el-divider>
+
+          <el-form-item label-width="80px" label="设计中...">
+            <el-input v-model="name" autocomplete="off"/>
+          </el-form-item> -->
+
+          <el-divider content-position="left">标签</el-divider>
+          <!-- 暂时禁止创建标签 TODO -->
+          <el-select
+            v-model="articleRelease.tagIds"
+            style="width:100%"
+            multiple
+            filterable
+            default-first-option
+            placeholder="选择或输入标签"
+            @change="createTag">
+            <el-option
+              v-for="item in tagLists"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"/>
+          </el-select>
+          <!-- allow-create_-->
+          <el-divider content-position="left">摘要</el-divider>
+          <el-input
+            v-model="articleRelease.hwDesc"
+            :autosize="{ minRows: 4}"
+            type="textarea"
+            placeholder="不填写则会自动生成摘要"
+            maxlength="150"
+            show-word-limit
+          />
+
+        </el-form>
+        <div class="article-drawer__footer">
+          <el-button size="medium" plain type="info" @click="cancelForm">保存草稿</el-button>
+          <el-button :loading="loading" plain size="medium" type="primary" @click="release">{{ loading ? '提交中 ...' : '发  布' }}</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
-import { addOrUpdate, get } from '@/api/article/article'
+import { addOrUpdate, get, release } from '@/api/article/article'
+import { create, updateById } from '@/api/index'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
+import { showAll } from '@/api/article/tag'
 export default {
   data() {
     return {
+      moudle: 'articles',
+      drawer: false,
       saveState: '尚未保存',
       articleForm: this.init(),
       timeOut: null,
       title: '',
-      code_style: 'dark'
+      code_style: 'dark',
+      tagLists: [], // 所有的标签,
+      articleRelease: {
+        hwDesc: '',
+        id: null,
+        tagIds: []
+      }
     }
   },
   watch: {
@@ -54,7 +112,7 @@ export default {
         this.articleForm.title = this.title
         var that = this
         this.timeOut = setTimeout(function() {
-          that.addOrUpdate()
+          that.createOrUpdate()
         }, 1000)
       },
       deep: true
@@ -73,7 +131,9 @@ export default {
         content: '',
         contentHtml: '',
         hwState: '1',
-        hwUp: '0'
+        hwUp: '0',
+        hwDesc: '',
+        tagIds: []
       }
     },
     get() {
@@ -92,7 +152,7 @@ export default {
       this.articleForm.hwState = '1'
       var that = this
       this.timeOut = setTimeout(function() {
-        that.addOrUpdate()
+        that.createOrUpdate()
       }, 1000)
     },
     saveContent(value, render) {
@@ -100,25 +160,43 @@ export default {
       this.articleForm.contentHtml = render
       this.articleForm.hwState = '1'
       if (this.rulesForm()) {
-        this.addOrUpdate()
+        this.createOrUpdate()
+      }
+    },
+    createOrUpdate() {
+      // 判断是新建还是更新
+      if (this.articleForm.id === '') {
+        this.create()
+      } else {
+        this.updateById()
+      }
+    },
+    createTag(item) {
+    },
+    // 预发布
+    preRelease() {
+      if (this.rulesForm()) {
+        this.drawer = true
+        this.articleRelease.id = this.articleForm.id
+        // 获取所有的标签
+        this.showTagsAll()
       }
     },
     // 发布文章
-    updateArticle() {
-      if (this.rulesForm()) {
-        this.articleForm.hwState = '2'
-        addOrUpdate(this.articleForm).then(res => {
-          this.$router.push({ path: '/read/article/' + this.articleForm.id })
-        })
-      }
+    release() {
+      release(this.articleRelease).then(() => {
+        // 跳转到阅读页面
+        this.$router.push({ path: '/read/article/' + this.articleRelease.id })
+      })
     },
-    addOrUpdate() {
-      addOrUpdate(this.articleForm).then(res => {
-        // 保存成功返回id
-        if (this.articleForm.id === '') {
-          // 表示新增
-          this.articleForm.id = res.data
-        }
+    create() {
+      create(this.moudle, this.articleForm).then(id => {
+        this.articleForm.id = id
+        this.saveState = '保存完成'
+      })
+    },
+    updateById() {
+      updateById(this.moudle, this.articleForm).then(() => {
         this.saveState = '保存完成'
       })
     },
@@ -151,6 +229,11 @@ export default {
       axios.post('/api/article/uploadImages', param, config).then(response => {
         that.$refs.mavonEditor.$img2Url(pos, response.data.data)
         that.$refs.mavonEditor.$refs.toolbar_left.$imgDelByFilename(pos)
+      })
+    },
+    showTagsAll() {
+      showAll().then(res => {
+        this.tagLists = res
       })
     }
   }
@@ -186,6 +269,18 @@ export default {
     li + li {
       margin-left: 10px;
     }
+  }
+  .article-drawer__content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .article-drawer__content form {
+    flex: 1;
+    margin: 0 20px;
+  }
+  .article-drawer__footer {
+    display: flex;
   }
 }
 </style>

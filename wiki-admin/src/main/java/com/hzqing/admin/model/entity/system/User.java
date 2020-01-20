@@ -1,5 +1,8 @@
 package com.hzqing.admin.model.entity.system;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzqing.admin.model.entity.base.BaseEntity;
 import lombok.Data;
 
@@ -8,9 +11,11 @@ import lombok.Data;
  * @date 2019-05-17 09:32
  */
 @Data
+@TableName(value = "hw_user")
 public class User extends BaseEntity {
 
-    private int id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     private String name;
 
@@ -26,7 +31,6 @@ public class User extends BaseEntity {
      * 用户头像
      */
     private String img;
-
 
     /**
      * 备注说明

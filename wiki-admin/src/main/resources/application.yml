@@ -15,10 +15,10 @@ spring:
       name: admin
       password: admin
 
-## MyBatis
-#mybatis:
-#  # 搜索指定包别名
-#  typeAliasesPackage: com.hzqing.admin
+# MyBatis
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.hzqing.admin.model
 #  # 配置mapper的扫描，找到所有的mapper.xml映射文件 在DruidConfig中配置
 #  mapperLocations: classpath*:mapper/**/*Mapper.xml
 #  # 加载全局的配置文件
@@ -39,10 +39,11 @@ management:
       exposure:
         include: "*"
 
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  type-aliases-package: com.hzqing.admin.model.entity
+  type-aliases-package: com.hzqing.admin.model
 
 
 

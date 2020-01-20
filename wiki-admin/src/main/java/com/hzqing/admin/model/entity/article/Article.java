@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * @author hzqing
  * @date 2019-07-01 18:11
@@ -52,4 +54,13 @@ public class Article extends BaseEntity {
 
     @TableField("user_id")
     private Integer userId;
+
+    @TableField("create_by")
+    private Integer createBy;
+
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    @TableField("update_time")
+    private LocalDateTime updateTime;
 }

@@ -1,5 +1,7 @@
 package com.hzqing.admin.service.space.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.space.SpaceDto;
@@ -66,5 +68,10 @@ public class SpaceServiceImpl implements ISpaceService {
     @Override
     public SpaceDto get(int id) {
         return spaceMapper.get(id);
+    }
+
+    @Override
+    public Page<Space> getPage(int num, int size, Space space) {
+        return (Page<Space>) spaceMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(space));
     }
 }

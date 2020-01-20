@@ -1,30 +1,38 @@
 package com.hzqing.admin.controller.system;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.exception.ExceptionProcessUtils;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.DateUtils;
 import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.system.User;
-import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.model.dto.system.UserInfo;
+import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.system.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 /**
  * @author hzqing
  * @date 2019-05-17 09:29
  */
+@Api(tags = "用户管理")
+@Slf4j
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserContoller extends BaseController {
 
     @Value("${hzq.fs.path}")
@@ -37,22 +45,37 @@ public class UserContoller extends BaseController {
 //    private PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("/page")
-    public ResponseMessage page(int pageNum, int pageSize, User user){
-        startPage(pageNum,pageSize);
-        List<User> users = userService.selectList(user);
-        return responseMessage(users);
+    @ApiOperation(value = "用户分页信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "num",value = "页码",required = true, paramType = "path",dataType = "int"),
+            @ApiImplicitParam(name = "size",value = "每页展示的数量",required = true, paramType = "path",dataType = "int")
+    })
+    @GetMapping("/page/{num}/{size}")
+    public RestResult<Page<User>> getPage(@PathVariable int num, @PathVariable int size, User user){
+        // 默认返回值
+        RestResult<Page<User>> result = RestResultFactory.getInstance().success();
+        try {
+            Page<User> datas = userService.getPage(num,size,user);
+            result.setData(datas);
+        } catch (Exception e) {
+            log.error("UserContoller.getPage occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+
+        return  result;
     }
 
-    /**
-     * 根据id获取对象
-     * @param id
-     * @return
-     */
-    @GetMapping("/get/{id}")
-    public ResponseMessage get(@PathVariable int id){
-        User user = userService.get(id);
-        return responseMessage(user);
+    @ApiOperation(value = "根据用户id，获取用户")
+    @GetMapping("/{id}")
+    public RestResult<User> getById(@PathVariable int id){
+        RestResult<User> result = RestResultFactory.getInstance().success();
+        try{
+            User user = userService.getById(id);
+        }catch (Exception e){
+            log.error("UserContoller.getById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 
     /**
@@ -60,16 +83,15 @@ public class UserContoller extends BaseController {
      * @param user
      * @return
      */
-    @PostMapping("/register")
-    public ResponseMessage register(@RequestBody User user){
-        user.setCreateBy(-1);
-        user.setUpdateBy(-1);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-     //   user.setPassword(passwordEncoder.encode(user.getPassword()));
-        int res = userService.insert(user);
-        return responseMessage(res);
-    }
+//    @PostMapping("/register")
+//    public ResponseMessage register(@RequestBody User user){
+//        user.setCreateBy(-1);
+//        user.setUpdateBy(-1);
+//        user.setCreateTime(LocalDateTime.now());
+//        user.setUpdateTime(LocalDateTime.now());
+//        int res = userService.insert(user);
+//        return responseMessage(res);
+//    }
 
     /**
      * 检查密码是否正确
@@ -78,7 +100,7 @@ public class UserContoller extends BaseController {
      */
     @PostMapping("/checkPass")
     public ResponseMessage checkPass(@RequestBody User user){
-        User oUser = userService.get(user.getId());
+        //User oUser = userService.get(user.getId());
       //  boolean matches = passwordEncoder.matches(user.getPassword(),oUser.getPassword());
         return responseMessage(true);
     }
@@ -90,35 +112,54 @@ public class UserContoller extends BaseController {
      */
     @GetMapping("/checkUsername")
     public ResponseMessage checkUsername(String username){
-        User user = userService.selectByUserName(username);
+        User user = userService.getByUserName(username);
         if (null == user){
             return responseMessage(true);
         }
         return responseMessage(false);
     }
 
-    /**
-     * 新增或者修改用户
-     * @param user
-     * @return
-     */
-    @PostMapping("/addOrUpdate")
-    public ResponseMessage addOrUpdate(@RequestBody User user){
-        int res = -1;
-        user = (User) initAddOrUpdate(user);
-        if ( user.getId() ==0){ //新增
-           // user.setPassword(passwordEncoder.encode(user.getPassword()));
-            res = userService.insert(user);
-        }else {
-            res = userService.update(user);
+
+
+    @ApiOperation(value = "创建用户")
+    @PostMapping
+    public RestResult<Integer> create(@RequestBody User user){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int id = userService.create(user);
+            result.setData(id);
+        } catch (Exception e) {
+            log.error("UserContoller.create occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
         }
-        return responseMessage(res);
+        return result;
     }
 
-    @DeleteMapping("deleted/{id}")
-    public ResponseMessage deleted(@PathVariable String id) {
-        int res = userService.deletedById(id);
-        return responseMessage(res);
+    @ApiOperation(value = "根据id，修改用户")
+    @PutMapping("/{id}")
+    public RestResult modifyById(@PathVariable int id, @RequestBody User user){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            userService.modifyById(user);
+        } catch (Exception e) {
+            log.error("UserContoller.modifyById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "根据用户id，删除用户")
+    @DeleteMapping("/{id}")
+    public  RestResult<Integer> removedById(@PathVariable int id) {
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int res = userService.removedById(id);
+            result.setData(res);
+        }catch (Exception e){
+            log.error("UserContoller.removedById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
     /**
      * 上传图片，返回图片路径

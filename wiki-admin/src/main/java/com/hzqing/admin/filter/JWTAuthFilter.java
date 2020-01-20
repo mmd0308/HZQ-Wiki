@@ -1,11 +1,15 @@
 package com.hzqing.admin.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.constants.ConstantSecurity;
 import com.hzqing.admin.common.HttpStatus;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.constants.RestResultCodeConstants;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.JwtTokenUtil;
-import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import com.hzqing.admin.sercurity.service.UserInfoDetailsService;
 import com.hzqing.admin.service.system.IAuthService;
 import org.apache.commons.lang3.StringUtils;
@@ -50,22 +54,30 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        final String uri = request.getRequestURI();
+        logger.info("JWTAuthFilter.doFilterInternal 请求URL: " + uri);
+
+        // 不需要权限验证的接口                                       如果不是api开头的，直接放行,表示是静态资源
+        if (uri.startsWith(Constant.NO_PERMISSION_API_URL_PREFIX) || !request.getRequestURI().startsWith(Constant.API_URL_PREFIX)){
+            chain.doFilter(request,response);
+            return;
+        }
+
         // 平台token
         String token = request.getHeader(ConstantSecurity.TOKEN_KEY);
+
         // token不存在，直接返回
         if (token == null || !token.startsWith(ConstantSecurity.TOKEN_PREFIX)) {
-            // 如果不是api开头的，直接放行
-            if (!request.getRequestURI().startsWith("/api")) {
-                System.out.println("request = [" + request.getRequestURL() + "], response = [" + response + "], chain = [" + chain + "]");
-                chain.doFilter(request, response);
-                return;
-            }
+
             // 自定义返回信息
-            ResponseMessage responseMessage = new ResponseMessage();
+            RestResult<String> result = RestResultFactory.getInstance().build(
+                    RestResultCodeConstants.TOKEN_ERROR.getCode(),
+                    RestResultCodeConstants.TOKEN_ERROR.getMsg()
+                    );
+            String json = new ObjectMapper().writeValueAsString(result);
+
             response.setContentType("text/json;charset=utf-8");
-            responseMessage.setMessage("登陆超时，请重新登陆！");
-            responseMessage.setCode(HttpStatus.FORBIDDEN);
-            String json = new ObjectMapper().writeValueAsString(responseMessage);
             response.getWriter().write(json);
             return;
         }

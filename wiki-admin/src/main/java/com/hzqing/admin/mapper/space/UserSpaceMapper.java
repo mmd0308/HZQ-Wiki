@@ -2,8 +2,8 @@ package com.hzqing.admin.mapper.space;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzqing.admin.domain.space.UserSpace;
-import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.entity.system.User;
 
 import java.util.List;
 

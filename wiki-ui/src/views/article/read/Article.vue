@@ -21,11 +21,13 @@
     </div>
   </div>
 </template>
+
 <script>
-import { get } from '@/api/article/article'
+import { get } from '@/api/index'
 export default {
   data() {
     return {
+      moudle: 'articles',
       backtop: false,
       articleForm: this.init(),
       code_style: 'dark'
@@ -37,11 +39,9 @@ export default {
 
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
-    // window.addEventListener('scroll', this.handleScroll)
   },
   destroyed() {
     window.removeEventListener('scroll', this.scrollToTop)
-    // window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     init() {
@@ -55,7 +55,7 @@ export default {
       }
     },
     get() {
-      get(this.$route.params.id).then(res => {
+      get(this.moudle, this.$route.params.id).then(res => {
         this.articleForm = res.data
       })
     },

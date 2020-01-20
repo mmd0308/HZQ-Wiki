@@ -11,11 +11,10 @@ export function login(username, password) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/api/auth/userInfo',
-    method: 'get',
-    params: { token }
+    url: '/api/wiki/auth/user',
+    method: 'get'
   })
 }
 

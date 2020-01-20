@@ -1,12 +1,12 @@
 <template>
-  <div class="dashboard-container">
+  <div class="index-container">
     <doc-dashbord />
   </div>
 </template>
 <script>
 import DocDashbord from '../doc/index'
 export default {
-  name: 'Dashboard',
+  name: 'Index',
   components: {
     DocDashbord
   }
@@ -14,7 +14,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
+.index {
   &-container {
     padding: 1px 00px 40px 00px;
   }

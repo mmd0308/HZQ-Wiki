@@ -1,8 +1,10 @@
 package com.hzqing.admin.service.system.impl;
 
-import com.hzqing.admin.domain.space.Space;
-import com.hzqing.admin.domain.system.User;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.mapper.system.UserMapper;
+import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,27 +27,35 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int insert(User user) {
+    public Page<User> getPage(int num, int size, User user) {
+        IPage<User> page = userMapper.selectPage(new Page<>(num, size), new QueryWrapper<>(user));
+        return (Page<User>) page;
+    }
+
+    @Override
+    public int create(User user) {
         return userMapper.insert(user);
     }
 
     @Override
-    public int update(User user) {
-        return userMapper.update(user);
+    public void modifyById(User user) {
+        userMapper.updateById(user);
     }
 
     @Override
-    public int deletedById(String id) {
-        return userMapper.deletedById(id);
+    public int removedById(int id) {
+        return userMapper.deletedById(id + "");
     }
 
     @Override
-    public User selectByUserName(String username) {
-        return userMapper.selectByUserName(username);
+    public User getById(int id) {
+        return userMapper.selectById(id);
     }
 
     @Override
-    public User get(int id) {
-        return userMapper.get(id);
+    public User getByUserName(String username) {
+        User user = new User();
+        user.setUsername(username);
+        return userMapper.selectOne(new QueryWrapper<>(user));
     }
 }

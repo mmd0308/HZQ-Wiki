@@ -1,6 +1,7 @@
 package com.hzqing.admin.service.system;
 
-import com.hzqing.admin.domain.system.UserInfo;
+
+import com.hzqing.admin.model.dto.system.UserInfo;
 
 /**
  * @author hzqing

@@ -1,7 +1,15 @@
 import request from '@/utils/request'
-export function release(query) {
+
+export function release(articleRelease) {
   return request({
-    url: '/api/article/release',
+    url: '/api/wiki/articles/release',
+    method: 'post',
+    data: articleRelease
+  })
+}
+export function showPage(query) {
+  return request({
+    url: '/api/wiki/show/articles/page/' + query.pageNum + '/' + query.pageSize,
     method: 'get',
     params: query
   })

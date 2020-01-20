@@ -6,7 +6,7 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.utils.DateUtils;
 import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.domain.base.Base;
-import com.hzqing.admin.domain.system.UserInfo;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;

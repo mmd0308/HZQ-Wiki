@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzqing.admin.common.constants.ConstantSecurity;
 import com.hzqing.admin.common.HttpStatus;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.JwtTokenUtil;
 import com.hzqing.admin.domain.log.LoginLog;
-import com.hzqing.admin.domain.system.UserInfoDetails;
+import com.hzqing.admin.model.dto.system.UserInfoDetails;
 import com.hzqing.admin.service.log.ILoginLogService;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -51,6 +53,7 @@ public class HZQAuthenticationSuccess extends SavedRequestAwareAuthenticationSuc
         Map<String, Object> claims = new HashMap<String, Object>();
         // 获取用户登陆信息
         UserInfoDetails user = (UserInfoDetails) authentication.getPrincipal();
+
         // 记录登陆信息
         this.addLoginLog(request,user);
 
@@ -62,13 +65,15 @@ public class HZQAuthenticationSuccess extends SavedRequestAwareAuthenticationSuc
         String token = JwtTokenUtil.generateToken(claims, ConstantSecurity.JWT_EXPIRATION);
 
         // 登陆成功。返回Token
-        ResponseMessage responseMessage = new ResponseMessage();
-        responseMessage.setCode(HttpStatus.OK);
-        responseMessage.setData(ConstantSecurity.TOKEN_PREFIX + token);
+        RestResult result = RestResultFactory.getInstance().success();
+        result.setData(ConstantSecurity.TOKEN_PREFIX + token);
+
+
         response.addHeader(ConstantSecurity.TOKEN_KEY, ConstantSecurity.TOKEN_PREFIX + token);
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Expose-Headers ",ConstantSecurity.TOKEN_KEY + "," + "Access-Control-Allow-Origin");
-        String json = new ObjectMapper().writeValueAsString(responseMessage);
+
+        String json = new ObjectMapper().writeValueAsString(result);
         response.setContentType("application/josn");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
@@ -79,7 +84,7 @@ public class HZQAuthenticationSuccess extends SavedRequestAwareAuthenticationSuc
      * @param request
      * @param user
      */
-    public void addLoginLog(HttpServletRequest request,UserInfoDetails user){
+    public void addLoginLog(HttpServletRequest request, UserInfoDetails user){
 
         //  解析浏览器信息
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));

@@ -2,7 +2,6 @@ package com.hzqing.admin.mapper.doc;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzqing.admin.domain.doc.Doc;
-import com.hzqing.admin.domain.system.User;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
 

@@ -13,4 +13,33 @@ public class Constant {
      * 超级管理员账号
      */
     public static String ADMIN_USER_NAME = "admin";
+
+
+
+    /**
+     * API 接口前缀
+     */
+    public static final String API_URL_PREFIX = "/api";
+
+    /**
+     * 不需要权限认证的api接口前缀
+     */
+    public static final String NO_PERMISSION_API_URL_PREFIX = "/api/wiki/show";
+
+
+
+    /**
+     * 文章摘要的长度
+     */
+    public static Integer ARTICLE_DESC_LENGHT = 150;
+
+    /**
+     * 文章状态，发布状态
+     */
+    public static Integer ARTICLE_STATE_RELEASE = 2;
+
+    /**
+     * 文章状态，草稿箱
+     */
+    public static Integer ARTICLE_STATE_DRAFT = 1;
 }

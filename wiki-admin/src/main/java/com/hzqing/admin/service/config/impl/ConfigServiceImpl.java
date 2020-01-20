@@ -2,9 +2,9 @@ package com.hzqing.admin.service.config.impl;
 
 import com.hzqing.admin.common.constants.ConstantConfig;
 import com.hzqing.admin.domain.config.Config;
-import com.hzqing.admin.domain.system.UserInfo;
 import com.hzqing.admin.dto.config.ConfigDto;
 import com.hzqing.admin.mapper.config.ConfigMapper;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import com.hzqing.admin.service.config.IConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
