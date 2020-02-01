@@ -15,7 +15,7 @@
         text-color="#fff"
         active-text-color="#ffd04b"
         @select="handleSelect">
-        <el-menu-item index="/dashboard">
+        <el-menu-item index="/index">
           首页
         </el-menu-item>
         <el-menu-item index="/articles" >
@@ -31,7 +31,7 @@
         <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
           系统管理-old
         </el-menu-item>
-        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/admin" >
+        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/admin/dashboard" >
           系统管理
         </el-menu-item>
       </el-menu>

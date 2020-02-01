@@ -23,7 +23,7 @@ export const constantRouterMap = [
       { path: ':spaceId/doc', component: () => import('@/views/doc/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
       { path: 'articles', component: () => import('@/views/article/show/Layout') },
-      { path: 'admin', component: () => import('@/views/admin/index') }
+      { path: 'admin/:name', component: () => import('@/views/admin/index') }
     ]
   },
   {
