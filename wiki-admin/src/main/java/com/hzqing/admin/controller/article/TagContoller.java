@@ -32,14 +32,6 @@ public class TagContoller extends BaseController {
 
     @Autowired
     private ITagService tagService;
-//
-//    @ApiOperation(value = "根据文章id，获取文章。如果是当前用户，直接返回，如果是admin，只能返回已经发布的文章。----存在bug")
-//    @GetMapping("/{id}")
-//    public ResponseMessage getById(@PathVariable int id){
-//        ArticleState article = articleService.getById(id);
-//        return responseMessage(article);
-//    }
-//
 
     @ApiOperation(value = "创建标签")
     @PostMapping
@@ -102,12 +94,18 @@ public class TagContoller extends BaseController {
         return result;
     }
 
-//    @ApiOperation(value = "根据id，删除博客")
-//    @DeleteMapping("/{id}")
-//    public ResponseMessage removedById(@PathVariable int id) {
-//        int res = articleService.removedById(id);
-//        return responseMessage(res);
-//    }
-//
+    @ApiOperation(value = "根据id，删除博客")
+    @DeleteMapping("/{id}")
+    public RestResult removedById(@PathVariable int id) {
+        log.info("TagContoller.removedById ",id);
+        RestResult result = RestResultFactory.getInstance().success();
+        try{
+            tagService.removedById(id);
+        }catch (Exception e){
+            log.error("TagContoller.removedById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
 
 }

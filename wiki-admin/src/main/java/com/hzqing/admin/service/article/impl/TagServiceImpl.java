@@ -6,10 +6,12 @@ import com.hzqing.admin.mapper.article.TagMapper;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.ArticleTag;
 import com.hzqing.admin.model.entity.article.Tag;
+import com.hzqing.admin.service.article.IArticleTagService;
 import com.hzqing.admin.service.article.ITagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,22 @@ public class TagServiceImpl implements ITagService {
     @Autowired
     private TagMapper tagMapper;
 
+    @Autowired
+    private IArticleTagService articleTagService;
+
     @Override
     public List<Article> getList(Tag tag) {
         return null;
     }
 
+    @Transactional
     @Override
     public int removedById(int id) {
-        return tagMapper.deleteById(id);
+        // 根据id删除标签
+        int res =  tagMapper.deleteById(id);
+        log.info("TagServiceImpl.removedById 删除该标签关联文章的所有关系数据");
+        articleTagService.removeByTagId(id);
+        return res;
     }
 
     @Override

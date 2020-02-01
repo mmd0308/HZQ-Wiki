@@ -22,4 +22,10 @@ public interface IArticleTagService {
      * @param articleTags
      */
     void createForBatch(List<ArticleTag> articleTags);
+
+    /**
+     * 根据标签id，删除所有的数据
+     * @param id
+     */
+    void removeByTagId(int id);
 }

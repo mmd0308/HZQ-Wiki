@@ -34,5 +34,10 @@ public class ArticleTagServiceImpl implements IArticleTagService {
         articleTagMapper.insertForBatch(articleTags);
     }
 
-
+    @Override
+    public void removeByTagId(int id) {
+        ArticleTag articleTag = new ArticleTag();
+        articleTag.setTagId(id);
+        articleTagMapper.delete(new QueryWrapper<>(articleTag));
+    }
 }

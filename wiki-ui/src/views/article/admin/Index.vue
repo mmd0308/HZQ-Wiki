@@ -16,8 +16,12 @@
       </el-form-item>
     </el-form>
     <el-table
+      v-loading="tableLoading"
       :data="tableLists"
       :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0.83)"
       tooltip-effect="dark"
       style="width: 100%">
       <el-table-column
@@ -106,6 +110,7 @@ export default {
     return {
       moudle: 'articles',
       tableLists: [],
+      tableLoading: false,
       total: 0,
       listQuery: {
         pageNum: 1,
@@ -130,13 +135,14 @@ export default {
       this.getPage()
     },
     handleEditClick(row) {
-      console.log(row)
       this.editDrawer = true
     },
     getPage() {
+      this.tableLoading = true
       page(this.moudle, this.listQuery).then(res => {
         this.tableLists = res.records
         this.total = res.total
+        this.tableLoading = false
       })
     },
     handleSizeChange(val) {

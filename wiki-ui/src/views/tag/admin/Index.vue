@@ -1,8 +1,12 @@
 <template>
   <div>
     <el-table
+      v-loading="tableLoading"
       :data="tableLists"
       :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0.83)"
       tooltip-effect="dark"
       style="width: 100%">
       <el-table-column
@@ -17,7 +21,18 @@
         width="100">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
-          <el-button type="text" size="small">删除</el-button>
+          <el-popconfirm
+            confirm-button-text="删除"
+            confirm-button-type="danger"
+            cancel-button-text="不用了"
+            cancel-button-type="text"
+            icon="el-icon-info"
+            icon-color="red"
+            title="您确定删除该条数据吗？"
+            @onConfirm="handleRemoveById(scope.row.id)"
+          >
+            <el-button slot="reference" type="text" size="small" >删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -56,12 +71,13 @@
 </template>
 
 <script>
-import { page, updateById } from '@/api/index'
+import { page, updateById, deleteById } from '@/api/index'
 export default {
   data() {
     return {
       moudle: 'tags',
       tableLists: [],
+      tableLoading: false,
       total: 0,
       listQuery: {
         pageNum: 1,
@@ -92,10 +108,17 @@ export default {
         this.editDrawer = false
       })
     },
+    handleRemoveById(id) {
+      deleteById(this.moudle, id).then(() => {
+        this.getPage()
+      })
+    },
     getPage() {
+      this.tableLoading = true
       page(this.moudle, this.listQuery).then(res => {
         this.tableLists = res.records
         this.total = res.total
+        this.tableLoading = false
       })
     },
     handleSizeChange(val) {
