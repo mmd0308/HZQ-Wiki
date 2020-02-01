@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.utils.ReplaceStrUtil;
-import com.hzqing.admin.converter.ArticleConverter;
 import com.hzqing.admin.mapper.article.ArticleMapper;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.ArticleTag;
+import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.params.ArticleRelease;
 import com.hzqing.admin.service.article.IArticleService;
 import com.hzqing.admin.service.article.IArticleTagService;
@@ -34,8 +34,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
-    @Autowired
-    private ArticleConverter articleConverter;
+
 
     @Autowired
     private IArticleTagService articleTagService;
@@ -92,7 +91,7 @@ public class ArticleServiceImpl implements IArticleService {
 
         // 发表文章
         Article article = articleMapper.selectById(articleRelease.getId());
-        article.setHwState(Constant.ARTICLE_STATE_RELEASE);
+        article.setHwState(ArticleState.RELEASE);
 
         if (StringUtils.isNotEmpty(articleRelease.getHwDesc())){
             article.setHwDesc(articleRelease.getHwDesc());

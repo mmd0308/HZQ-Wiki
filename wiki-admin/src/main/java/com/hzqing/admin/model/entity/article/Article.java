@@ -1,11 +1,12 @@
 package com.hzqing.admin.model.entity.article;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.annotation.*;
 import com.hzqing.admin.domain.base.Base;
 import com.hzqing.admin.model.entity.base.BaseEntity;
+import com.hzqing.admin.model.enums.article.ArticleState;
+import com.hzqing.admin.model.enums.article.ArticleUp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -37,20 +38,23 @@ public class Article extends BaseEntity {
      */
     private Integer sequence;
 
+    /**
+     * 文章摘要
+     */
     @TableField("hw_desc")
     private String hwDesc;
 
     /**
-     * 状态 1 草稿 2 发布
+     * 文章状态
      */
     @TableField("hw_state")
-    private Integer hwState;
+    private ArticleState hwState;
 
     /**
-     * 是否置顶 0 否 1是
+     * 是否置顶
      */
     @TableField("hw_up")
-    private Integer hwUp;
+    private ArticleUp hwUp;
 
     @TableField("user_id")
     private Integer userId;

@@ -16,7 +16,7 @@
       </el-form-item>
     </el-form>
     <el-table
-      :data="articleLists"
+      :data="tableLists"
       :header-cell-style="{background:'whitesmoke',color:'#000000'}"
       tooltip-effect="dark"
       style="width: 100%">
@@ -28,45 +28,84 @@
         label="标题"
         width="180"/>
       <el-table-column
-        prop="hwState"
         label="状态"
-        width="180"/>
+        width="180">
+        <template slot-scope="scope">
+          <el-tag :type="articleState[scope.row.hwState].status" >{{ articleState[scope.row.hwState].text }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="hwUp"
+        label="是否置顶">
+        <template slot-scope="scope">
+          <el-tag :type="articleUp[scope.row.hwUp].status" >{{ articleUp[scope.row.hwUp].text }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="address"
         label="标签"/>
       <el-table-column
-        prop="address"
-        label="发布时间"/>
+        prop="createTime"
+        width="160"
+        label="创建时间"/>
       <el-table-column
         fixed="right"
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-button type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div style="padding:15px 0px 0px;float:right">
       <el-pagination
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
-        :total="400"
+        :current-page="listQuery.pageNum"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="listQuery.pageSize"
+        :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
     </div>
+
+    <!--编辑 -->
+    <el-drawer
+      :visible.sync="editDrawer"
+      :with-header="false"
+      class="hzq-drawer">
+      <h4 class="header">文章编辑</h4>
+      <el-divider/>
+      <div class="content">
+        <el-form :model="formLabelAlign" label-width="80px">
+          <el-form-item label="名称">
+            <el-input v-model="formLabelAlign.name"/>
+          </el-form-item>
+          <el-form-item label="活动区域">
+            <el-input v-model="formLabelAlign.region"/>
+          </el-form-item>
+          <el-form-item label="活动形式">
+            <el-input v-model="formLabelAlign.type"/>
+          </el-form-item>
+        </el-form>
+
+        <div class="footer">
+          <el-button size="medium" type="info" @click="cancelForm">保存草稿</el-button>
+          <el-button :loading="loading" size="medium" type="primary" @click="release">{{ loading ? '提交中 ...' : '发  布' }}</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import { page } from '@/api/index'
+import { articleState, articleUp } from '@/api/article/articleConstants'
 export default {
   data() {
     return {
       moudle: 'articles',
-      articleLists: [],
+      tableLists: [],
       total: 0,
       listQuery: {
         pageNum: 1,
@@ -76,24 +115,37 @@ export default {
         user: '',
         region: ''
       },
-      currentPage4: 4
+      articleState: articleState,
+      articleUp: articleUp,
+      editDrawer: false,
+      formLabelAlign: {
+        name: '',
+        region: '',
+        type: ''
+      }
     }
   },
   methods: {
     init() {
       this.getPage()
     },
+    handleEditClick(row) {
+      console.log(row)
+      this.editDrawer = true
+    },
     getPage() {
       page(this.moudle, this.listQuery).then(res => {
-        this.articleLists = res.records
+        this.tableLists = res.records
         this.total = res.total
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.listQuery.pageSize = val
+      this.getPage()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.listQuery.pageNum = val
+      this.getPage()
     }
   }
 }

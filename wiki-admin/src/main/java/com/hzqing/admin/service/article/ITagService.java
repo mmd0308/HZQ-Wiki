@@ -1,5 +1,6 @@
 package com.hzqing.admin.service.article;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.Tag;
 
@@ -57,4 +58,13 @@ public interface ITagService {
      * @return
      */
     List<Tag> getListByNames(List<String> tagNames);
+
+    /**
+     * 获取标签分页数据
+     * @param num
+     * @param size
+     * @param tag
+     * @return
+     */
+    Page<Tag> getPage(int num, int size, Tag tag);
 }

@@ -1,5 +1,7 @@
 package com.hzqing.admin.service.article.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.mapper.article.TagMapper;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.ArticleTag;
@@ -41,7 +43,7 @@ public class TagServiceImpl implements ITagService {
 
     @Override
     public void modifyById(Tag tag) {
-
+        tagMapper.updateById(tag);
     }
 
     @Override
@@ -62,5 +64,10 @@ public class TagServiceImpl implements ITagService {
     @Override
     public List<Tag> getListByNames(List<String> tagNames) {
         return tagMapper.selectByNames(tagNames);
+    }
+
+    @Override
+    public Page<Tag> getPage(int num, int size, Tag tag) {
+        return (Page<Tag>) tagMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(tag));
     }
 }

@@ -6,10 +6,12 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.model.dto.article.ArticleDto;
+import com.hzqing.admin.converter.article.ArticleConverter;
 import com.hzqing.admin.model.entity.article.Article;
+import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.params.ArticlePage;
 import com.hzqing.admin.model.params.ArticleRelease;
+import com.hzqing.admin.model.vo.article.ArticleVO;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,6 +37,9 @@ public class ArticleContoller extends BaseController {
 
     @Autowired
     private IArticleService articleService;
+
+    @Autowired
+    private ArticleConverter articleConverter;
 
     @ApiOperation(value = "根据文章id，获取文章。如果是当前用户，直接返回，如果是admin，只能返回已经发布的文章。----存在bug")
     @GetMapping("/{id}")
@@ -67,6 +72,7 @@ public class ArticleContoller extends BaseController {
     @ApiOperation(value = "创建博客")
     @PostMapping
     public RestResult<Integer> create(@RequestBody Article article){
+        log.info("ArticleContoller.create ",article);
         RestResult<Integer> result = RestResultFactory.getInstance().success();
         try {
             int id = articleService.create(article);

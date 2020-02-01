@@ -1,12 +1,17 @@
 package com.hzqing.admin.controller.article;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
+import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.Tag;
+import com.hzqing.admin.model.params.ArticlePage;
 import com.hzqing.admin.service.article.ITagService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +36,7 @@ public class TagContoller extends BaseController {
 //    @ApiOperation(value = "根据文章id，获取文章。如果是当前用户，直接返回，如果是admin，只能返回已经发布的文章。----存在bug")
 //    @GetMapping("/{id}")
 //    public ResponseMessage getById(@PathVariable int id){
-//        Article article = articleService.getById(id);
+//        ArticleState article = articleService.getById(id);
 //        return responseMessage(article);
 //    }
 //
@@ -64,20 +69,39 @@ public class TagContoller extends BaseController {
         return result;
     }
 
-//
-//    @ApiOperation(value = "根据id，更新博客")
-//    @PutMapping("/{id}")
-//    public RestResult modifyById(@PathVariable int id, @RequestBody Article article){
-//        RestResult<Integer> result = RestResultFactory.getInstance().success();
-//        try {
-//           articleService.modifyById(article);
-//        } catch (Exception e) {
-//            log.error("ArticleContoller.modify occur Exception: ", e);
-//            ExceptionProcessUtils.wrapperHandlerException(result,e);
-//        }
-//        return result;
-//    }
-//
+    @ApiOperation(value = "获取标签分页数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "num", value = "页码", required = true, paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
+    })
+    @GetMapping("/page/{num}/{size}")
+    public  RestResult<Page<Tag>> getPage(@PathVariable int num, @PathVariable int size, Tag tag){
+        // 默认返回值
+        RestResult<Page<Tag>> result = RestResultFactory.getInstance().success();
+        try {
+            Page<Tag> articlePages = tagService.getPage(num,size,tag);
+            result.setData(articlePages);
+        }catch (Exception e){
+            log.error("TagContoller.getPage occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value = "根据id，更新标签")
+    @PutMapping("/{id}")
+    public RestResult modifyById(@PathVariable int id, @RequestBody Tag tag){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+           tagService.modifyById(tag);
+        } catch (Exception e) {
+            log.error("TagContoller.modifyById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
 //    @ApiOperation(value = "根据id，删除博客")
 //    @DeleteMapping("/{id}")
 //    public ResponseMessage removedById(@PathVariable int id) {

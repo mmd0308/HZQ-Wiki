@@ -44,7 +44,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   type-aliases-package: com.hzqing.admin.model
-
+  type-enums-package: com.hzqing.admin.model.enums.*
 
 
 hzq:
