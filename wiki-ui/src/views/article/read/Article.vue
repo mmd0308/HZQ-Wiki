@@ -56,7 +56,7 @@ export default {
     },
     get() {
       get(this.moudle, this.$route.params.id).then(res => {
-        this.articleForm = res.data
+        this.articleForm = res
       })
     },
     // 点击图片回到顶部方法，加计时器是为了过渡顺滑

@@ -8,6 +8,7 @@ import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
+import com.hzqing.admin.model.params.ArticlePage;
 import com.hzqing.admin.model.params.ArticleRelease;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
@@ -49,12 +50,13 @@ public class ArticleContoller extends BaseController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticleDto article){
+    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticlePage articlePage){
         // 默认返回值
         RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
         try {
-            Page<Article> articlePage = articleService.getPage(num,size,article);
-            result.setData(articlePage);
+            Article article = new Article();
+            Page<Article> articlePages = articleService.getPage(num,size,article);
+            result.setData(articlePages);
         }catch (Exception e){
             log.error("ArticleContoller.page occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
@@ -90,8 +92,6 @@ public class ArticleContoller extends BaseController {
         }
         return result;
     }
-
-
 
     @ApiOperation(value = "根据id，更新博客")
     @PutMapping("/{id}")

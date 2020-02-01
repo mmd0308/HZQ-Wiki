@@ -29,10 +29,10 @@
         </el-menu-item>
         <!-- 只有admin拥有超级管理员权限 -->
         <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
-          系统管理
+          系统管理-old
         </el-menu-item>
         <el-menu-item v-if="userId == 1 && username == 'admin'" index="/admin" >
-          系统
+          系统管理
         </el-menu-item>
       </el-menu>
     </div>

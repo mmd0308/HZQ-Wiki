@@ -16,7 +16,7 @@
       </el-form-item>
     </el-form>
     <el-table
-      :data="tableData"
+      :data="articleLists"
       :header-cell-style="{background:'whitesmoke',color:'#000000'}"
       tooltip-effect="dark"
       style="width: 100%">
@@ -24,11 +24,11 @@
         type="selection"
         width="55"/>
       <el-table-column
-        prop="date"
+        prop="title"
         label="标题"
         width="180"/>
       <el-table-column
-        prop="name"
+        prop="hwState"
         label="状态"
         width="180"/>
       <el-table-column
@@ -61,51 +61,17 @@
 </template>
 
 <script>
+import { page } from '@/api/index'
 export default {
   data() {
     return {
-
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
+      moudle: 'articles',
+      articleLists: [],
+      total: 0,
+      listQuery: {
+        pageNum: 1,
+        pageSize: 10
+      },
       formInline: {
         user: '',
         region: ''
@@ -114,8 +80,14 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      console.log('submit!')
+    init() {
+      this.getPage()
+    },
+    getPage() {
+      page(this.moudle, this.listQuery).then(res => {
+        this.articleLists = res.records
+        this.total = res.total
+      })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

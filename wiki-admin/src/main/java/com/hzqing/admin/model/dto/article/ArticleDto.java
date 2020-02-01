@@ -8,7 +8,6 @@ import org.apache.ibatis.type.Alias;
  * @date 2020-01-17 16:24
  */
 @Data
-@Alias("articledto")
 public class ArticleDto {
 
     /**

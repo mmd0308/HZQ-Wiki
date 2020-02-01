@@ -7,6 +7,7 @@ import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
+import com.hzqing.admin.model.params.article.ArticleShowPage;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,13 +39,15 @@ public class ShowArticleController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticleDto article){
+    public RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticleShowPage articleShowPage){
         // 默认返回值
         RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
         try {
+            ArticleDto article = new ArticleDto();
             // 获取已经发布的博客
             article.setHwState(Constant.ARTICLE_STATE_RELEASE);
-            Page<Article> articlePage = articleService.getPage(num,size,article);
+            article.setTagId(articleShowPage.getTagId());
+            Page<Article> articlePage = articleService.getPageByStateOrTag(num,size,article);
             result.setData(articlePage);
         }catch (Exception e){
             log.error("ArticleContoller.page occur Exception: ", e);

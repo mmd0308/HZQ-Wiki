@@ -10,14 +10,12 @@ import com.hzqing.admin.mapper.article.ArticleMapper;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.ArticleTag;
-import com.hzqing.admin.model.entity.article.Tag;
 import com.hzqing.admin.model.params.ArticleRelease;
 import com.hzqing.admin.service.article.IArticleService;
 import com.hzqing.admin.service.article.IArticleTagService;
 import com.hzqing.admin.service.article.ITagService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,9 +60,8 @@ public class ArticleServiceImpl implements IArticleService {
 
 
     @Override
-    public Page<Article> getPage(int num, int size, ArticleDto articledto) {
-        IPage<Article> articleIPage = articleMapper.selectPageByStateOrTag(new Page<Article>(num, size), articledto);
-        return (Page<Article>) articleIPage;
+    public Page<Article> getPage(int num, int size, Article article) {
+        return (Page<Article>) articleMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(article));
     }
 
     @Override
@@ -108,5 +105,11 @@ public class ArticleServiceImpl implements IArticleService {
         }
         // 更新文章
         articleMapper.updateById(article);
+    }
+
+    @Override
+    public Page<Article> getPageByStateOrTag(int num, int size, ArticleDto article) {
+        IPage<Article> articleIPage = articleMapper.selectPageByStateOrTag(new Page<Article>(num, size), article);
+        return (Page<Article>) articleIPage;
     }
 }

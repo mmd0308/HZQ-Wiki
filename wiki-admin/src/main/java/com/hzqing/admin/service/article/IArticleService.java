@@ -41,7 +41,7 @@ public interface IArticleService {
      * @param article
      * @return
      */
-    Page<Article> getPage(int num, int size, ArticleDto article);
+    Page<Article> getPage(int num, int size, Article article);
 
     /**
      * 新增
@@ -62,4 +62,12 @@ public interface IArticleService {
      */
     void createRelease(ArticleRelease articleRelease);
 
+    /**
+     * 根据标签id或者文章状态获取数据
+     * @param num
+     * @param size
+     * @param article
+     * @return
+     */
+    Page<Article> getPageByStateOrTag(int num, int size, ArticleDto article);
 }
