@@ -1,14 +1,17 @@
 <template>
   <div class="index-container">
-    <doc-dashbord />
+    <doc-index/>
+    <article-index/>
   </div>
 </template>
 <script>
-import DocDashbord from '../doc/index'
+import DocIndex from './components/DocIndex'
+import ArticleIndex from './components/ArticleIndex'
 export default {
   name: 'Index',
   components: {
-    DocDashbord
+    DocIndex,
+    ArticleIndex
   }
 }
 </script>

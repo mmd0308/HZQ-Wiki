@@ -2,7 +2,6 @@
   <div class="article">
     <div>
       <el-button type="info" size="mini" plain @click="clickTag(null)">全部</el-button>
-
       <div v-for="(item,index) in tagsLists" :key="index" style="display: inline;">
         <el-divider direction="vertical"/>
         <el-button type="info" size="mini" plain @click="clickTag(item.id)">
@@ -10,29 +9,39 @@
         </el-button>
       </div>
     </div>
+    <div
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0.83)"
+    >
+      <div
+        v-for="(item,index) in articleLists"
+        v-if="item.title != ''"
+        :key="index"
+        class="item" >
 
-    <div v-for="(item,index) in articleLists" v-if="item.title != ''" :key="index" class="item" >
-      <div style="height: 22px;">
-        <router-link :to="{path:'read/articles/' + item.id}">
-          <span class="article_title" style="font-weight: 800;">
-            {{ item.title }}
+        <div style="height: 22px;">
+          <router-link :to="{path:'read/articles/' + item.id}">
+            <span class="article_title" style="font-weight: 800;">
+              {{ item.title }}
+            </span>
+          </router-link>
+        </div>
+        <div class="article_description">
+          {{ item.hwDesc }}
+        </div>
+        <div class="article_auth">
+          <span>
+            作者: {{ item.createName }}
           </span>
-        </router-link>
-        <!-- <el-tag size="mini" type="warning">置顶</el-tag> -->
+          <span>
+            创建时间: {{ item.createTime }}
+          </span>
+        </div>
       </div>
-      <div class="article_description">
-        {{ item.hwDesc }}
-      </div>
-      <div class="article_auth">
-        <span>
-          作者: {{ item.createName }}
-        </span>
-        <span>
-          创建时间: {{ item.createTime }}
-        </span>
-      </div>
-
     </div>
+
   </div>
 </template>
 
@@ -45,6 +54,7 @@ export default {
     return {
       moudle: 'articles',
       articleLists: [],
+      tableLoading: false,
       tagsLists: [],
       total: 0,
       listQuery: {
@@ -61,6 +71,7 @@ export default {
   },
   methods: {
     showPage() {
+      this.tableLoading = true
       showPage(this.listQuery).then(res => {
         if (this.articleLists.length === 0) {
           this.articleLists = res.records
@@ -87,6 +98,8 @@ export default {
             }
           }
         })
+
+        this.tableLoading = false
       })
     },
     showTagsAll() {
