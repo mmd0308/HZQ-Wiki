@@ -9,41 +9,12 @@
       element-loading-background="rgba(255, 255, 255, 0.83)"
       tooltip-effect="dark"
       style="width: 100%">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" class="demo-table-expand">
-            <el-form-item label="空间名称">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-            <el-form-item label="访问级别">
-              <el-tag v-if="props.row.visitLevel != null" :type="spaceVisitLevel[props.row.visitLevel].status" >{{ spaceVisitLevel[props.row.visitLevel].text }}</el-tag>
-            </el-form-item>
-            <el-form-item label="备注">
-              <span>{{ props.row.remark }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
       <el-table-column
         type="selection"
         width="55"/>
       <el-table-column
         prop="name"
-        label="空间名称"/>
-
-      <el-table-column
-        label="访问级别"
-        width="130" >
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.visitLevel != null" :type="spaceVisitLevel[scope.row.visitLevel].status" >{{ spaceVisitLevel[scope.row.visitLevel].text }}</el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        prop="createTime"
-        width="160"
-        label="创建时间"/>
-
+        label="名称"/>
       <el-table-column
         fixed="right"
         label="操作"
@@ -101,11 +72,10 @@
 
 <script>
 import { page, updateById, deleteById } from '@/api/index'
-import { spaceVisitLevel } from '@/api/space/SpaceConstants'
 export default {
   data() {
     return {
-      moudle: 'spaces',
+      moudle: 'tags',
       tableLists: [],
       tableLoading: false,
       total: 0,
@@ -113,20 +83,18 @@ export default {
         pageNum: 1,
         pageSize: 10
       },
-      spaceVisitLevel: spaceVisitLevel,
       editDrawer: false,
       editTagForm: this.initForm()
     }
   },
   methods: {
     init() {
-      this.getPage()
+      // this.getPage()
     },
     initForm() {
       return {
         id: null,
-        name: null,
-        remark: null
+        name: null
       }
     },
     handleEditClick(row) {
@@ -164,17 +132,3 @@ export default {
   }
 }
 </script>
-<style>
-  .demo-table-expand {
-    font-size: 0;
-  }
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-</style>

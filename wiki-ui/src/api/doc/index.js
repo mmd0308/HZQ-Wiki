@@ -16,6 +16,14 @@ export function page(query) {
   })
 }
 
+export function showPage(query) {
+  return request({
+    url: '/api/wiki/show/docs/page/' + query.pageNum + '/' + query.pageSize,
+    method: 'get',
+    params: query
+  })
+}
+
 export function get(id) {
   return request({
     url: '/api/doc/get/' + id,

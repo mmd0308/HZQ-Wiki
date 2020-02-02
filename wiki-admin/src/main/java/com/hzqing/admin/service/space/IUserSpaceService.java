@@ -21,4 +21,10 @@ public interface IUserSpaceService {
     int update(UserSpace userSpace);
 
     int deletedById(String id);
+
+    /**
+     * 创建
+     * @param userSpace
+     */
+    void create(UserSpace userSpace);
 }

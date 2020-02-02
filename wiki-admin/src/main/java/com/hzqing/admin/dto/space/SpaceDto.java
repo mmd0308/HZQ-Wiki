@@ -1,6 +1,6 @@
 package com.hzqing.admin.dto.space;
 
-import com.hzqing.admin.domain.space.Space;
+import com.hzqing.admin.model.entity.space.Space;
 import lombok.Data;
 
 /**

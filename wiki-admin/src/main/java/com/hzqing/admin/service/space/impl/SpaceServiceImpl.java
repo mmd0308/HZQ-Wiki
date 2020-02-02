@@ -2,14 +2,15 @@ package com.hzqing.admin.service.space.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.space.SpaceDto;
 import com.hzqing.admin.mapper.space.SpaceMapper;
-import com.hzqing.admin.mapper.space.UserSpaceMapper;
+import com.hzqing.admin.model.entity.space.Space;
 import com.hzqing.admin.service.space.ISpaceService;
+import com.hzqing.admin.service.space.IUserSpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,19 +26,32 @@ public class SpaceServiceImpl implements ISpaceService {
     private SpaceMapper spaceMapper;
 
     /**
-     * 用户更空间中间关系
+     * 用户跟空间中间关系
      */
     @Autowired
-    private UserSpaceMapper userSpaceMapper;
+    private IUserSpaceService userSpaceService;
 
     @Override
     public List<SpaceDto> selectList(Space space) {
         return spaceMapper.selectList(space);
     }
 
+
+
     @Override
-    public int insert(Space space) {
-       spaceMapper.insert(space);
+    public List<SpaceDto> selectListByUserId(Space space) {
+        return spaceMapper.selectListByUserId(space);
+    }
+
+    @Override
+    public Page<Space> getPage(int num, int size, Space space) {
+        return (Page<Space>) spaceMapper.selectPage(new Page<>(num,size),new QueryWrapper<Space>(space));
+    }
+
+    @Override
+    @Transactional
+    public int create(Space space) {
+        spaceMapper.insert(space);
         // 新增空间的时候，插入拥有者
         UserSpace userSpace = new UserSpace();
         userSpace.setUserId(space.getCreateBy());
@@ -46,32 +60,19 @@ public class SpaceServiceImpl implements ISpaceService {
         userSpace.setPrivilege(0);
         userSpace.setCreateBy(space.getCreateBy());
         userSpace.setCreateTime(LocalDateTime.now());
-        userSpaceMapper.insert(userSpace);
+
+        userSpaceService.create(userSpace);
         return space.getId();
     }
 
     @Override
-    public int update(Space space) {
-        return spaceMapper.update(space);
+    public void modifyById(Space space) {
+        space.setUpdateTime(LocalDateTime.now());
+        spaceMapper.updateById(space);
     }
 
     @Override
-    public int deletedById(String id) {
-        return spaceMapper.deletedById(id);
-    }
-
-    @Override
-    public List<SpaceDto> selectListByUserId(Space space) {
-        return spaceMapper.selectListByUserId(space);
-    }
-
-    @Override
-    public SpaceDto get(int id) {
-        return spaceMapper.get(id);
-    }
-
-    @Override
-    public Page<Space> getPage(int num, int size, Space space) {
-        return (Page<Space>) spaceMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(space));
+    public int removedById(int id) {
+        return spaceMapper.deleteById(id);
     }
 }

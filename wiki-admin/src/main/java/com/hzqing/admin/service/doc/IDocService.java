@@ -1,8 +1,9 @@
 package com.hzqing.admin.service.doc;
 
-import com.hzqing.admin.domain.doc.Doc;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
+import com.hzqing.admin.model.entity.doc.Doc;
 
 import java.util.List;
 
@@ -30,4 +31,13 @@ public interface IDocService {
     DocDto selectByIDandUserId(Doc doc);
 
     Integer selectPrivilegeById(MemberDto memberDto);
+
+    /**
+     * 首页展示，根据空间id及级别获取分页的文档
+     * @param num
+     * @param size
+     * @param doc
+     * @return
+     */
+    Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc);
 }

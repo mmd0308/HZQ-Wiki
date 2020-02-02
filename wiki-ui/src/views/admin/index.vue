@@ -1,8 +1,11 @@
 <template>
   <el-tabs v-model="tabName" type="border-card" @tab-click="checkTab">
-    <el-tab-pane name="dashboard">
-      <span slot="label"><i class="el-icon-odometer"/> 仪表盘</span>
-      仪表盘
+    <el-tab-pane :name="paramsConstants['dashboard'].name">
+      <span slot="label">
+        <i class="el-icon-odometer"/>
+        仪表盘
+      </span>
+      <dashboard-admin :ref="paramsConstants['dashboard'].ref" />
     </el-tab-pane>
 
     <el-tab-pane :name="paramsConstants['article'].name">
@@ -21,46 +24,36 @@
       <tag-admin :ref="paramsConstants['tag'].ref"/>
     </el-tab-pane>
 
-    <el-tab-pane>
+    <el-tab-pane :name="paramsConstants['sapce'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
         空间管理
       </span>
-      <space-admin />
+      <space-admin :ref="paramsConstants['sapce'].ref"/>
     </el-tab-pane>
-    <el-tab-pane>
+
+    <!-- <el-tab-pane :name="paramsConstants['space'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
-        用户管理
+        空间管理
       </span>
-      <space-admin />
-    </el-tab-pane>
-    <el-tab-pane>
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        登陆日志
-      </span>
-      <space-admin />
-    </el-tab-pane>
-    <el-tab-pane>
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        配置管理
-      </span>
-      <space-admin />
-    </el-tab-pane>
+      <space-admin :ref="paramsConstants['space'].ref"/>
+    </el-tab-pane> -->
+
   </el-tabs>
 </template>
 
 <script>
+import DashboardAdmin from './Dashboard'
 import ArticleAdmin from '../article/admin/Index'
 import TagAdmin from '../tag/admin/Index'
 import SpaceAdmin from '../space/admin/Index'
 export default {
   components: {
+    DashboardAdmin,
     ArticleAdmin,
-    SpaceAdmin,
-    TagAdmin
+    TagAdmin,
+    SpaceAdmin
   },
   data() {
     return {
@@ -77,6 +70,10 @@ export default {
         tag: {
           name: 'tag',
           ref: 'tagAdmin'
+        },
+        sapce: {
+          name: 'sapce',
+          ref: 'sapceAdmin'
         }
       }
     }

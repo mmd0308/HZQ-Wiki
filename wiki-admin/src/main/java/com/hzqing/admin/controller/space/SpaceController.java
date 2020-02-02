@@ -6,8 +6,8 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.space.Space;
 import com.hzqing.admin.dto.space.SpaceDto;
+import com.hzqing.admin.model.entity.space.Space;
 import com.hzqing.admin.service.space.ISpaceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,7 +26,7 @@ import java.util.List;
 @Api(tags = "文档空间管理")
 @Slf4j
 @RestController
-@RequestMapping("/api/space")
+@RequestMapping("/api/wiki/spaces")
 public class SpaceController extends BaseController {
 
     @Autowired
@@ -64,37 +64,49 @@ public class SpaceController extends BaseController {
             log.error("ShowSpaceController.getPage occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
         }
-
         return result;
     }
 
-    /**
-     * 根据id获取对象
-     * @param id
-     * @return
-     */
-    @GetMapping("/get/{id}")
-    public ResponseMessage get(@PathVariable int id){
-        SpaceDto spaceDto = spaceService.get(id);
-        return responseMessage(spaceDto);
-    }
 
-    @PostMapping("/addOrUpdate")
-    public ResponseMessage addOrUpdate(@RequestBody Space space){
-        int res = -1;
-        space = (Space) initAddOrUpdate(space);
-        if (space.getId() == null){ //新增
-            res = spaceService.insert(space);
-        }else {
-            space.setCreateBy(null);
-            res = spaceService.update(space);
+    @ApiOperation(value = "创建空间")
+    @PostMapping
+    public RestResult<Integer> create(@RequestBody Space space){
+
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int id = spaceService.create(space);
+            result.setData(id);
+        } catch (Exception e) {
+            log.error("SpaceController.create occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
         }
-        return responseMessage(res);
+        return result;
     }
 
-    @DeleteMapping("deleted/{id}")
-    public ResponseMessage deleted(@PathVariable String id) {
-        int res = spaceService.deletedById(id);
-        return responseMessage(res);
+    @ApiOperation(value = "根据id，更新空间")
+    @PutMapping("/{id}")
+    public RestResult modifyById(@PathVariable int id, @RequestBody Space space){
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            spaceService.modifyById(space);
+        } catch (Exception e) {
+            log.error("ArticleContoller.modify occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "根据id，删除空间")
+    @DeleteMapping("/{id}")
+    public RestResult<Integer> removedById(@PathVariable int id) {
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int res = spaceService.removedById(id);
+            result.setData(res);
+        }catch (Exception e){
+            log.error("SpaceController.removedById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 }

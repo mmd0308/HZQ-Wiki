@@ -1,9 +1,9 @@
 package com.hzqing.admin.model.entity.article;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.baomidou.mybatisplus.annotation.*;
-import com.hzqing.admin.domain.base.Base;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzqing.admin.model.entity.base.BaseEntity;
 import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.enums.article.ArticleUp;

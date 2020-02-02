@@ -44,4 +44,9 @@ public class UserSpaceServiceImpl implements IUserSpaceService {
     public int deletedById(String id) {
         return userSpaceMapper.deletedById(id);
     }
+
+    @Override
+    public void create(UserSpace userSpace) {
+        userSpaceMapper.insert(userSpace);
+    }
 }

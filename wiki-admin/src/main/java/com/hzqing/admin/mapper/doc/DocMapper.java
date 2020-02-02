@@ -1,9 +1,9 @@
 package com.hzqing.admin.mapper.doc;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzqing.admin.domain.doc.Doc;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
+import com.hzqing.admin.model.entity.doc.Doc;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2019-05-17 09:55
  */
 public interface DocMapper  extends BaseMapper<Doc> {
-    public List<Doc> selectList(Doc doc);
+    List<Doc> selectList(Doc doc);
 
     int update(Doc doc);
 

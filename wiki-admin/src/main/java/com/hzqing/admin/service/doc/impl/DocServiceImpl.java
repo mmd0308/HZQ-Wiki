@@ -1,11 +1,13 @@
 package com.hzqing.admin.service.doc.impl;
 
-import com.hzqing.admin.domain.doc.Doc;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
 import com.hzqing.admin.mapper.doc.UserDocMapper;
+import com.hzqing.admin.model.entity.doc.Doc;
 import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +39,8 @@ public class DocServiceImpl implements IDocService {
         UserDoc userDoc = new UserDoc();
         userDoc.setDocId(doc.getId());
         userDoc.setPrivilege(0);
-        userDoc.setUserId(doc.getCreateBy());
-        userDoc.setCreateBy(doc.getCreateBy());
+//        userDoc.setUserId(doc.getCreateBy());
+//        userDoc.setCreateBy(doc.getCreateBy());
         userDoc.setCreateTime(LocalDateTime.now());
         userDocMapper.insert(userDoc);
         return  doc.getId();
@@ -77,5 +79,10 @@ public class DocServiceImpl implements IDocService {
     @Override
     public Integer selectPrivilegeById(MemberDto memberDto) {
         return docMapper.selectPrivilegeById(memberDto);
+    }
+
+    @Override
+    public Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc) {
+      return (Page<Doc>) docMapper.selectPage(new Page<>(num, size), new QueryWrapper<Doc>(doc));
     }
 }
