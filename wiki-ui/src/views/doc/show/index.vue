@@ -1,5 +1,14 @@
 <template>
   <div class="doc">
+    <div style="margin-bottom: 15px;">
+      <el-button type="info" size="mini" plain @click="clickTag(null)">全部</el-button>
+      <div v-for="(item,index) in tagsLists" :key="index" style="display: inline;">
+        <el-divider direction="vertical"/>
+        <el-button type="info" size="mini" plain @click="clickTag(item.id)">
+          {{ item.name }}
+        </el-button>
+      </div>
+    </div>
     <div v-for="(item,index) in docLists" :key="index" class="boxs">
       <router-link :to="{ path: '/edit/' + item.spaceId + '/doc/' + item.id}">
         <div class="icon">
@@ -25,6 +34,7 @@
 <script>
 import { showPage } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
+import { showAll } from '@/api/article/tag'
 import $ from 'jquery'
 export default {
   data() {
@@ -44,8 +54,14 @@ export default {
   },
   created() {
     this.showDocPage()
+    this.showTagsAll()
   },
   methods: {
+    showTagsAll() {
+      showAll().then(res => {
+        this.tagsLists = res
+      })
+    },
     showDocPage() {
       showPage(this.listQuery, this.userId).then(response => {
         if (this.docLists.length === 0) {

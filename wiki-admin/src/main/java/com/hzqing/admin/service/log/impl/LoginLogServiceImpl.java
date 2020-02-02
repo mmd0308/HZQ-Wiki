@@ -1,12 +1,13 @@
 package com.hzqing.admin.service.log.impl;
 
-import com.hzqing.admin.domain.log.LoginLog;
+import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.mapper.log.LoginLogMapper;
+import com.hzqing.admin.model.entity.system.LoginLog;
 import com.hzqing.admin.service.log.ILoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author hzqing
@@ -19,12 +20,13 @@ public class LoginLogServiceImpl implements ILoginLogService {
     private LoginLogMapper loginLogMapper;
 
     @Override
-    public List<LoginLog> selectList(LoginLog loginLog) {
-        return loginLogMapper.selectList(loginLog);
+    public int insert(LoginLog loginLog) {
+        loginLogMapper.insert(loginLog);
+        return loginLog.getId();
     }
 
     @Override
-    public int insert(LoginLog loginLog) {
-        return loginLogMapper.insert(loginLog);
+    public Page<LoginLog> getPage(int num, int size, LoginLog loginLog) {
+        return (Page<LoginLog>) loginLogMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(loginLog).orderByDesc("create_time"));
     }
 }

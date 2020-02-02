@@ -32,7 +32,7 @@ import java.util.UUID;
 @Api(tags = "用户管理")
 @Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/wiki/users")
 public class UserContoller extends BaseController {
 
     @Value("${hzq.fs.path}")

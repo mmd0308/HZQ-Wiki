@@ -2,13 +2,11 @@ package com.hzqing.admin.sercurity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzqing.admin.common.constants.ConstantSecurity;
-import com.hzqing.admin.common.HttpStatus;
-import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.JwtTokenUtil;
-import com.hzqing.admin.domain.log.LoginLog;
 import com.hzqing.admin.model.dto.system.UserInfoDetails;
+import com.hzqing.admin.model.entity.system.LoginLog;
 import com.hzqing.admin.service.log.ILoginLogService;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -67,7 +65,6 @@ public class HZQAuthenticationSuccess extends SavedRequestAwareAuthenticationSuc
         // 登陆成功。返回Token
         RestResult result = RestResultFactory.getInstance().success();
         result.setData(ConstantSecurity.TOKEN_PREFIX + token);
-
 
         response.addHeader(ConstantSecurity.TOKEN_KEY, ConstantSecurity.TOKEN_PREFIX + token);
         response.addHeader("Access-Control-Allow-Origin", "*");

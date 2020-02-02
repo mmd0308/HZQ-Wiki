@@ -19,38 +19,4 @@
         hw_login_log
     </sql>
 
-    <select id="selectList" resultMap="baseResult" parameterType="loginlog">
-        SELECT
-            id,
-            username,
-            ip,
-            browser,
-            create_by,
-            create_time,
-            system
-        FROM
-            <include refid="tableName"/>
-        order by create_time desc
-    </select>
-
-    <insert id="insert" parameterType="loginlog" >
-        INSERT INTO
-            <include refid="tableName"/>
-        (
-            username,
-            ip,
-            browser,
-            create_by,
-            create_time,
-            system
-        ) VALUE (
-            #{username},
-            #{ip},
-            #{browser},
-            #{createBy},
-            #{createTime},
-            #{system}
-        )
-    </insert>
-
 </mapper>

@@ -40,30 +40,51 @@
       <doc-admin :ref="paramsConstants['doc'].ref"/>
     </el-tab-pane>
 
-    <!-- <el-tab-pane :name="paramsConstants['space'].name">
+    <el-tab-pane :name="paramsConstants['user'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
-        空间管理
+        用户管理
       </span>
-      <space-admin :ref="paramsConstants['space'].ref"/>
-    </el-tab-pane> -->
+      <user-admin :ref="paramsConstants['user'].ref"/>
+    </el-tab-pane>
+
+    <el-tab-pane :name="paramsConstants['loginLog'].name">
+      <span slot="label">
+        <i class="el-icon-collection="/>
+        登陆日志
+      </span>
+      <login-log-admin :ref="paramsConstants['loginLog'].ref"/>
+    </el-tab-pane>
+
+    <el-tab-pane :name="paramsConstants['config'].name">
+      <span slot="label">
+        <i class="el-icon-collection="/>
+        配置管理
+      </span>
+      <config-admin :ref="paramsConstants['config'].ref"/>
+    </el-tab-pane>
 
   </el-tabs>
 </template>
-
 <script>
 import DashboardAdmin from './Dashboard'
 import ArticleAdmin from '../article/admin/Index'
 import TagAdmin from '../tag/admin/Index'
 import SpaceAdmin from '../space/admin/Index'
 import DocAdmin from '../doc/admin/Index'
+import UserAdmin from '../system/user/admin/Index'
+import LoginLogAdmin from '../system/log/login/Index'
+import ConfigAdmin from '../system/config/Index'
 export default {
   components: {
     DashboardAdmin,
     ArticleAdmin,
     TagAdmin,
     SpaceAdmin,
-    DocAdmin
+    DocAdmin,
+    UserAdmin,
+    LoginLogAdmin,
+    ConfigAdmin
   },
   data() {
     return {
@@ -88,6 +109,18 @@ export default {
         doc: {
           name: 'doc',
           ref: 'docAdmin'
+        },
+        user: {
+          name: 'user',
+          ref: 'userAdmin'
+        },
+        loginLog: {
+          name: 'loginLog',
+          ref: 'loginLogAdmin'
+        },
+        config: {
+          name: 'config',
+          ref: 'configAdmin'
         }
       }
     }

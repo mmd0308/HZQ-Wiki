@@ -24,14 +24,12 @@
         <el-menu-item index="/doc" >
           文档
         </el-menu-item>
-        <el-menu-item index="/space" >
-          空间
-        </el-menu-item>
+
         <!-- 只有admin拥有超级管理员权限 -->
-        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
+        <!-- <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
           系统管理-old
-        </el-menu-item>
-        <el-menu-item v-if="userId == 1 && username == 'admin'" index="/admin/dashboard" >
+        </el-menu-item> -->
+        <el-menu-item v-if="token != '' && token != null" index="/admin/dashboard" >
           系统管理
         </el-menu-item>
       </el-menu>
@@ -58,7 +56,7 @@
         </el-submenu>
       </el-menu>
       <div v-else>
-        <el-button type="text" >登陆</el-button>
+        <el-button type="text" @click="login" >登陆</el-button>
         <el-divider direction="vertical"/>
         <el-button type="text" >注册</el-button>
       </div>
@@ -90,6 +88,9 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       this.activeIndex = key
+    },
+    login() {
+      this.$router.push({ path: '/login' })
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {

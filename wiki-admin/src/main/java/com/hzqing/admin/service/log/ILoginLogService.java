@@ -1,8 +1,7 @@
 package com.hzqing.admin.service.log;
 
-import com.hzqing.admin.domain.log.LoginLog;
-
-import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hzqing.admin.model.entity.system.LoginLog;
 
 /**
  * 登陆日志记录
@@ -10,16 +9,18 @@ import java.util.List;
 public interface ILoginLogService {
 
     /**
-     * 分页查询
-     * @param loginLog
-     * @return
-     */
-    List<LoginLog> selectList(LoginLog loginLog);
-
-    /**
      * 新增日志
      * @param loginLog
      * @return
      */
     int insert(LoginLog loginLog);
+
+    /**
+     * 分页查询
+     * @param num
+     * @param size
+     * @param loginLog
+     * @return
+     */
+    Page<LoginLog> getPage(int num, int size, LoginLog loginLog);
 }
