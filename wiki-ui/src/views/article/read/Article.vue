@@ -1,5 +1,20 @@
 <template>
-  <div class="read-height">
+  <div style="background:#fff">
+    <div class="header" style="padding:20px 24px 0px ">
+      <h1 style="font-size: 30px;font-weight: 700;word-break: break-word;">{{ articleForm.title }}</h1>
+      <div class="article_auth" style="position: relative;">
+        <span>
+          作者: {{ articleForm.createTime }}
+        </span>
+        <span>
+          创建时间: {{ articleForm.createTime }}
+        </span>
+        <div style="position: absolute;right: 0px;top: -8px;" >
+          <el-button type="text" size="small">编辑</el-button>
+        </div>
+      </div>
+    </div>
+
     <mavon-editor
       ref="mavonEditor"
       :subfield="false"
@@ -9,7 +24,7 @@
       class="height:100%;"
       default-open="preview" />
 
-    <div class="hzq-right-bottom-toolbar" style="right: 100px;">
+    <div class="hzq-right-bottom-toolbar">
       <!-- 回到顶端 -->
       <div
         v-if="backtop"
@@ -18,6 +33,21 @@
         @click="backTop">
         <i style="line-height:40px" class="el-icon-caret-top" />
       </div>
+    </div>
+
+    <div ref="toolBox" class="tool-box">
+      <ul class="meau-list">
+        <li>
+          <div class="btn-like mp" >
+            <svg-icon class="detail-icon" icon-class="star"/>
+          </div>
+        </li>
+        <li>
+          <div class="btn-like mp" >
+            <svg-icon class="detail-icon" icon-class="star"/>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -83,18 +113,6 @@ export default {
       } else {
         that.backtop = false
       }
-    },
-    handleScroll() {
-      var scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
-      const tools = this.$refs.toolBox
-      if (scrollTop < 50) {
-        tools.style.setProperty('--toolBoxHeight', '0px')
-      } else {
-        tools.style.setProperty('--toolBoxHeight', scrollTop - 50 + 'px')
-      }
     }
   }
 }
@@ -106,31 +124,30 @@ export default {
   width: 40px;
   z-index: 99999;
   bottom: 150px;
+  right: calc((100vw - 1050px)/2 - 40px);
 }
-.tool-box {
-  --toolBoxHeight: 216px;
-  z-index: 2;
+
+.tool-box{
   position: fixed;
-  left: 100px;
-  top: var(--toolBoxHeight);
+  top: 180px;
+  left: calc((100vw - 1050px)/2 - 78px);
   ul {
     li {
       list-style: none;
       .btn-like {
         color: #6b6b6b;
-        width: 44px;
+        width: 40px;
         background: #fff;
-        height: 56px;
+        height: 40px;
+        line-height: 40px;
         text-align: center;
-        margin-bottom: 6px;
-        border-radius: 6px;
+        margin-bottom: 20px;
+        border-radius: 50%;
       }
-      .btn-like:hover {
+      .btn-like:hover{
         color: #f56c6c;
       }
       .detail-icon {
-        margin-top: 7px;
-        margin-bottom: 3px;
         font-size: 18px;
       }
     }
@@ -139,5 +156,13 @@ export default {
       font-size: 12px;
     }
   }
-}
+ }
+    .article_auth{
+      font-size: 12px;
+      padding-bottom: 15px;
+      color: rgba(0,0,0,.65);
+      span + span{
+        padding-left: 10px;
+      }
+    }
 </style>
