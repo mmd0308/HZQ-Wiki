@@ -32,7 +32,9 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.indexOf(to.path) !== -1 ||
+      to.path.startsWith('/read')
+    ) {
       next()
     } else {
       next(`/login`) // 否则全部重定向到登录页

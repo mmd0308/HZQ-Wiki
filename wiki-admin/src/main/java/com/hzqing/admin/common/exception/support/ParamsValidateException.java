@@ -16,3 +16,4 @@ public class ParamsValidateException extends BaseException {
         super(code, msg);
     }
 }
+

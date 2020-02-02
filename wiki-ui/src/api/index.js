@@ -18,6 +18,13 @@ export function page(moudle, params) {
   })
 }
 
+export function getById(moudle, id) {
+  return request({
+    url: path + moudle + '/' + id,
+    method: 'get'
+  })
+}
+
 export function get(moudle, id) {
   return request({
     url: path + moudle + '/' + id,

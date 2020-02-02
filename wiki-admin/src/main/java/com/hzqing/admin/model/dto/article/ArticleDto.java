@@ -1,7 +1,7 @@
 package com.hzqing.admin.model.dto.article;
 
+import com.hzqing.admin.model.enums.article.ArticleState;
 import lombok.Data;
-import org.apache.ibatis.type.Alias;
 
 /**
  * @author hzqing
@@ -17,7 +17,7 @@ public class ArticleDto {
 
 
     /**
-     * 状态 1 草稿 2 发布
+     * 状态
      */
-    private Integer hwState;
+    private ArticleState hwState;
 }

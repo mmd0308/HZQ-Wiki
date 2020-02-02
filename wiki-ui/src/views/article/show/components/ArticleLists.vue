@@ -21,7 +21,7 @@
         :key="index"
         class="item" >
         <div style="height: 22px;">
-          <router-link :to="{path:'read/articles/' + item.id}">
+          <router-link :to="{ path:'read/articles/' + item.id }">
             <span class="article_title" style="font-weight: 800;">
               {{ item.title }}
             </span>

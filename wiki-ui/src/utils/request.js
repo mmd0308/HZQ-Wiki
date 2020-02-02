@@ -29,14 +29,13 @@ service.interceptors.response.use(
     const res = response.data
     // 如果数据响应结果不是200
     if (res.code !== 200 && res.code !== '200') {
-      // Message({
-      //   message: res.message,
-      //   type: 'error',
-      //   duration: 2 * 1000
-      // })
-
-      // 10610:非法的token; 10620:Token 过期了;
-      if (res.code === '10610' || res.code === '10620') {
+      Message({
+        message: res.msg,
+        type: 'error',
+        duration: 2 * 1000
+      })
+      // 40110:非法的token; 40120:Token 过期了;
+      if (res.code === '40110' || res.code === '40120') {
         MessageBox.confirm(
           '你已被登出，可以取消继续留在该页面，或者重新登录',
           '确定登出',

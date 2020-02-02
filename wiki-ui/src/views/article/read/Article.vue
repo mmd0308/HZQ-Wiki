@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { get } from '@/api/index'
+import { showGetById } from '@/api/article/article'
 export default {
   data() {
     return {
@@ -36,7 +36,6 @@ export default {
   created() {
     this.get()
   },
-
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
   },
@@ -55,7 +54,7 @@ export default {
       }
     },
     get() {
-      get(this.moudle, this.$route.params.id).then(res => {
+      showGetById(this.$route.params.id).then(res => {
         this.articleForm = res
       })
     },

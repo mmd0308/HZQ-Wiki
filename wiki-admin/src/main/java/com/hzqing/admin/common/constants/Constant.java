@@ -32,14 +32,4 @@ public class Constant {
      * 文章摘要的长度
      */
     public static Integer ARTICLE_DESC_LENGHT = 150;
-
-    /**
-     * 文章状态，发布状态
-     */
-    public static Integer ARTICLE_STATE_RELEASE = 2;
-
-    /**
-     * 文章状态，草稿箱
-     */
-    public static Integer ARTICLE_STATE_DRAFT = 1;
 }

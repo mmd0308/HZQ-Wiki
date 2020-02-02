@@ -15,6 +15,13 @@ export function showPage(query) {
   })
 }
 
+export function showGetById(id) {
+  return request({
+    url: '/api/wiki/show/articles/' + id,
+    method: 'get'
+  })
+}
+
 export function page(query) {
   return request({
     url: '/api/article/page',

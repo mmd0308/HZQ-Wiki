@@ -25,6 +25,9 @@ public class ExceptionConvertUtils {
         if (e instanceof ParamsValidateException){
             result.setCode(((ParamsValidateException) e).getCode());
             result.setMsg(((ParamsValidateException) e).getMsg());
+        }if (e instanceof BaseException){
+            result.setCode(((BaseException) e).getCode());
+            result.setMsg(((BaseException) e).getMsg());
         } else if (e instanceof Exception) {
             // 该异常服务端处理不了，扔给服务调用者
             throw e;
