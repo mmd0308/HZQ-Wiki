@@ -1,6 +1,6 @@
 package com.hzqing.admin.dto.doc;
 
-import com.hzqing.admin.domain.doc.UserDoc;
+import com.hzqing.admin.model.entity.doc.UserDoc;
 import lombok.Data;
 
 /**

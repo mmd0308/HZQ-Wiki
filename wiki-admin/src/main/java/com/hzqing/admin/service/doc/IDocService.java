@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.model.entity.doc.Doc;
+import com.hzqing.admin.model.entity.space.Space;
 
 import java.util.List;
 
@@ -15,9 +16,7 @@ public interface IDocService {
 
     List<Doc> selectList(Doc doc);
 
-    int insert(Doc doc);
 
-    int update(Doc doc);
 
     List<DocDto> selectListByID(Doc doc);
 
@@ -25,7 +24,6 @@ public interface IDocService {
 
     DocDto get(int id);
 
-    int deletedById(String id);
 
 
     DocDto selectByIDandUserId(Doc doc);
@@ -40,4 +38,33 @@ public interface IDocService {
      * @return
      */
     Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc);
+
+    /**
+     * 文档分页数据
+     * @param num
+     * @param size
+     * @param doc
+     * @return
+     */
+    Page<Doc> getPage(int num, int size, Doc doc);
+
+    /**
+     * 新增空间
+     * @param doc
+     * @return
+     */
+    int create(Doc doc);
+
+    /**
+     * 根据id进行更新
+     * @param doc
+     */
+    void modifyById(Doc doc);
+
+    /**
+     * 根据id进行删除
+     * @param id
+     * @return
+     */
+    int removedById(int id);
 }

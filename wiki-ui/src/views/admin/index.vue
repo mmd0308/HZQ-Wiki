@@ -32,6 +32,14 @@
       <space-admin :ref="paramsConstants['sapce'].ref"/>
     </el-tab-pane>
 
+    <el-tab-pane :name="paramsConstants['doc'].name">
+      <span slot="label">
+        <i class="el-icon-collection="/>
+        文档管理
+      </span>
+      <doc-admin :ref="paramsConstants['doc'].ref"/>
+    </el-tab-pane>
+
     <!-- <el-tab-pane :name="paramsConstants['space'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
@@ -48,12 +56,14 @@ import DashboardAdmin from './Dashboard'
 import ArticleAdmin from '../article/admin/Index'
 import TagAdmin from '../tag/admin/Index'
 import SpaceAdmin from '../space/admin/Index'
+import DocAdmin from '../doc/admin/Index'
 export default {
   components: {
     DashboardAdmin,
     ArticleAdmin,
     TagAdmin,
-    SpaceAdmin
+    SpaceAdmin,
+    DocAdmin
   },
   data() {
     return {
@@ -74,6 +84,10 @@ export default {
         sapce: {
           name: 'sapce',
           ref: 'sapceAdmin'
+        },
+        doc: {
+          name: 'doc',
+          ref: 'docAdmin'
         }
       }
     }

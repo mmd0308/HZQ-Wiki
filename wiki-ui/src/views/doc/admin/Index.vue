@@ -1,193 +1,211 @@
 <template>
-  <div class="doc">
-    <div class="header" style="margin:0 0 10px 0;">
-      <el-input v-model="input5" style="width:300px" placeholder="请输入内容" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search"/>
-      </el-input>
-      <el-button style="float:right;margin-right:30px;" type="success" size="small" @click="spaceToAdd">添加项目</el-button>
-    </div>
+  <div>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="关键字">
+        <el-input v-model="formInline.user" size="small" placeholder="审批人"/>
+      </el-form-item>
+      <el-form-item label="文章状态">
+        <el-select v-model="formInline.region" size="small" placeholder="活动区域">
+          <el-option label="区域一" value="shanghai"/>
+          <el-option label="区域二" value="beijing"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item style="float:right">
+        <el-button type="primary" size="small" >查询</el-button>
+        <el-button type="info" size="small" >重置</el-button>
+        <el-button type="success" size="small" @click="handleToCreate">新增</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-table
-      :data="docLists"
-      :show-header="false"
+      v-loading="tableLoading"
+      :data="tableLists"
+      :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0.83)"
+      tooltip-effect="dark"
       style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left" class="demo-table-expand">
             <el-form-item label="文档名称">
               <span>{{ props.row.name }}</span>
             </el-form-item>
-            <el-form-item label="创建人">
-              <span>{{ props.row.createBy }}</span>
+            <el-form-item label="访问级别">
+              <el-tag v-if="props.row.visitLevel != null" :type="docVisitLevel[props.row.visitLevel].status" >{{ docVisitLevel[props.row.visitLevel].text }}</el-tag>
             </el-form-item>
-            <el-form-item label="创建时间">
-              <span>{{ props.row.createTime }}</span>
-            </el-form-item>
-            <el-form-item label="文档描述">
+            <el-form-item label="备注">
               <span>{{ props.row.remark }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column>
+
+      <el-table-column
+        type="selection"
+        width="55"/>
+      <el-table-column
+        prop="name"
+        label="文档名称"/>
+
+      <el-table-column
+        label="访问级别"
+        width="130" >
         <template slot-scope="scope">
-          <router-link to="/set/doc">
-            <h3>{{ scope.row.name }}</h3>
-          </router-link>
+          <el-tag v-if="scope.row.visitLevel != null" :type="docVisitLevel[scope.row.visitLevel].status" >{{ docVisitLevel[scope.row.visitLevel].text }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="160">
+
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="100">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.visitLevel == 0">
-            私有项目1
-          </el-tag>
-          <el-tag v-if="scope.row.visitLevel == 1" type="warning">
-            共享项目
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="120">
-        <template slot-scope="scope">
-          <el-dropdown trigger="click">
-            <el-button class="el-dropdown-link" type="hwbutton" size="small">
-              设置<i class="el-icon-arrow-down el-icon--right"/>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-check-outline">蚵仔煎</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
+          <el-popconfirm
+            confirm-button-text="删除"
+            confirm-button-type="danger"
+            cancel-button-text="不用了"
+            cancel-button-type="text"
+            icon="el-icon-info"
+            icon-color="red"
+            title="您确定删除该条数据吗？"
+            @onConfirm="handleRemoveById(scope.row.id)"
+          >
+            <el-button slot="reference" type="text" size="small" >删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
-
-    <div style="margin:10px 0 0 0;">
+    <div style="padding:15px 0px 0px;float:right">
       <el-pagination
         :current-page="listQuery.pageNum"
+        :page-sizes="[10, 20, 30, 40]"
         :page-size="listQuery.pageSize"
         :total="total"
-        layout="total,  prev, pager, next"
+        layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
     </div>
 
-    <!-- 新增或者修改项目 -->
-    <el-dialog :visible.sync="dialogDocVisible" :title="dialogTitle" width="40%">
-      <el-form :model="spaceForm" label-width="100px" >
-        <el-form-item label="空间名称" prop="name">
-          <el-input v-model="spaceForm.name" style="width:80%"/>
-        </el-form-item>
-        <el-form-item label="访问级别" prop="visitLevel">
-          <el-select v-model="spaceForm.visitLevel" placeholder="请选择" style="width:80%">
-            <el-option
-              v-for="item in visitLevels"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="描述" prop="remark">
-          <el-input v-model="spaceForm.remark" type="textarea" style="width:80%"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addOrUpdate">确 定</el-button>
+    <!--编辑/新增 -->
+    <el-drawer
+      :visible.sync="drawer"
+      :with-header="false"
+      class="hzq-drawer">
+      <h4 class="header">{{ drawerState === 'CREATE' ? '新增文档':'编辑文档' }}</h4>
+      <el-divider/>
+      <div class="content">
+        <el-form :model="drawerForm" label-width="80px">
+          <el-form-item label="文档名称">
+            <el-input v-model="drawerForm.name"/>
+          </el-form-item>
+          <el-form-item label="备注说明">
+            <el-input
+              v-model="drawerForm.remark"
+              type="textarea"
+              placeholder="请输入内容"
+              maxlength="100"
+              show-word-limit
+            />
+          </el-form-item>
+        </el-form>
+
+        <div class="footer">
+          <el-button size="medium" type="info" @click="drawer = false">取消</el-button>
+          <el-button v-if="drawerState === 'CREATE'" size="medium" type="primary" @click="handleSaveClick">保存 </el-button>
+          <el-button v-if="drawerState === 'UPDATE'" size="medium" type="primary" @click="handleUpdateClick">更新  </el-button>
+        </div>
       </div>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import { page, addOrUpdate } from '@/api/doc/index'
+import { create, page, updateById, deleteById } from '@/api/index'
+import { docVisitLevel } from '@/api/doc/DocConstants'
 export default {
-
   data() {
     return {
-      dialogTitle: '新增空间',
-      dialogDocVisible: false,
-      spaceForm: {
-        name: '',
-        visitLevel: 0,
-        remark: ''
+      moudle: 'docs',
+      formInline: {
+        user: '',
+        region: ''
       },
-      visitLevels: [
-        {
-          value: 0,
-          label: '私有空间'
-        }, {
-          value: 1,
-          label: '共享空间'
-        }],
-      docLists: [],
+      tableLists: [],
+      tableLoading: false,
       total: 0,
       listQuery: {
         pageNum: 1,
-        pageSize: 6,
-        name: ''
-      }
+        pageSize: 10
+      },
+      docVisitLevel: docVisitLevel,
+      drawer: false,
+      drawerForm: this.initDrawerForm(),
+      drawerState: 'CREATE'
     }
   },
-  created() {
-    this.page()
-  },
   methods: {
-    spaceToAdd() {
-      this.dialogDocVisible = true
+    init() {
+      this.getPage()
     },
-    spaceToEdit(index, row) {
-      this.dialogTitle = '修改空间'
-      this.dialogDocVisible = true
+    initDrawerForm() {
+      return {
+        id: null,
+        name: null,
+        remark: null
+      }
     },
-    page() {
-      page(this.listQuery).then(response => {
-        this.docLists = response.data
-        this.total = response.total
+    handleToCreate() {
+      this.drawerForm = this.initDrawerForm()
+      this.drawer = true
+      this.drawerState = 'CREATE'
+    },
+    handleEditClick(row) {
+      this.drawer = true
+      this.drawerState = 'UPDATE'
+      this.drawerForm = this.initDrawerForm()
+      this.drawerForm = row
+    },
+    handleSaveClick() {
+      // 创建
+      create(this.moudle, this.drawerForm).then(() => {
+        this.drawer = false
+        this.getPage()
       })
     },
-    addOrUpdate() {
-      addOrUpdate(this.spaceForm).then(() => {
-        this.dialogDocVisible = false
-        this.page()
+    handleUpdateClick() {
+      // 更新
+      updateById(this.moudle, this.drawerForm).then(() => {
+        this.drawer = false
       })
     },
-    spaceDelete() {
-      this.$confirm('此操作将永久删除[]用户?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        typr: 'warning'
-      }).then(() => {
+    handleRemoveById(id) {
+      deleteById(this.moudle, id).then(() => {
+        this.getPage()
       })
     },
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(index, row) {
-      console.log(index, row)
+    getPage() {
+      this.tableLoading = true
+      page(this.moudle, this.listQuery).then(res => {
+        this.tableLists = res.records
+        this.total = res.total
+        this.tableLoading = false
+      })
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val
-      this.page()
+      this.getPage()
     },
     handleCurrentChange(val) {
       this.listQuery.pageNum = val
-      this.page()
+      this.getPage()
     }
   }
 }
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-.doc {
-    .el-button--hwbutton{
-        background: #ff7d44;
-        border-color:#ff7d44;
-    }
-    .el-button--hwbutton:hover{
-        background: #f98d5f;
-        border-color:#f98d5f;
-    }
-}
-
+<style>
   .demo-table-expand {
     font-size: 0;
   }
@@ -198,6 +216,6 @@ export default {
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    width: 100%;
+    width: 50%;
   }
 </style>

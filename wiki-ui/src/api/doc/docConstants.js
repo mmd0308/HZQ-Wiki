@@ -1,5 +1,5 @@
 
-export const spaceVisitLevel = {
+export const docVisitLevel = {
   PRIVATE: {
     value: 'PRIVATE',
     status: 'success',

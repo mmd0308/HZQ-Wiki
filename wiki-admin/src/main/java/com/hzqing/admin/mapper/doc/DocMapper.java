@@ -24,8 +24,6 @@ public interface DocMapper  extends BaseMapper<Doc> {
 
     DocDto get(int id);
 
-    int deletedById(String id);
-
     DocDto selectByIDandUserId(Doc doc);
 
     Integer selectPrivilegeById(MemberDto memberDto);

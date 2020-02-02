@@ -8,6 +8,7 @@ import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.doc.Doc;
+import com.hzqing.admin.model.enums.doc.DocVisitLevel;
 import com.hzqing.admin.model.params.article.ArticleShowPage;
 import com.hzqing.admin.model.params.doc.DocShowPage;
 import com.hzqing.admin.service.article.IArticleService;
@@ -48,7 +49,7 @@ public class ShowDocController {
         try {
             Doc doc = new Doc();
             doc.setSpaceId(docShowPage.getSpaceId());
-            doc.setVisitLevel(1);
+            doc.setVisitLevel(DocVisitLevel.PUBLIC);
             Page<Doc> docPage = docService.getPageBySpaceOrLevel(num,size,doc);
             result.setData(docPage);
         }catch (Exception e){

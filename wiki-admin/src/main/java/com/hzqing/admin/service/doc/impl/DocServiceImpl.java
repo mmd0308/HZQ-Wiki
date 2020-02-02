@@ -2,15 +2,17 @@ package com.hzqing.admin.service.doc.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
-import com.hzqing.admin.mapper.doc.UserDocMapper;
 import com.hzqing.admin.model.entity.doc.Doc;
+import com.hzqing.admin.model.entity.doc.UserDoc;
+import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
 import com.hzqing.admin.service.doc.IDocService;
+import com.hzqing.admin.service.doc.IUserDocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,30 +27,12 @@ public class DocServiceImpl implements IDocService {
     private DocMapper docMapper;
 
     @Autowired
-    private UserDocMapper userDocMapper;
+    private IUserDocService userDocService;
 
 
     @Override
     public List<Doc> selectList(Doc doc) {
         return docMapper.selectList(doc);
-    }
-
-    @Override
-    public int insert(Doc doc) {
-        docMapper.insert(doc);
-        UserDoc userDoc = new UserDoc();
-        userDoc.setDocId(doc.getId());
-        userDoc.setPrivilege(0);
-//        userDoc.setUserId(doc.getCreateBy());
-//        userDoc.setCreateBy(doc.getCreateBy());
-        userDoc.setCreateTime(LocalDateTime.now());
-        userDocMapper.insert(userDoc);
-        return  doc.getId();
-    }
-
-    @Override
-    public int update(Doc doc) {
-        return docMapper.update(doc);
     }
 
     @Override
@@ -66,10 +50,6 @@ public class DocServiceImpl implements IDocService {
         return docMapper.get(id);
     }
 
-    @Override
-    public int deletedById(String id) {
-        return docMapper.deletedById(id);
-    }
 
     @Override
     public DocDto selectByIDandUserId(Doc doc) {
@@ -84,5 +64,34 @@ public class DocServiceImpl implements IDocService {
     @Override
     public Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc) {
       return (Page<Doc>) docMapper.selectPage(new Page<>(num, size), new QueryWrapper<Doc>(doc));
+    }
+
+    @Override
+    public Page<Doc> getPage(int num, int size, Doc doc) {
+        return (Page<Doc>) docMapper.selectPage(new Page<>(num, size), new QueryWrapper<Doc>(doc));
+    }
+
+    @Override
+    @Transactional
+    public int create(Doc doc) {
+        docMapper.insert(doc);
+        // 新增用户和文档关系
+        UserDoc userDoc = new UserDoc();
+        userDoc.setDocId(doc.getId());
+        userDoc.setPrivilege(UserDocPrivilege.OWNER);
+        userDoc.setCreateTime(LocalDateTime.now());
+        userDocService.create(userDoc);
+
+        return doc.getId();
+    }
+
+    @Override
+    public void modifyById(Doc doc) {
+        docMapper.updateById(doc);
+    }
+
+    @Override
+    public int removedById(int id) {
+        return docMapper.deleteById(id);
     }
 }

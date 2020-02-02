@@ -1,7 +1,7 @@
 package com.hzqing.admin.dto.doc;
 
 import com.hzqing.admin.domain.doc.Content;
-import com.hzqing.admin.domain.doc.Doc;
+import com.hzqing.admin.model.entity.doc.Doc;
 import lombok.Data;
 
 import java.util.List;

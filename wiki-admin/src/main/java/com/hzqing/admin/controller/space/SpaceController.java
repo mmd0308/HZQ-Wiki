@@ -90,7 +90,7 @@ public class SpaceController extends BaseController {
         try {
             spaceService.modifyById(space);
         } catch (Exception e) {
-            log.error("ArticleContoller.modify occur Exception: ", e);
+            log.error("SpaceController.modifyById occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
         }
         return result;

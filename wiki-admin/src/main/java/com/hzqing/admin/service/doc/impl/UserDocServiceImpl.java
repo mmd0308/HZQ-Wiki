@@ -1,8 +1,8 @@
 package com.hzqing.admin.service.doc.impl;
 
-import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.dto.doc.UserDocDto;
 import com.hzqing.admin.mapper.doc.UserDocMapper;
+import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.doc.IUserDocService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +43,11 @@ public class UserDocServiceImpl implements IUserDocService {
     @Override
     public int deletedById(String id) {
         return userDocMapper.deletedById(id);
+    }
+
+    @Override
+    public int create(UserDoc userDoc) {
+        userDocMapper.insert(userDoc);
+        return userDoc.getId();
     }
 }

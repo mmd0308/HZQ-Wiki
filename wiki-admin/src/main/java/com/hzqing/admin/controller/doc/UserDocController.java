@@ -2,11 +2,11 @@ package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.doc.UserDoc;
 import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.dto.doc.UserDocDto;
 import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.doc.IUserDocService;
 import com.hzqing.admin.service.space.IUserSpaceService;

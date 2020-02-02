@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzqing.admin.model.entity.base.BaseEntity;
+import com.hzqing.admin.model.entity.base.SimpleBaseEntity;
+import com.hzqing.admin.model.enums.doc.DocVisitLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,7 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("hw_doc")
-public class Doc extends BaseEntity {
+public class Doc extends SimpleBaseEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -42,13 +44,10 @@ public class Doc extends BaseEntity {
      * 访问级别 0 私有 1 公开
      */
     @TableField("visit_level")
-    private Integer visitLevel;
+    private DocVisitLevel visitLevel;
 
     /**
      * 文档封面图片
      */
     private String img;
-
-
-
 }
