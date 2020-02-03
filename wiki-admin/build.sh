@@ -1,3 +1,4 @@
+
 cd ../wiki-ui/
 
 npm run build
@@ -10,10 +11,11 @@ cp -r ../wiki-ui/dist/* ../wiki-admin/src/main/resources/static/
 
 mvn clean package -Dmaven.test.skip=true
 
-docker rmi mmd0308/wiki-admin:v1.5.0
+# version=v2.0.0
 
-docker build -t mmd0308/wiki-admin:v1.5.0 .
+# docker rmi mmd0308/wiki-admin:$version
+
+docker build -t mmd0308/wiki-admin:v2.0.0-beta.1 .
 
 rm -rf  src/main/resources/static/*
 
-# v2.0.0-beta.1

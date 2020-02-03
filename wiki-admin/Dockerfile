@@ -8,6 +8,5 @@ RUN sh -c 'touch /app.jar' \
 ENV JAVA_OPTS="\
             -server \
             -Xms128m \
-            -Xmx256m
-            "
+            -Xmx256m"
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
