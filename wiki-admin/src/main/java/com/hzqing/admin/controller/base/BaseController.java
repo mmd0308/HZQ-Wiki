@@ -64,6 +64,7 @@ public class BaseController {
      */
     public ResponseMessage uploadImages(MultipartFile file,String type, String id , HttpServletRequest request){
         String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+
         String dataPaths =  DateUtils.getYearAndMonth() + "/";
         String resPath = type + "/" + id + "/images/" + dataPaths;
         String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));

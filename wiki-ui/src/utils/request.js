@@ -29,11 +29,6 @@ service.interceptors.response.use(
     const res = response.data
     // 如果数据响应结果不是200
     if (res.code !== 200 && res.code !== '200') {
-      Message({
-        message: res.msg,
-        type: 'error',
-        duration: 2 * 1000
-      })
       // 40110:非法的token; 40120:Token 过期了;
       if (res.code === '40110' || res.code === '40120') {
         MessageBox.confirm(
@@ -49,6 +44,12 @@ service.interceptors.response.use(
             location.reload() // 为了重新实例化vue-router对象 避免bug
             location.href = '/login'
           })
+        })
+      } else {
+        Message({
+          message: res.msg,
+          type: 'error',
+          duration: 2 * 1000
         })
       }
       return Promise.reject('error')

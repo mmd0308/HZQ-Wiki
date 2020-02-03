@@ -24,6 +24,7 @@
 </template>
 <script>
 import { getById, updateById } from '@/api/index'
+import { imageUploadUrl } from '@/api/system/ImageConstants'
 import bus from '@/assets/js/eventbus'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
@@ -92,7 +93,7 @@ export default {
       this.changeSave = false
       const param = new FormData() // 创建form对象
       param.append('file', $file) // 通过append向form对象添加数据
-      param.append('docId', this.contentForm.docId)
+      param.append('basePath', 'doc/' + this.contentForm.docId)
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -101,7 +102,7 @@ export default {
       }
       var that = this
       // 添加请求头
-      axios.post('/api/doc/uploadImages', param, config).then(response => {
+      axios.post(imageUploadUrl, param, config).then(response => {
         that.$refs.mavonEditor.$img2Url(pos, response.data.data)
         that.$refs.mavonEditor.$refs.toolbar_left.$imgDelByFilename(pos)
       })

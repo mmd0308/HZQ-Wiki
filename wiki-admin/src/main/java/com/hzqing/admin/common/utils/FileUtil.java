@@ -25,7 +25,7 @@ public class FileUtil {
         if(!targetFile.exists()){
             targetFile.mkdirs();
         }
-        FileOutputStream out = new FileOutputStream(filePath+fileName);
+        FileOutputStream out = new FileOutputStream((filePath +"/" +fileName).replaceAll("/+","/"));
         out.write(file);
         out.flush();
         out.close();
