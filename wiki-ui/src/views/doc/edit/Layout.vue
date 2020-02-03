@@ -2,10 +2,10 @@
   <div class="app-doc">
     <el-container>
       <el-header>
-        <navbar :doc-status="docStatus" @editStatus="editStatus"/>
+        <navbar/>
       </el-header>
       <el-main style="padding:0px;  min-height: calc(100vh - 60px)">
-        <document-main :doc-status="docStatus" />
+        <document-main />
       </el-main>
     </el-container>
   </div>
@@ -21,13 +21,9 @@ export default {
   },
   data() {
     return {
-      docStatus: 'R' // 状态为可读 E编辑
     }
   },
   methods: {
-    editStatus(stat) {
-      this.docStatus = stat
-    }
   }
 }
 </script>

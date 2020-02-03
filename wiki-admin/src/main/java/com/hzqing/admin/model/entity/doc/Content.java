@@ -54,9 +54,5 @@ public class Content extends SimpleBaseEntity {
     @TableField("doc_type")
     private String docType;
 
-    /**
-     * 是否为目录
-     */
-    private Boolean parent;
 
 }

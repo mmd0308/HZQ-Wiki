@@ -2,10 +2,10 @@
   <div class="document-main" style=" min-height: calc(100vh - 60px)">
     <el-container style=" min-height: calc(100vh - 60px)">
       <el-aside width="280px">
-        <document-tree :doc-status="docStatus" />
+        <document-tree />
       </el-aside>
       <el-main style="padding:0px 0 0 1px">
-        <document :doc-status="docStatus" />
+        <document />
       </el-main>
     </el-container>
   </div>
@@ -17,12 +17,6 @@ export default {
   components: {
     Document,
     DocumentTree
-  },
-  props: {
-    docStatus: {
-      type: String,
-      required: true
-    }
   }
 }
 </script>

@@ -52,6 +52,7 @@ export const constantRouterMap = [
     children: [
       { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
       { path: 'doc/:id', component: () => import('@/views/doc/edit/Layout') },
+      { path: 'doc/:id/:contentId', component: () => import('@/views/doc/edit/Layout') },
       { path: 'article', component: () => import('@/views/article/edit/Layout') },
       { path: 'article/:id', component: () => import('@/views/article/edit/Layout') }
     ]
@@ -67,8 +68,8 @@ export const constantRouterMap = [
       { path: 'system', component: () => import('@/views/setting/Layout') },
       { path: 'article', component: () => import('@/views/article/set/Layout') }
     ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({

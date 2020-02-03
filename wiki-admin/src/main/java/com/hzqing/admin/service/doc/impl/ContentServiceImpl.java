@@ -1,13 +1,15 @@
 package com.hzqing.admin.service.doc.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.mapper.doc.ContentMapper;
 import com.hzqing.admin.model.dto.doc.ContentDto;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import com.hzqing.admin.model.entity.doc.Content;
 import com.hzqing.admin.service.doc.IContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -49,6 +51,28 @@ public class ContentServiceImpl implements IContentService {
     @Override
     public List<ContentDto> getListAllByDocId(Integer docId) {
         return contentMapper.selectListByDocId(docId);
+    }
+
+    @Override
+    public Content getById(int id) {
+        return contentMapper.selectById(id);
+    }
+
+    @Override
+    public int create(Content content) {
+        final UserInfo userInfo = UserAuthUtils.getUserInfo();
+        content.setCreateBy(userInfo.getId());
+        content.setCreateTime(LocalDateTime.now());
+        contentMapper.insert(content);
+        return content.getId();
+    }
+
+    @Override
+    public void modifyById(Content content) {
+        final UserInfo userInfo = UserAuthUtils.getUserInfo();
+        content.setUpdateBy(userInfo.getId());
+        content.setUpdateTime(LocalDateTime.now());
+        contentMapper.updateById(content);
     }
 
 }

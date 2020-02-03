@@ -26,15 +26,10 @@ import { getById } from '@/api/index'
 import { mapGetters } from 'vuex'
 import bus from '@/assets/js/eventbus'
 export default {
-  props: {
-    docStatus: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       moudle: 'show/docs',
+      docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       docId: this.$route.params.id,
       docPrivilege: '',
       paramsPrivilege: {
@@ -55,7 +50,7 @@ export default {
   },
   created() {
     this.get()
-    this.getPrivilege()
+    // this.getPrivilege()
   },
   mounted() {
     var that = this
@@ -70,8 +65,11 @@ export default {
       })
     },
     toEdit() {
-      this.docStatus = 'E'
-      this.$emit('editStatus', this.docStatus)
+      if (this.$route.path.startsWith('/read')) {
+        // this.$router.push({ path: '/write' + this.$route.path.substr(5) })
+        // 组件从新加载
+        window.location.href = '/write' + this.$route.path.substr(5)
+      }
     },
     getPrivilege() {
       this.paramsPrivilege.userId = this.userId

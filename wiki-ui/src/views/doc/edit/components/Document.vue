@@ -23,19 +23,15 @@
   </div>
 </template>
 <script>
-import { addOrUpdate, get } from '@/api/doc/content'
+import { getById, updateById } from '@/api/index'
 import bus from '@/assets/js/eventbus'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 export default {
-  props: {
-    docStatus: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
+      moudle: 'contents',
+      docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       contentForm: this.init(),
       timeOut: null,
       saveState: '已保存',
@@ -66,8 +62,8 @@ export default {
       }
     },
     get(id) {
-      get(id).then(res => {
-        this.contentForm = res.data
+      getById('show/' + this.moudle, id).then(res => {
+        this.contentForm = res
       })
     },
     contentChange(value, render) {
@@ -79,16 +75,16 @@ export default {
       this.contentForm.contentHtml = render
       var that = this
       this.timeOut = setTimeout(function() {
-        that.addOrUpdate()
+        that.updateById()
       }, 500)
     },
     saveContent(value, render) {
       this.contentForm.content = value
       this.contentForm.contentHtml = render
-      this.addOrUpdate()
+      this.updateById()
     },
-    addOrUpdate() {
-      addOrUpdate(this.contentForm).then(() => {
+    updateById() {
+      updateById(this.moudle, this.contentForm).then(() => {
         this.saveState = '保存成功'
       })
     },

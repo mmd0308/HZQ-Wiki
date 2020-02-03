@@ -20,11 +20,7 @@ public interface IContentService {
 
     int deletedById(Integer id);
 
-    /**
-     * 根据Id获取
-     * @param id 文档内容id
-     * @return
-     */
+
     Content get(int id);
 
 
@@ -34,4 +30,24 @@ public interface IContentService {
      * @return
      */
     List<ContentDto> getListAllByDocId(Integer docId);
+
+    /**
+     * 根据Id获取
+     * @param id 文档内容id
+     * @return
+     */
+    Content getById(int id);
+
+    /**
+     * 创建
+     * @param content
+     * @return
+     */
+    int create(Content content);
+
+    /**
+     * 根据id更新
+     * @param article
+     */
+    void modifyById(Content content);
 }

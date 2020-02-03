@@ -41,32 +41,28 @@
           </el-select>
         </el-form-item>
         <el-form-item label="文档排序">
-          <el-input id="tentacles" v-model="contentForm.sequence" type="number" min="10" max="100" @keyup.enter.native="addOrUpdate" />
+          <el-input id="tentacles" v-model="contentForm.sequence" type="number" min="10" max="100" @keyup.enter.native="add" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="contentDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addOrUpdate">确 定</el-button>
+        <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getShowAllByDocId, addOrUpdate, deletedById } from '@/api/doc/content'
-import { getAll } from '@/api/index'
+import { getShowAllByDocId, deletedById } from '@/api/doc/content'
+import { create } from '@/api/index'
 import $ from 'jquery'
 import bus from '@/assets/js/eventbus'
 export default {
-  props: {
-    docStatus: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       moudle: 'contents',
+      docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       docId: this.$route.params.id,
       setting: this.initSetting(),
       zNodes: [],
@@ -94,18 +90,18 @@ export default {
       ]
     }
   },
-  watch: {
-    docStatus: {
-      immediate: true,
-      handler: function(val, oldVal) {
-        // 如果状态发生变化,需要修改树的状态
-        this.tree()
-      }
-    },
-    filterText(val) {
-      this.filterNode(val)
-    }
-  },
+  // watch: {
+  //   docStatus: {
+  //     immediate: true,
+  //     handler: function(val, oldVal) {
+  //       // 如果状态发生变化,需要修改树的状态
+  //       this.tree()
+  //     }
+  //   },
+  //   filterText(val) {
+  //     this.filterNode(val)
+  //   }
+  // },
   created() {
     this.tree()
   },
@@ -147,30 +143,26 @@ export default {
       }
       return set
     },
-    tree() {
+    tree(conId) {
       getShowAllByDocId(this.docId).then(res => {
         this.zNodes = res
         $.fn.zTree.init($('#treeContent'), this.initSetting(), res)
         const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
 
-        // 是否打开指定的文章
-        if (this.$route.params.contentId != null) {
-          var treeNode = zTree_Menu.getNodeByTId(this.$route.params.contentId)
-          zTree_Menu.selectNode(treeNode)
+        if (conId == null) {
+          // 通过请求路径打开指定的文章
+          conId = this.$route.params.contentId
         }
-
-        // var treeNode = zTree_Menu.getNodes()[0].children[0]
-        // zTree_Menu.selectNode(treeNode)
-        // var treeNode
-        // if (conId) {
-        //   // 根据id进行选中
-        //   treeNode = zTree_Menu.getNodeByParam('id', conId)
-        // } else {
-        //   // 首次加载数据,或者没有制定选择时候,默认选择第一个
-        //   treeNode = zTree_Menu.getNodes()[0]
+        if (conId != null) {
+          var treeNode = zTree_Menu.getNodeByParam('id', conId, null)
+          zTree_Menu.selectNode(treeNode)
+          // 加载数据
+          this.selectContentTree(treeNode)
+          return
+        }
+        // else {
+        //   // 如果没有指定打开文档的某一份文章,TODO
         // }
-        // zTree_Menu.selectNode(treeNode)
-        //   this.selectContentTree(treeNode)
       })
     },
     toAdd() {
@@ -183,11 +175,13 @@ export default {
       this.contentFormStatus = 'add'
       this.cancelRMenu()
     },
-    addOrUpdate() {
-      addOrUpdate(this.contentForm).then(res => {
+    add() {
+      create(this.moudle, this.contentForm).then(res => {
         this.contentDialogFormVisible = false
         this.checkContentId = null
-        this.tree(res.data)
+
+        // 创建完成之后选中
+        this.tree(res)
       })
     },
     // 取消树拖拽
@@ -241,9 +235,20 @@ export default {
         this.selectContentTree(treeNode)
       }
     },
+    // 选择指定节点,显示内容
     selectContentTree(treeNode) {
+      this.routerPush(treeNode)
+      // 加载内容
       bus.$emit('clickContentTree', treeNode)
     },
+    routerPush(treeNode) {
+      if (this.docStatus === 'E') {
+        this.$router.push({ path: this.$route.path.substr(0, 10) + '/' + treeNode.docId + '/' + treeNode.id })
+      } else {
+        this.$router.push({ path: this.$route.path.substr(0, 9) + '/' + treeNode.docId + '/' + treeNode.id })
+      }
+    },
+
     onRightClickMethod(event, treeId, treeNode) {
       if (this.docStatus !== 'E') return // 只有进入编辑模式,才能右击操作
       if (
