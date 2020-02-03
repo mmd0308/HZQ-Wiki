@@ -21,7 +21,7 @@
         :key="index"
         class="item" >
         <div style="height: 22px;">
-          <router-link :to="{ path:'read/articles/' + item.id }">
+          <router-link :to="{ path:'read/article/' + item.id }">
             <span class="article_title" style="font-weight: 800;">
               {{ item.title }}
             </span>
@@ -35,7 +35,7 @@
             作者: {{ item.createName }}
           </span>
           <span>
-            创建时间: {{ item.createTime }}
+            最后更新时间: {{ item.updateTime }}
           </span>
         </div>
       </div>

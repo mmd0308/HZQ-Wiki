@@ -7,6 +7,7 @@ import com.hzqing.admin.common.utils.DateUtils;
 import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.domain.base.Base;
 import com.hzqing.admin.model.dto.system.UserInfo;
+import com.hzqing.admin.model.entity.base.SimpleBaseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,7 @@ public class BaseController {
     public BaseController() {
     }
 
-    protected Object initAddOrUpdate(Base base){
+    protected Object initBaseData(SimpleBaseEntity base){
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         base.setCreateTime(LocalDateTime.now());
         base.setUpdateTime(LocalDateTime.now());

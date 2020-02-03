@@ -18,7 +18,7 @@
         <el-menu-item index="/index">
           首页
         </el-menu-item>
-        <el-menu-item index="/articles" >
+        <el-menu-item index="/article" >
           文章
         </el-menu-item>
         <el-menu-item index="/doc" >
@@ -58,7 +58,7 @@
       <div v-else>
         <el-button type="text" @click="login" >登陆</el-button>
         <el-divider direction="vertical"/>
-        <el-button type="text" >注册</el-button>
+        <el-button type="text" @click="login" >注册</el-button>
       </div>
     </div>
   </div>

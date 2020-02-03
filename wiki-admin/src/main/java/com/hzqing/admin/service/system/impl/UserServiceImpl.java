@@ -9,6 +9,7 @@ import com.hzqing.admin.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> selectList(User user) {
-        return userMapper.selectList(user);
+        return userMapper.selectList(new QueryWrapper<>(user));
     }
 
     @Override
@@ -34,17 +35,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public int create(User user) {
+        user.setCreateTime(LocalDateTime.now());
         return userMapper.insert(user);
     }
 
     @Override
     public void modifyById(User user) {
+        user.setUpdateTime(LocalDateTime.now());
         userMapper.updateById(user);
     }
 
     @Override
     public int removedById(int id) {
-        return userMapper.deletedById(id + "");
+        return userMapper.deleteById(id);
     }
 
     @Override

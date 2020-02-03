@@ -4,13 +4,15 @@
       <h1 style="font-size: 30px;font-weight: 700;word-break: break-word;">{{ articleForm.title }}</h1>
       <div class="article_auth" style="position: relative;">
         <span>
-          作者: {{ articleForm.createTime }}
+          作者: {{ articleForm.createName }}
         </span>
         <span>
           创建时间: {{ articleForm.createTime }}
         </span>
-        <div style="position: absolute;right: 0px;top: -8px;" >
-          <el-button type="text" size="small">编辑</el-button>
+        <div v-if="checkPermission(articleForm.userId)" style="position: absolute;right: 0px;top: -8px;" >
+          <router-link :to="'/write/article/'+articleForm.id">
+            <el-button type="text" size="small">编辑</el-button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -42,11 +44,11 @@
             <svg-icon class="detail-icon" icon-class="star"/>
           </div>
         </li>
-        <li>
+        <!-- <li>
           <div class="btn-like mp" >
             <svg-icon class="detail-icon" icon-class="star"/>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
@@ -54,7 +56,10 @@
 
 <script>
 import { showGetById } from '@/api/article/article'
+import { getToken } from '@/utils/auth'
+import { mapGetters } from 'vuex'
 export default {
+
   data() {
     return {
       moudle: 'articles',
@@ -62,6 +67,12 @@ export default {
       articleForm: this.init(),
       code_style: 'dark'
     }
+  },
+  computed: {
+    ...mapGetters([
+      'userId',
+      'token'
+    ])
   },
   created() {
     this.get()
@@ -87,6 +98,14 @@ export default {
       showGetById(this.$route.params.id).then(res => {
         this.articleForm = res
       })
+    },
+    // 判断是否显示编辑按钮
+    checkPermission(id) {
+      if (getToken() == null || this.token == null || this.token === '' || this.userId === '' || this.userId == null) { return false }
+      if (this.userId === id) {
+        return true
+      }
+      return false
     },
     // 点击图片回到顶部方法，加计时器是为了过渡顺滑
     backTop() {

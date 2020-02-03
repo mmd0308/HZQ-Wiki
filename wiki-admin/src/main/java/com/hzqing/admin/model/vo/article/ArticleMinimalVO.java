@@ -1,42 +1,34 @@
 package com.hzqing.admin.model.vo.article;
 
+import com.hzqing.admin.model.enums.article.ArticleUp;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 最少参数的文章信息
  * @author hzqing
- * @date 2020-02-01 17:05
+ * @date 2020-02-03 08:50
  */
 @Data
-public class ArticleVO implements Serializable {
+@ToString
+public class ArticleMinimalVO implements Serializable {
 
     private Integer id;
 
     private String title;
 
-    private String content;
-
-    private String contentHtml;
-
-    private Integer sequence;
-
     private String hwDesc;
 
-    /**
-     * 状态 1 草稿 2 发布
-     */
-    private String hwState;
-
-    /**
-     * 是否置顶 0 否 1是
-     */
-    private String hwUp;
+    private ArticleUp hwUp;
 
     private Integer userId;
 
     private Integer createBy;
+
+    private String createName;
 
     private LocalDateTime createTime;
 

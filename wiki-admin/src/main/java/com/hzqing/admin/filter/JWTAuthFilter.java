@@ -1,5 +1,6 @@
 package com.hzqing.admin.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.constants.ConstantSecurity;
@@ -69,23 +70,16 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
 
         // token不存在，直接返回
         if (token == null || !token.startsWith(ConstantSecurity.TOKEN_PREFIX)) {
-
             // 自定义返回信息
-            RestResult<String> result = RestResultFactory.getInstance().build(
-                    RestResultCodeConstants.TOKEN_ERROR.getCode(),
-                    RestResultCodeConstants.TOKEN_ERROR.getMsg()
-                    );
-            String json = new ObjectMapper().writeValueAsString(result);
-
-            response.setContentType("text/json;charset=utf-8");
-            response.getWriter().write(json);
+            tokenError(response);
             return;
         }
+
         // 检验token是否正确
         // 从token中获取用户名
         String userName = JwtTokenUtil.getUsernameFromToken(token.replace(ConstantSecurity.TOKEN_PREFIX,""));
         if (StringUtils.isEmpty(userName)){
-            logger.error("hzqing.com --- 该Token错误，请重新登陆");
+            tokenError(response);
             return;
         }
         logger.info("hzqing.com --- 从新配置 SecurityContextHolder");
@@ -96,4 +90,19 @@ public class JWTAuthFilter extends BasicAuthenticationFilter {
 
         chain.doFilter(request, response);
     }
+
+    private void tokenError(HttpServletResponse response) throws IOException {
+        logger.error("JWTAuthFilter.tokenError occur Exception: Token 错误。");
+        // 自定义返回信息
+        RestResult<String> result = RestResultFactory.getInstance().build(
+                RestResultCodeConstants.TOKEN_ERROR.getCode(),
+                RestResultCodeConstants.TOKEN_ERROR.getMsg()
+        );
+        String json = new ObjectMapper().writeValueAsString(result);
+
+        response.setContentType("text/json;charset=utf-8");
+        response.getWriter().write(json);
+    }
+
+
 }

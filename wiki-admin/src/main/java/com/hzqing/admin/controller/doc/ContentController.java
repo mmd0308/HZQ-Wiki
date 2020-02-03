@@ -53,7 +53,7 @@ public class ContentController extends BaseController {
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody Content content){
         int res = -1;
-        content = (Content) initAddOrUpdate(content);
+       // content = (Content) initAddOrUpdate(content);
         //新增
         if (content.getId() == null){
             res = contentService.insert(content);

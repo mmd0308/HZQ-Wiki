@@ -33,6 +33,7 @@
       :visible.sync="drawer"
       size="25%"
       direction="rtl"
+      class="hzq-drawer"
       title="文章设置">
       <div class="article-drawer__content">
         <el-form :model="articleRelease">
@@ -70,17 +71,21 @@
           />
 
         </el-form>
-        <div class="article-drawer__footer">
+        <!-- <div class="article-drawer__footer">
           <el-button size="medium" plain type="info" @click="cancelForm">保存草稿</el-button>
           <el-button :loading="loading" plain size="medium" type="primary" @click="release">{{ loading ? '提交中 ...' : '发  布' }}</el-button>
+        </div> -->
+        <div class="footer">
+          <el-button size="medium" type="info" @click="drawer = false">取消</el-button>
+          <el-button :loading="buttonLoading" size="medium" type="primary" @click="release">{{ buttonLoading ? '提交中 ...' : '发  布' }}</el-button>
         </div>
       </div>
     </el-drawer>
   </div>
 </template>
 <script>
-import { addOrUpdate, get, release } from '@/api/article/article'
-import { create, updateById } from '@/api/index'
+import { release } from '@/api/article/article'
+import { getById, create, updateById } from '@/api/index'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 import { showAll } from '@/api/article/tag'
@@ -99,7 +104,8 @@ export default {
         hwDesc: '',
         id: null,
         tagIds: []
-      }
+      },
+      buttonLoading: false
     }
   },
   watch: {
@@ -137,8 +143,9 @@ export default {
       }
     },
     get() {
-      get(this.$route.params.id).then(res => {
-        this.articleForm = res.data
+      getById(this.moudle, this.$route.params.id).then(res => {
+        this.articleForm = res
+        this.title = this.articleForm.title
       })
     },
     contentChange(value, render) {
@@ -184,6 +191,7 @@ export default {
     },
     // 发布文章
     release() {
+      this.buttonLoading = true
       release(this.articleRelease).then(() => {
         // 跳转到阅读页面
         this.$router.push({ path: '/read/article/' + this.articleRelease.id })

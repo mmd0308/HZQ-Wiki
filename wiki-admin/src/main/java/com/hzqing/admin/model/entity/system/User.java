@@ -1,10 +1,13 @@
 package com.hzqing.admin.model.entity.system;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzqing.admin.model.entity.base.BaseEntity;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author hzqing
@@ -36,5 +39,18 @@ public class User extends BaseEntity {
      * 备注说明
      */
     private String remark;
+
+
+    @TableField("create_by")
+    private Integer createBy;
+
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    @TableField("update_by")
+    private Integer updateBy;
+
+    @TableField("update_time")
+    private LocalDateTime updateTime;
 
 }

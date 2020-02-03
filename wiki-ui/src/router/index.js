@@ -8,6 +8,7 @@ import EmptyLayout from '../views/layout/EmptyLayout'
 
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/register', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
@@ -22,7 +23,7 @@ export const constantRouterMap = [
       { path: 'space', component: () => import('@/views/space/show/index') },
       { path: ':spaceId/doc', component: () => import('@/views/doc/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
-      { path: 'articles', component: () => import('@/views/article/show/Layout') },
+      { path: 'article', component: () => import('@/views/article/show/Layout') },
       { path: 'admin/:name', component: () => import('@/views/admin/index') }
     ]
   },
@@ -31,7 +32,7 @@ export const constantRouterMap = [
     component: Layout,
     hidden: true,
     children: [
-      { path: 'articles/:id', component: () => import('@/views/article/read/Article') }
+      { path: 'article/:id', component: () => import('@/views/article/read/Article') }
     ]
   },
   {

@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.utils.ReplaceStrUtil;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.mapper.article.ArticleMapper;
 import com.hzqing.admin.model.dto.article.ArticleDto;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.article.ArticleTag;
 import com.hzqing.admin.model.enums.article.ArticleState;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +36,6 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
-
-
 
     @Autowired
     private IArticleTagService articleTagService;
@@ -65,13 +66,20 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public int create(Article article) {
+        article.setHwState(ArticleState.DRAFT);
+        final UserInfo userInfo = UserAuthUtils.getUserInfo();
+        article.setUserId(userInfo.getId());
+        article.setCreateBy(userInfo.getId());
+        article.setCreateTime(LocalDateTime.now());
         articleMapper.insert(article);
         return article.getId();
     }
 
     @Override
     public void modifyById(Article article) {
-
+        // 如果文章被修改，默认存储到草稿箱
+        article.setHwState(ArticleState.DRAFT);
+        article.setUpdateTime(LocalDateTime.now());
         articleMapper.updateById(article);
     }
 
@@ -107,8 +115,13 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
-    public Page<Article> getPageByStateOrTag(int num, int size, ArticleDto article) {
-        IPage<Article> articleIPage = articleMapper.selectPageByStateOrTag(new Page<Article>(num, size), article);
-        return (Page<Article>) articleIPage;
+    public Page<ArticleDto> getPageByStateOrTag(int num, int size, ArticleDto article) {
+        IPage<ArticleDto> articleIPage = articleMapper.selectPageByStateOrTag(new Page<ArticleDto>(num, size), article);
+        return (Page<ArticleDto>) articleIPage;
+    }
+
+    @Override
+    public ArticleDto getDtoById(int id) {
+        return articleMapper.selectDtoById(id);
     }
 }

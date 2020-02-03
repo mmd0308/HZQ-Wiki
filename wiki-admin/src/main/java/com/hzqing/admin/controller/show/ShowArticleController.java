@@ -8,10 +8,13 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.converter.article.ArticleConverter;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.params.article.ArticleShowPage;
+import com.hzqing.admin.model.vo.article.ArticleDetailVO;
+import com.hzqing.admin.model.vo.article.ArticleMinimalVO;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,6 +40,8 @@ public class ShowArticleController {
     @Autowired
     private IArticleService articleService;
 
+    @Autowired
+    private ArticleConverter articleConverter;
 
     @ApiOperation(value = "公开展示的博客信息")
     @ApiImplicitParams({
@@ -44,16 +49,17 @@ public class ShowArticleController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticleShowPage articleShowPage){
+    public RestResult<Page<ArticleMinimalVO>> getPage(@PathVariable int num, @PathVariable int size, ArticleShowPage articleShowPage){
         // 默认返回值
-        RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
+        RestResult<Page<ArticleMinimalVO>> result = RestResultFactory.getInstance().success();
         try {
             ArticleDto article = new ArticleDto();
             // 获取已经发布的博客
             article.setHwState(ArticleState.RELEASE);
             article.setTagId(articleShowPage.getTagId());
-            Page<Article> articlePage = articleService.getPageByStateOrTag(num,size,article);
-            result.setData(articlePage);
+            Page<ArticleDto> articlePage = articleService.getPageByStateOrTag(num,size,article);
+            Page<ArticleMinimalVO> minimalVOPage = articleConverter.pageArticleDtoToPageArticleMinimalVo(articlePage);
+            result.setData(minimalVOPage);
         }catch (Exception e){
             log.error("ShowArticleController.getPage occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
@@ -63,20 +69,20 @@ public class ShowArticleController {
 
     @ApiOperation(value = "根据文章id，获取文章")
     @GetMapping("/{id}")
-    public RestResult<Article> getById(@PathVariable int id){
-        RestResult<Article> result = RestResultFactory.getInstance().success();
+    public RestResult<ArticleDetailVO> getById(@PathVariable int id){
+        RestResult<ArticleDetailVO> result = RestResultFactory.getInstance().success();
         try{
-            Article article = articleService.getById(id);
+            ArticleDto article = articleService.getDtoById(id);
             // 判断该文章是否已经发布,如果没有发布，不能查看
             if (!article.getHwState().equals(ArticleState.RELEASE)){
                 throw new UnauthorizedException(
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getCode(),
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getMsg()
                 );
-
             }
+            ArticleDetailVO articleDetailVO = articleConverter.DtoToDetailVO(article);
 
-            result.setData(article);
+            result.setData(articleDetailVO);
         }catch (Exception e){
             log.error("ShowArticleController.getById occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);

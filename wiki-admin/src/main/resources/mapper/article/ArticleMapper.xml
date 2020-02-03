@@ -19,6 +19,25 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="baseResultDto" type="articledto">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content" />
+        <result column="content_html" property="contentHtml" />
+        <result column="sequence" property="sequence" />
+        <result column="hw_desc" property="hwDesc" />
+        <result column="hw_state" property="hwState" />
+        <result column="hw_up" property="hwUp" />
+        <result column="user_id" property="userId" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+
+        <result column="createName" property="createName"/>
+    </resultMap>
+
+
+
     <sql id="columnName">
         id,
         title,
@@ -28,23 +47,50 @@
         hw_desc
     </sql>
     
-    <select id="selectPageByStateOrTag" parameterType="articledto" resultMap="baseResult">
+    <select id="selectPageByStateOrTag" parameterType="articledto" resultMap="baseResultDto">
         select
-            id,
-            title,
-            sequence,
-            hw_desc,
-            create_time
-        from hw_article
+            a.id,
+            a.title,
+            a.content,
+            a.content_html,
+            a.sequence,
+            a.hw_desc,
+            a.hw_state,
+            a.hw_up,
+            a.user_id,
+            a.create_by,
+            a.create_time,
+            a.update_time,
+            u.name as createName
+        from hw_article a left join hw_user u on a.create_by = u.id
         <where>
-            hw_state = #{articledto.hwState}
+            a.hw_state = #{articledto.hwState}
             <if test="articledto.tagId != null and articledto.tagId != ''">
-               and find_in_set(id, (
+               and find_in_set(a.id, (
                     select group_concat(article_id) from hw_article_tag where tag_id = #{articledto.tagId}
                 ))
             </if>
         </where>
+        order by a.update_time desc
+    </select>
 
+    <select id="selectDtoById" parameterType="int" resultMap="baseResultDto">
+        select
+            a.id,
+            a.title,
+            a.content,
+            a.content_html,
+            a.sequence,
+            a.hw_desc,
+            a.hw_state,
+            a.hw_up,
+            a.user_id,
+            a.create_by,
+            a.create_time,
+            a.update_time,
+            u.name as createName
+        from hw_article a left join hw_user u on a.create_by = u.id
+        where a.id = #{id}
     </select>
 
 </mapper>

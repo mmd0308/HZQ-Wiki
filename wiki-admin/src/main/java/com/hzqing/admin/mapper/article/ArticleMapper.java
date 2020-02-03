@@ -19,5 +19,12 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articledto
      * @return
      */
-    IPage<Article> selectPageByStateOrTag(Page<Article> articlePage, @Param("articledto") ArticleDto articledto);
+    IPage<ArticleDto> selectPageByStateOrTag(Page<ArticleDto> articlePage, @Param("articledto") ArticleDto articledto);
+
+    /**
+     * 根据id获取数据
+     * @param id
+     * @return
+     */
+    ArticleDto selectDtoById(int id);
 }

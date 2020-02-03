@@ -1,12 +1,11 @@
 <template>
   <div class="login-container">
-    <img
-      src="@/assets/login.jpg"
-      style="width: 100%;height: 100%;position: absolute;z-index: -10;" >
+    <img src="@/assets/login.jpg" style="width: 100%;height: 100%;position: absolute;z-index: -10;" >
+
     <div class="login-register">
       <h3 class="title">
         <div :class="{'check-item':formStates === 'login','title-item':true}" @click="checkForm('login')">登录</div>
-        <b>|</b>
+        <el-divider direction="vertical"/>
         <div :class="{'check-item':formStates === 'register','title-item':true}" @click="checkForm('register')"> 注册</div>
       </h3>
       <!-- 登录 -->
@@ -45,6 +44,7 @@
           登 录
         </el-button>
       </el-form>
+
       <!-- 注册 -->
       <el-form
         v-if="formStates === 'register'"
@@ -63,17 +63,8 @@
           <el-input v-model="regForm.username" type="text" auto-complete="on" placeholder="登陆账号" />
         </el-form-item>
 
-        <!-- <el-form-item prop="phone">
-          <span class="svg-container svg-container_login">
-            <svg-icon icon-class="phone" />
-          </span>
-          <el-input v-model="regForm.phone" type="text" auto-complete="on" placeholder="手机号" />
-        </el-form-item> -->
-
         <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password"/>
-          </span>
+          <span class="svg-container"><svg-icon icon-class="password"/></span>
           <el-input
             :type="pwdType"
             v-model="regForm.password"
@@ -88,9 +79,7 @@
         </el-form-item>
 
         <el-form-item prop="email">
-          <span class="svg-container svg-container_login">
-            <svg-icon icon-class="reg-email" />
-          </span>
+          <span class="svg-container svg-container_login"><svg-icon icon-class="reg-email" /></span>
           <el-input v-model="regForm.email" type="text" auto-complete="on" placeholder="邮箱" />
         </el-form-item>
 
@@ -112,46 +101,50 @@ export default {
         callback(new Error('请输入账号!'))
       } else {
         checkUsername(value).then(res => {
-          if (!res.data) {
-            callback(new Error('该账号已经被使用'))
+          if (!res) {
+            callback(new Error('该账号已经被使用!'))
           } else {
             callback()
           }
         })
       }
     }
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码!'))
-      }
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        username: 'admin',
+        username: 'hengzhaoqing',
         password: 'admin'
       },
       regForm: this.initReg(),
       loginRules: {
         username: [{ required: true, trigger: 'blur', message: '请输入账号' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        password: [
+          { required: true, trigger: 'blur', message: '请输入密码!' },
+          { min: 5, message: '密码不能小于5位', trigger: 'blur' }]
       },
       regRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        username: [
+          { required: true, trigger: 'blur', validator: validateUsername }
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: '请输入密码!' },
+          { min: 5, message: '密码不能小于5位', trigger: 'blur' }
+        ],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-        ],
-        phone: [{ required: true, message: '联系电话不能为空' }]
+        ]
       },
       loading: false,
       pwdType: 'password',
       formStates: 'login'
+    }
+  },
+  created() {
+    if (this.$route.path === '/register') {
+      this.formStates = 'register'
+    }
+    if (this.$route.path === '/login') {
+      this.formStates = 'login'
     }
   },
   methods: {
@@ -159,7 +152,6 @@ export default {
       return {
         name: '',
         username: '',
-        phone: '',
         password: '',
         email: ''
       }
@@ -193,6 +185,7 @@ export default {
         if (valid) {
           this.loading = true
           this.regForm.name = this.regForm.username
+
           registerUser(this.regForm).then(() => {
             this.$notify({
               title: '成功',
@@ -201,8 +194,8 @@ export default {
               duration: 2000
             })
             this.loading = false
-            this.formStates = 'login'
             this.regForm = this.initReg()
+            this.checkForm('login')
           })
         } else {
           console.log('注册校验错误')
@@ -211,6 +204,7 @@ export default {
       })
     },
     checkForm(item) {
+      this.$router.push({ path: '/' + item })
       this.formStates = item
     }
   }

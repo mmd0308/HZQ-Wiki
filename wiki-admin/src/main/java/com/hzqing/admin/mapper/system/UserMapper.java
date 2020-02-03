@@ -11,13 +11,4 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<User> {
 
-    List<User> selectList(User user);
-
-    int update(User user);
-
-    int insert(User user);
-
-    int deletedById(String id);
-
-    User get(int id);
 }

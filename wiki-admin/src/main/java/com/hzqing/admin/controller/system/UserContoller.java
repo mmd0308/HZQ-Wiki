@@ -78,20 +78,7 @@ public class UserContoller extends BaseController {
         return result;
     }
 
-    /**
-     * 注册用户
-     * @param user
-     * @return
-     */
-//    @PostMapping("/register")
-//    public ResponseMessage register(@RequestBody User user){
-//        user.setCreateBy(-1);
-//        user.setUpdateBy(-1);
-//        user.setCreateTime(LocalDateTime.now());
-//        user.setUpdateTime(LocalDateTime.now());
-//        int res = userService.insert(user);
-//        return responseMessage(res);
-//    }
+
 
     /**
      * 检查密码是否正确
@@ -105,19 +92,6 @@ public class UserContoller extends BaseController {
         return responseMessage(true);
     }
 
-    /**
-     * 检查登陆账号是否可用
-     * @param username
-     * @return
-     */
-    @GetMapping("/checkUsername")
-    public ResponseMessage checkUsername(String username){
-        User user = userService.getByUserName(username);
-        if (null == user){
-            return responseMessage(true);
-        }
-        return responseMessage(false);
-    }
 
 
 

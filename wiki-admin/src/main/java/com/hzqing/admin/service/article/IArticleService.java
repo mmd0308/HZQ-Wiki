@@ -69,5 +69,12 @@ public interface IArticleService {
      * @param article
      * @return
      */
-    Page<Article> getPageByStateOrTag(int num, int size, ArticleDto article);
+    Page<ArticleDto> getPageByStateOrTag(int num, int size, ArticleDto article);
+
+    /**
+     * 根据id获取数据
+     * @param id
+     * @return
+     */
+    ArticleDto getDtoById(int id);
 }

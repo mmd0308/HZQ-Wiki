@@ -15,9 +15,8 @@ export function get(id) {
 }
 export function checkUsername(username) {
   return request({
-    url: '/api/user/checkUsername',
-    method: 'get',
-    params: { username }
+    url: '/api/wiki/show/users/' + username + '/username',
+    method: 'get'
   })
 }
 export function checkPass(params) {
@@ -37,7 +36,7 @@ export function addOrUpdate(params) {
 
 export function registerUser(params) {
   return request({
-    url: '/api/user/register',
+    url: '/api/wiki/show/users/register',
     method: 'post',
     data: params
   })

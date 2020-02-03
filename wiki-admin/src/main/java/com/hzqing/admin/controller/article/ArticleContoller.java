@@ -8,10 +8,8 @@ import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.converter.article.ArticleConverter;
 import com.hzqing.admin.model.entity.article.Article;
-import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.params.ArticlePage;
 import com.hzqing.admin.model.params.ArticleRelease;
-import com.hzqing.admin.model.vo.article.ArticleVO;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -75,6 +73,7 @@ public class ArticleContoller extends BaseController {
         log.info("ArticleContoller.create ",article);
         RestResult<Integer> result = RestResultFactory.getInstance().success();
         try {
+
             int id = articleService.create(article);
             result.setData(id);
         } catch (Exception e) {
