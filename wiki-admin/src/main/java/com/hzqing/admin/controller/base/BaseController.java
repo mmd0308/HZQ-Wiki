@@ -54,26 +54,4 @@ public class BaseController {
         return new ResponseMessage(code, data,message,0);
     }
 
-    /**
-     * 上传图片
-     * @param file
-     * @param type
-     * @param id
-     * @param request
-     * @return
-     */
-    public ResponseMessage uploadImages(MultipartFile file,String type, String id , HttpServletRequest request){
-        String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
-
-        String dataPaths =  DateUtils.getYearAndMonth() + "/";
-        String resPath = type + "/" + id + "/images/" + dataPaths;
-        String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        try {
-            FileUtil.uploadFile(file.getBytes(),filePath + resPath,fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseMessage().success(http + "/fs/"+resPath + fileName);
-    }
-
 }

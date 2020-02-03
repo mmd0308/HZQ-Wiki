@@ -5,13 +5,10 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
-import com.hzqing.admin.common.utils.DateUtils;
-import com.hzqing.admin.common.utils.FileUtil;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
-import com.hzqing.admin.model.entity.space.Space;
 import com.hzqing.admin.service.doc.IDocService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,11 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author hzqing
@@ -164,25 +158,5 @@ public class DocContoller extends BaseController {
         startPage(pageNum,pageSize);
         List<Doc> docs = docService.selectList(doc);
         return responseMessage(docs);
-    }
-
-    /**
-     * 上传图片，返回图片路径
-     * @param file
-     * @return
-     */
-    @PostMapping("/uploadImages")
-    public ResponseMessage uploadImages(MultipartFile file, String docId , HttpServletRequest request){
-        String http = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
-
-        String dataPaths =  DateUtils.getYearAndMonth() + "/";
-        String resPath = "doc/" + docId + "/images/" + dataPaths;
-        String fileName =  UUID.randomUUID().toString() +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        try {
-            FileUtil.uploadFile(file.getBytes(),filePath + resPath,fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseMessage().success(http + "/fs/"+resPath + fileName);
     }
 }

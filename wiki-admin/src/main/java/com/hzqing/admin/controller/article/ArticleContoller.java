@@ -18,9 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author hzqing
@@ -118,17 +115,4 @@ public class ArticleContoller extends BaseController {
         return responseMessage(res);
     }
 
-    /**
-     * 上传图片，返回图片路径
-     * @param file
-     * @return
-     */
-    @PostMapping("/uploadImages")
-    public ResponseMessage uploadImages(MultipartFile file, String articleId , HttpServletRequest request){
-        // 如果文章id为空，存储在tmp目录下
-        if (articleId == null || articleId.equals("")) {
-            articleId = "tmp";
-        }
-        return super.uploadImages(file,"article",articleId,request);
-    }
 }

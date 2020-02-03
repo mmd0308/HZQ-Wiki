@@ -66,12 +66,6 @@ public class ContentController extends BaseController {
 
     //////////////////
 
-    @GetMapping("/page")
-    public ResponseMessage page(int pageNum, int pageSize, Content content){
-        startPage(pageNum,pageSize);
-        List<Content> contents = contentService.selectList(content);
-        return responseMessage(contents);
-    }
 
     /**
      * 根据Id获取信息

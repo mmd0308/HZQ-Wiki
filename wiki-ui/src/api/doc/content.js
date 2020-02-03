@@ -7,14 +7,6 @@ export function getShowAllByDocId(docId) {
   })
 }
 
-export function catalogPage(query) {
-  return request({
-    url: '/api/content/page',
-    method: 'get',
-    params: query
-  })
-}
-
 export function get(id) {
   return request({
     url: '/api/content/get/' + id,
