@@ -9,6 +9,7 @@
       :toolbars-flag="false"
       class="hzq-wiki-height"
       default-open="preview" />
+
     <mavon-editor
       v-else
       ref="mavonEditor"

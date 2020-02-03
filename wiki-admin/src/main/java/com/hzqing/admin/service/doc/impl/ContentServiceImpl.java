@@ -1,7 +1,9 @@
 package com.hzqing.admin.service.doc.impl;
 
-import com.hzqing.admin.domain.doc.Content;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hzqing.admin.mapper.doc.ContentMapper;
+import com.hzqing.admin.model.dto.doc.ContentDto;
+import com.hzqing.admin.model.entity.doc.Content;
 import com.hzqing.admin.service.doc.IContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class ContentServiceImpl implements IContentService {
 
     @Override
     public List<Content> selectList(Content content) {
-        return contentMapper.selectList(content);
+       return null;
     }
 
     @Override
@@ -31,17 +33,22 @@ public class ContentServiceImpl implements IContentService {
 
     @Override
     public int update(Content content) {
-        return contentMapper.update(content);
+        return contentMapper.updateById(content);
     }
 
     @Override
     public int deletedById(Integer id) {
-        return contentMapper.deletedById(id);
+        return contentMapper.deleteById(id);
     }
 
     @Override
     public Content get(int id) {
-        return contentMapper.get(id);
+        return contentMapper.selectById(id);
+    }
+
+    @Override
+    public List<ContentDto> getListAllByDocId(Integer docId) {
+        return contentMapper.selectListByDocId(docId);
     }
 
 }

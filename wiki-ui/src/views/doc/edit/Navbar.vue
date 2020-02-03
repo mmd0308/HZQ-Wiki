@@ -21,7 +21,8 @@
   </div>
 </template>
 <script>
-import { get, docPrivilege } from '@/api/doc/index'
+import { docPrivilege } from '@/api/doc/index'
+import { getById } from '@/api/index'
 import { mapGetters } from 'vuex'
 import bus from '@/assets/js/eventbus'
 export default {
@@ -33,6 +34,7 @@ export default {
   },
   data() {
     return {
+      moudle: 'show/docs',
       docId: this.$route.params.id,
       docPrivilege: '',
       paramsPrivilege: {
@@ -63,8 +65,8 @@ export default {
   },
   methods: {
     get() {
-      get(this.docId).then(res => {
-        this.docForm = res.data
+      getById(this.moudle, this.docId).then(res => {
+        this.docForm = res
       })
     },
     toEdit() {

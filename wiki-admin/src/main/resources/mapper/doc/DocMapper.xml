@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzqing.admin.mapper.doc.DocMapper">
 
+
+
     <resultMap id="baseResult" type="doc">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
@@ -12,11 +14,51 @@
         <result column="visit_level" property="visitLevel" />
         <result column="img" property="img" />
         <result column="create_by" property="createBy"/>
-        <result column="create_time" property="createTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="create_time" property="createTime"/>
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="baseResultDto" type="docdto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="space_id" property="spaceId" />
+        <result column="remark" property="remark" />
+        <result column="visit_level" property="visitLevel"/>
+        <result column="img" property="img" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+
+        <result column="createName" property="createName" />
+    </resultMap>
+
+
+    <select id="selectPageBySpaceOrLevel" resultMap="baseResultDto" parameterType="doc">
+        select
+            d.id,
+            d.name,
+            d.space_id,
+            d.remark,
+            d.visit_level,
+            d.img,
+            d.create_by,
+            d.create_time,
+            d.update_by,
+            d.update_time,
+            u.name as createName
+        from hw_doc d left join hw_user u on d.create_by = u.id
+        <where>
+            <if test="doc.visitLevel != null">
+                d.visit_level = #{doc.visitLevel}
+            </if>
+            <if test="doc.spaceId != null and doc.spaceId != 0">
+                d.space_id = #{doc.spaceId}
+            </if>
+        </where>
+        order by d.update_time desc
+    </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="doc">
         select
@@ -39,61 +81,6 @@
 
     </select>
 
-    <insert id="insert" parameterType="doc"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
-        INSERT INTO hw_doc (
-            name,
-            space_id,
-            remark,
-            visit_level,
-            img,
-            create_by,
-            create_time,
-            update_by,
-            update_time
-        ) VALUE (
-            #{name},
-            #{spaceId},
-            #{remark},
-            #{visitLevel},
-            #{img},
-            #{createBy},
-            #{createTime},
-            #{updateBy},
-            #{updateTime}
-        )
-    </insert>
 
-    <delete id="deletedById" parameterType="string">
-        DELETE FROM hw_doc
-        WHERE id = #{id}
-    </delete>
-
-    <update id="update" parameterType="doc">
-        UPDATE hw_doc
-        <set>
-            <if test="name != null and name != ''">
-                name = #{name},
-            </if>
-            <if test="spaceId != null">
-                space_id = #{spaceId},
-            </if>
-            <if test="remark != null and remark != ''">
-                remark = #{remark},
-            </if>
-            <if test="visitLevel != null">
-                visit_level = #{visitLevel},
-            </if>
-            <if test="img != null and img != ''">
-                img = #{img},
-            </if>
-            <if test="updateBy != null and updateBy != ''">
-                update_by = #{updateBy},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime}
-            </if>
-        </set>
-        WHERE id = #{id}
-    </update>
 
 </mapper>

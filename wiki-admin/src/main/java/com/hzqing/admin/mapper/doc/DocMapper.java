@@ -1,8 +1,10 @@
 package com.hzqing.admin.mapper.doc;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzqing.admin.dto.doc.DocDto;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.dto.doc.MemberDto;
+import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
 
 import java.util.List;
@@ -27,4 +29,6 @@ public interface DocMapper  extends BaseMapper<Doc> {
     DocDto selectByIDandUserId(Doc doc);
 
     Integer selectPrivilegeById(MemberDto memberDto);
+
+    IPage<DocDto> selectPageBySpaceOrLevel(Page<Object> objectPage, Doc doc);
 }

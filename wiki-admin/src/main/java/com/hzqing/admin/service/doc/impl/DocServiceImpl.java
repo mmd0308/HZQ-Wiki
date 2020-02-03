@@ -1,10 +1,11 @@
 package com.hzqing.admin.service.doc.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
+import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
 import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
@@ -62,8 +63,9 @@ public class DocServiceImpl implements IDocService {
     }
 
     @Override
-    public Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc) {
-      return (Page<Doc>) docMapper.selectPage(new Page<>(num, size), new QueryWrapper<Doc>(doc));
+    public Page<DocDto> getPageBySpaceOrLevel(int num, int size, Doc doc) {
+        IPage<DocDto> docDtoIPage =  docMapper.selectPageBySpaceOrLevel(new Page<>(num, size), doc);
+        return (Page<DocDto>) docDtoIPage;
     }
 
     @Override
@@ -93,5 +95,10 @@ public class DocServiceImpl implements IDocService {
     @Override
     public int removedById(int id) {
         return docMapper.deleteById(id);
+    }
+
+    @Override
+    public Doc getById(int id) {
+        return docMapper.selectById(id);
     }
 }

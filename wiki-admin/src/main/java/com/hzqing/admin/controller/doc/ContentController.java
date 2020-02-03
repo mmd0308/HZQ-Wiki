@@ -2,7 +2,7 @@ package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.doc.Content;
+import com.hzqing.admin.model.entity.doc.Content;
 import com.hzqing.admin.service.doc.IContentService;
 import com.hzqing.admin.service.doc.IDocService;
 import org.springframework.beans.factory.annotation.Autowired;

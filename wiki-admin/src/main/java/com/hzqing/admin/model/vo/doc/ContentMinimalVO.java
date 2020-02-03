@@ -1,19 +1,22 @@
-package com.hzqing.admin.domain.doc;
+package com.hzqing.admin.model.vo.doc;
 
-import com.hzqing.admin.domain.base.Base;
 import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
+ * 最少参数的文档目录信息
  * @author hzqing
- * @date 2019-05-30 09:42
+ * @date 2020-02-03 08:50
  */
 @Data
-public class Content extends Base {
+@ToString
+public class ContentMinimalVO implements Serializable {
 
     private Integer id;
 
     private Integer docId;
-
     /**
      * 标题
      */
@@ -21,22 +24,10 @@ public class Content extends Base {
 
     private Integer parentId;
 
-    private String version;
-
     /**
      * 排序
      */
     private Integer sequence;
-
-    /**
-     * 文档内容 mk格式
-     */
-    private String content;
-
-    /**
-     * 文档内容 html格式
-     */
-    private String contentHtml;
 
     /**
      * 文档类型: A 文章(默认) D 目录 H 链接
@@ -47,5 +38,4 @@ public class Content extends Base {
      * 是否为目录
      */
     private boolean parent;
-
 }

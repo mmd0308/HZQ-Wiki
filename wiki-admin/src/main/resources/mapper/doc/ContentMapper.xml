@@ -18,6 +18,23 @@
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
         <result column="doc_type" property="docType" />
+    </resultMap>
+
+    <resultMap id="baseResultDto" type="contentDto">
+        <id column="id" property="id"/>
+        <result column="doc_id" property="docId" />
+        <result column="parent_id" property="parentId" />
+        <result column="title" property="title"/>
+        <result column="sequence" property="sequence" />
+        <result column="version" property="version"/>
+        <result column="content" property="content" />
+        <result column="content_html" property="contentHtml" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="doc_type" property="docType" />
+
         <result column="parent" property="parent" />
     </resultMap>
 
@@ -25,7 +42,7 @@
         hw_doc_content
     </sql>
 
-    <select id="selectList" resultMap="baseResult" parameterType="content">
+    <select id="selectListByDocId" resultMap="baseResultDto" parameterType="int">
         select
             id,
             doc_id,
@@ -38,101 +55,12 @@
             update_time,
             doc_type,
             (case when doc_type =  "D"  then true else false end)as parent
-        from 
+        from
             <include refid="tableName" />
-        <where>
-            <if test="docId != null">
-                doc_id = #{docId}
-            </if>
-            <if test="parentId != null">
-                parent_id = #{parentId}
-            </if>
-        </where>
+        where doc_id = #{docId}
             order by sequence  asc
     </select>
 
-    <select id="get" resultMap="baseResult" parameterType="int">
-        select
-            id,
-            doc_id,
-            parent_id,
-            title,
-            sequence,
-            version,
-            content,
-            content_html,
-            create_time,
-            update_by,
-            update_time,
-            doc_type
-        from
-            <include refid="tableName" />
-        where id = #{id}
-    </select>
 
-    <insert id="insert" parameterType="content"  keyColumn="id" useGeneratedKeys="true"  keyProperty="id"  >
-        INSERT INTO
-            <include refid="tableName" />
-        (
-            id,
-            doc_id,
-            parent_id,
-            title,
-            sequence,
-            version,
-            content,
-            content_html,
-            create_by,
-            create_time,
-            update_by,
-            update_time,
-            doc_type
-        ) VALUE (
-            #{id},
-            #{docId},
-            #{parentId},
-            #{title},
-            #{sequence},
-            #{version},
-            #{content},
-            #{contentHtml},
-            #{createBy},
-            #{createTime},
-            #{updateBy},
-            #{updateTime},
-            #{docType}
-        )
-    </insert>
 
-    <delete id="deletedById" parameterType="Integer">
-        DELETE FROM
-            <include refid="tableName" />
-        WHERE id = #{id}
-    </delete>
-
-    <update id="update" parameterType="content">
-        UPDATE
-            <include refid="tableName" />
-        <set>
-            <if test="title != null and title != ''">
-                title = #{title},
-            </if>
-            <if test="sequence != null ">
-                sequence = #{sequence},
-            </if>
-            <if test="content != null and content != ''">
-                content = #{content},
-            </if>
-            <if test="contentHtml != null and contentHtml != ''">
-                content_html = #{contentHtml},
-            </if>
-            <if test="updateBy != null and updateBy != ''">
-                update_by = #{updateBy},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime}
-            </if>
-        </set>
-        WHERE id = #{id}
-    </update>
 </mapper>

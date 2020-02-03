@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function all(docId) {
+export function getShowAllByDocId(docId) {
   return request({
-    url: '/api/content/all/' + docId,
+    url: '/api/wiki/show/contents/all/' + docId,
     method: 'get'
   })
 }

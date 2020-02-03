@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import { all, addOrUpdate, deletedById } from '@/api/doc/content'
+import { getShowAllByDocId, addOrUpdate, deletedById } from '@/api/doc/content'
+import { getAll } from '@/api/index'
 import $ from 'jquery'
 import bus from '@/assets/js/eventbus'
 export default {
@@ -65,6 +66,7 @@ export default {
   },
   data() {
     return {
+      moudle: 'contents',
       docId: this.$route.params.id,
       setting: this.initSetting(),
       zNodes: [],
@@ -145,21 +147,30 @@ export default {
       }
       return set
     },
-    tree(conId) {
-      all(this.docId).then(res => {
-        this.zNodes = res.data
-        $.fn.zTree.init($('#treeContent'), this.initSetting(), res.data)
+    tree() {
+      getShowAllByDocId(this.docId).then(res => {
+        this.zNodes = res
+        $.fn.zTree.init($('#treeContent'), this.initSetting(), res)
         const zTree_Menu = $.fn.zTree.getZTreeObj('treeContent')
-        var treeNode
-        if (conId) {
-          // 根据id进行选中
-          treeNode = zTree_Menu.getNodeByParam('id', conId)
-        } else {
-          // 首次加载数据,或者没有制定选择时候,默认选择第一个
-          treeNode = zTree_Menu.getNodes()[0]
+
+        // 是否打开指定的文章
+        if (this.$route.params.contentId != null) {
+          var treeNode = zTree_Menu.getNodeByTId(this.$route.params.contentId)
+          zTree_Menu.selectNode(treeNode)
         }
-        zTree_Menu.selectNode(treeNode)
-        this.selectContentTree(treeNode)
+
+        // var treeNode = zTree_Menu.getNodes()[0].children[0]
+        // zTree_Menu.selectNode(treeNode)
+        // var treeNode
+        // if (conId) {
+        //   // 根据id进行选中
+        //   treeNode = zTree_Menu.getNodeByParam('id', conId)
+        // } else {
+        //   // 首次加载数据,或者没有制定选择时候,默认选择第一个
+        //   treeNode = zTree_Menu.getNodes()[0]
+        // }
+        // zTree_Menu.selectNode(treeNode)
+        //   this.selectContentTree(treeNode)
       })
     },
     toAdd() {

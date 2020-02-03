@@ -20,6 +20,8 @@ public enum RestResultCodeConstants {
     ARTICLE_UNAUTHORIZED("41100", "文章管理模块权限不足"),
     ARTICLE_NO_RELEASE("41110","该文章没有发布，您没有权限访问"),
 
+    DOC_UNAUTHORIZED("41200", "文档管理模块权限不足"),
+    DOC_NO_PUBLIC("41210","该文档是私有文档，您没有权限访问"),
 
     SYS_ERROR("50000", "系统出错");
 

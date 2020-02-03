@@ -1,6 +1,8 @@
 package com.hzqing.admin.service.doc;
 
-import com.hzqing.admin.domain.doc.Content;
+
+import com.hzqing.admin.model.dto.doc.ContentDto;
+import com.hzqing.admin.model.entity.doc.Content;
 
 import java.util.List;
 
@@ -24,4 +26,12 @@ public interface IContentService {
      * @return
      */
     Content get(int id);
+
+
+    /**
+     * 根据文档id，获取所有的目录
+     * @param docId
+     * @return
+     */
+    List<ContentDto> getListAllByDocId(Integer docId);
 }

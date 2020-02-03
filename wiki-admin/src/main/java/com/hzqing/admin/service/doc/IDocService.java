@@ -1,8 +1,8 @@
 package com.hzqing.admin.service.doc;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.dto.doc.DocDto;
 import com.hzqing.admin.dto.doc.MemberDto;
+import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
 import com.hzqing.admin.model.entity.space.Space;
 
@@ -37,7 +37,7 @@ public interface IDocService {
      * @param doc
      * @return
      */
-    Page<Doc> getPageBySpaceOrLevel(int num, int size, Doc doc);
+    Page<DocDto> getPageBySpaceOrLevel(int num, int size, Doc doc);
 
     /**
      * 文档分页数据
@@ -67,4 +67,11 @@ public interface IDocService {
      * @return
      */
     int removedById(int id);
+
+    /**
+     * 根据id获取数据
+     * @param id
+     * @return
+     */
+    Doc getById(int id);
 }

@@ -36,13 +36,22 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/read',
+    component: EmptyLayout,
+    hidden: true,
+    children: [
+      { path: 'doc/:id', component: () => import('@/views/doc/edit/Layout') },
+      { path: 'doc/:id/:contentId', component: () => import('@/views/doc/edit/Layout') }
+    ]
+  },
+  {
     path: '/write',
     component: EmptyLayout,
     name: 'Layout',
     hidden: true,
     children: [
-      // { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
-      { path: ':spaceId/doc/:id', component: () => import('@/views/doc/edit/Layout') },
+      { path: 'doc', component: () => import('@/views/doc/edit/Layout') },
+      { path: 'doc/:id', component: () => import('@/views/doc/edit/Layout') },
       { path: 'article', component: () => import('@/views/article/edit/Layout') },
       { path: 'article/:id', component: () => import('@/views/article/edit/Layout') }
     ]

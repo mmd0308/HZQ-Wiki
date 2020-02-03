@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-for="(item,index) in docLists" :key="index" class="boxs">
-      <router-link :to="{ path: '/edit/' + item.spaceId + '/doc/' + item.id}">
+      <router-link :to="{ path: '/read/doc/' + item.id}">
         <div class="icon">
           <img v-if="item.img === null" class="pic-404__child right" src="@/assets/doc_images/doc.png" >
           <img v-else :src="item.img" class="pic-404__child right" @error="imgError(item)">
@@ -68,7 +68,7 @@ export default {
           this.docLists = response.records
           this.total = response.total
         } else {
-          response.data.forEach(item => {
+          response.records.forEach(item => {
             this.docLists.push(item)
           })
         }
@@ -85,13 +85,6 @@ export default {
     },
     imgError(item) {
       item.img = null
-    },
-    handleSizeChange() {
-
-    },
-    handleCurrentChange(val) {
-      this.listQuery.pageNum = val
-      this.showDocPage()
     }
   }
 }
@@ -137,8 +130,8 @@ export default {
       color:#666;
     }
   }
-  .boxs:nth-of-type(4n+2){
-  margin-left: -1px;
+  .boxs:nth-of-type(4n+1){
+    margin-left: -1px;
   }
 }
 </style>
