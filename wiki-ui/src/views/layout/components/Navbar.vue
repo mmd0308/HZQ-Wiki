@@ -25,19 +25,15 @@
           文档
         </el-menu-item>
 
-        <!-- 只有admin拥有超级管理员权限 -->
-        <!-- <el-menu-item v-if="userId == 1 && username == 'admin'" index="/set/system" >
-          系统管理-old
-        </el-menu-item> -->
-        <el-menu-item v-if="token != '' && token != null" index="/admin/dashboard" >
+        <!-- <el-menu-item v-if="token != '' && token != null" index="/admin/dashboard" >
           系统管理
-        </el-menu-item>
+        </el-menu-item> -->
       </el-menu>
     </div>
 
     <div style="float:right;" >
       <el-menu
-        v-if="token != '' && token != null"
+        v-if="isLogin"
         :default-active="activeIndex"
         :router="true"
         class="el-menu-demo"
@@ -53,7 +49,7 @@
           <el-menu-item index="/admin/user" >个人中心</el-menu-item>
           <el-menu-item index="/admin/article" >文章管理</el-menu-item>
           <el-menu-item index="/admin/doc" >文档管理</el-menu-item>
-          <el-menu-item index="/admin/system" >系统管理</el-menu-item>
+          <el-menu-item v-if="isAdmin" index="/admin/system" >系统管理</el-menu-item>
           <el-menu-item index="/login" @click="logout">退出登陆</el-menu-item>
         </el-submenu>
       </el-menu>
@@ -69,6 +65,7 @@
 import Avatar from 'vue-avatar'
 import { mapGetters } from 'vuex'
 import { getToken } from '@/utils/auth'
+import { isAdmin, isLogin } from '@/utils/authUtils'
 export default {
   components: {
     Avatar

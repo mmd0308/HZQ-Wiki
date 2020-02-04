@@ -4,13 +4,14 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // getToken from cookie
+import { isToken } from '@/utils/authUtils'
 
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
 const whiteList = ['/index', '/article', '/doc', '/space', '/login', '/register'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  if (getToken()) {
+  if (isToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it

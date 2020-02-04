@@ -1,6 +1,14 @@
 <template>
   <el-tabs v-model="tabName" tab-position="left" @tab-click="checkTab">
 
+    <el-tab-pane :name="paramsConstants['doc'].name">
+      <span slot="label">
+        <i class="el-icon-collection="/>
+        文档管理
+      </span>
+      <doc-admin :ref="paramsConstants['doc'].ref"/>
+    </el-tab-pane>
+
     <el-tab-pane :name="paramsConstants['sapce'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
@@ -9,13 +17,6 @@
       <space-admin :ref="paramsConstants['sapce'].ref"/>
     </el-tab-pane>
 
-    <el-tab-pane :name="paramsConstants['doc'].name">
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        文档管理
-      </span>
-      <doc-admin :ref="paramsConstants['doc'].ref"/>
-    </el-tab-pane>
   </el-tabs>
 </template>
 <script>
@@ -28,7 +29,7 @@ export default {
   },
   data() {
     return {
-      tabName: '',
+      tabName: 'doc',
       paramsConstants: {
         dashboard: {
           name: 'dashboard',
@@ -67,7 +68,7 @@ export default {
   },
   created() {
     // 获取tab标签名称
-    this.tabName = this.$route.fullPath.substr(7)
+    // this.tabName = this.$route.fullPath.substr(7)
     var that = this
     // 延迟0.5秒加载,让页面渲染完毕
     setTimeout(function() {

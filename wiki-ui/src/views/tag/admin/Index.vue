@@ -3,7 +3,7 @@
     <el-table
       v-loading="tableLoading"
       :data="tableLists"
-      :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      :header-cell-style="{background:'#545c64',color:'#ffffff'}"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.83)"
