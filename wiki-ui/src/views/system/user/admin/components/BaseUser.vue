@@ -31,7 +31,7 @@
       </div>
       <div class="footer">
         <el-button v-if="fromState == 'E'" size="medium" round type="info" @click="fromState = 'R'" >取 消</el-button>
-        <el-button v-if="fromState == 'R'" size="medium" type="primary" round @click="toUpdate">编 辑</el-button>
+        <el-button v-if="fromState == 'R'" size="medium" type="primary" round @click="fromState = 'E'">编 辑</el-button>
         <el-button v-else size="medium" type="primary" round @click="update">保 存</el-button>
       </div>
 
@@ -105,9 +105,6 @@ export default {
         phone: '',
         remark: ''
       }
-    },
-    toUpdate() {
-      this.fromState = 'E'
     },
     update() {
       this.$refs[this.ruleForm].validate((valid) => {

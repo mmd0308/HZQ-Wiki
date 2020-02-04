@@ -14,9 +14,7 @@
       </el-form>
 
       <div class="footer">
-        <div class="footer">
-          <el-button size="medium" type="primary" round @click="update">更 改</el-button>
-        </div>
+        <el-button size="medium" type="primary" round @click="update">更 改</el-button>
       </div>
     </div>
   </div>

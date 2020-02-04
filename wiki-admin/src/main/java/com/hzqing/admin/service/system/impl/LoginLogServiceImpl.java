@@ -1,11 +1,10 @@
-package com.hzqing.admin.service.log.impl;
+package com.hzqing.admin.service.system.impl;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.mapper.log.LoginLogMapper;
+import com.hzqing.admin.mapper.system.LoginLogMapper;
 import com.hzqing.admin.model.entity.system.LoginLog;
-import com.hzqing.admin.service.log.ILoginLogService;
+import com.hzqing.admin.service.system.ILoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class LoginLogServiceImpl implements ILoginLogService {
 
     @Autowired
+    @SuppressWarnings("all")
     private LoginLogMapper loginLogMapper;
 
     @Override

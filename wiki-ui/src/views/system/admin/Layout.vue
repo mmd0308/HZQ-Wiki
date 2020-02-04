@@ -35,7 +35,7 @@
   </el-tabs>
 </template>
 <script>
-import DashboardAdmin from './Dashboard'
+import DashboardAdmin from './components/Dashboard'
 import UserAdmin from '../user/admin/Index'
 import LoginLogAdmin from '../log/login/Index'
 import ConfigAdmin from '../config/Index'
@@ -48,20 +48,13 @@ export default {
   },
   data() {
     return {
-      tabName: '',
+      tabName: 'dashboard',
       paramsConstants: {
         dashboard: {
           name: 'dashboard',
           ref: 'dashboardAdmin'
         },
-        article: {
-          name: 'article',
-          ref: 'articleAdmin'
-        },
-        tag: {
-          name: 'tag',
-          ref: 'tagAdmin'
-        },
+
         sapce: {
           name: 'sapce',
           ref: 'sapceAdmin'
@@ -87,12 +80,12 @@ export default {
   },
   created() {
     // 获取tab标签名称
-    this.tabName = this.$route.fullPath.substr(7)
-    var that = this
+    // this.tabName = this.$route.fullPath.substr(7)
+    // var that = this
     // 延迟0.5秒加载,让页面渲染完毕
-    setTimeout(function() {
-      that.$refs[that.paramsConstants[that.tabName].ref].init()
-    }, 500)
+    // setTimeout(function() {
+    //   that.$refs[that.paramsConstants[that.tabName].ref].init()
+    // }, 500)
   },
   methods: {
     checkTab(item) {

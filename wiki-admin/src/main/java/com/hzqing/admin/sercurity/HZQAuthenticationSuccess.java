@@ -7,7 +7,7 @@ import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.JwtTokenUtil;
 import com.hzqing.admin.model.dto.system.UserInfoDetails;
 import com.hzqing.admin.model.entity.system.LoginLog;
-import com.hzqing.admin.service.log.ILoginLogService;
+import com.hzqing.admin.service.system.ILoginLogService;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;

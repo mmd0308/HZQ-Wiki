@@ -1,4 +1,4 @@
-package com.hzqing.admin.service.log;
+package com.hzqing.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.model.entity.system.LoginLog;

@@ -1,19 +1,21 @@
 <template>
-  <div>
-    <el-form :inline="true" :model="queryForm" class="demo-form-inline">
-      <el-form-item label="关键字">
-        <el-input v-model="queryForm.keyword" size="small" placeholder="请输入检索内容"/>
-      </el-form-item>
-      <el-form-item style="float:right">
-        <el-button type="primary" size="small" >查询</el-button>
-        <el-button type="info" size="small" >重置</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="hzq-admin">
+    <div class="headerForm">
+      <el-form :inline="true" :model="queryForm" class="demo-form-inline">
+        <el-form-item label="关键字">
+          <el-input v-model="queryForm.keyword" size="small" placeholder="请输入检索内容"/>
+        </el-form-item>
+        <el-form-item style="float:right">
+          <el-button type="primary" size="small" >查询</el-button>
+          <el-button type="info" size="small" >重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 
     <el-table
       v-loading="tableLoading"
       :data="tableLists"
-      :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      :header-cell-style="{background:'#545c64',color:'#ffffff'}"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.83)"

@@ -1,6 +1,6 @@
-package com.hzqing.admin.service.config;
+package com.hzqing.admin.service.system;
 
-import com.hzqing.admin.dto.config.ConfigDto;
+import com.hzqing.admin.model.dto.system.ConfigDto;
 
 /**
  * @author hzqing
@@ -12,7 +12,7 @@ public interface IConfigService {
      * @param config
      * @return
      */
-    int update(ConfigDto config);
+    int modifyForBatch(ConfigDto config);
 
     /**
      * 获取所有的配置项目

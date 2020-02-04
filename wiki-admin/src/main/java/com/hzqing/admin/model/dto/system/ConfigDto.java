@@ -1,4 +1,4 @@
-package com.hzqing.admin.dto.config;
+package com.hzqing.admin.model.dto.system;
 
 import lombok.Data;
 

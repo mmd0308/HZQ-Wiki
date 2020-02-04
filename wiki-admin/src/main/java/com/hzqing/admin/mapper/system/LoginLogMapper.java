@@ -1,4 +1,4 @@
-package com.hzqing.admin.mapper.log;
+package com.hzqing.admin.mapper.system;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzqing.admin.model.entity.system.LoginLog;

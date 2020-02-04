@@ -1,4 +1,4 @@
-package com.hzqing.admin.controller.log;
+package com.hzqing.admin.controller.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
@@ -6,7 +6,7 @@ import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.model.entity.system.LoginLog;
-import com.hzqing.admin.service.log.ILoginLogService;
+import com.hzqing.admin.service.system.ILoginLogService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

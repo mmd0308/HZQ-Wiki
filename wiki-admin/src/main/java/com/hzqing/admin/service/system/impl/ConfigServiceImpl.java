@@ -1,11 +1,11 @@
-package com.hzqing.admin.service.config.impl;
+package com.hzqing.admin.service.system.impl;
 
 import com.hzqing.admin.common.constants.ConstantConfig;
-import com.hzqing.admin.domain.config.Config;
-import com.hzqing.admin.dto.config.ConfigDto;
-import com.hzqing.admin.mapper.config.ConfigMapper;
+import com.hzqing.admin.mapper.system.ConfigMapper;
+import com.hzqing.admin.model.dto.system.ConfigDto;
 import com.hzqing.admin.model.dto.system.UserInfo;
-import com.hzqing.admin.service.config.IConfigService;
+import com.hzqing.admin.model.entity.system.Config;
+import com.hzqing.admin.service.system.IConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,11 @@ import java.util.List;
 public class ConfigServiceImpl implements IConfigService {
 
     @Autowired
+    @SuppressWarnings("all")
     private ConfigMapper configMapper;
 
     @Override
-    public int update(ConfigDto config) {
+    public int modifyForBatch(ConfigDto config) {
         return configMapper.updateBatch(toList(config));
     }
 
@@ -44,9 +45,11 @@ public class ConfigServiceImpl implements IConfigService {
     private ConfigDto toConfigDto(List<Config> configs){
         ConfigDto dto = new ConfigDto();
         configs.forEach(item ->{
+            // 项目标题
             if (item.getKey().equals(ConstantConfig.CONFIG_TITLE)){
                 dto.setTitle(item.getValue());
             }else if (item.getKey().equals(ConstantConfig.CONFIG_RECORD)){
+                // 网站备案号
                 dto.setKeepToRecord(item.getValue());
             }
         });

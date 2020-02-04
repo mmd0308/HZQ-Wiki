@@ -20,8 +20,8 @@ const config = {
     HWConfig({ commit, state }) {
       return new Promise((resolve, reject) => {
         form().then(res => {
-          commit('SET_TITLE', res.data.title)
-          commit('SET_RECORD', res.data.keepToRecord)
+          commit('SET_TITLE', res.title)
+          commit('SET_RECORD', res.keepToRecord)
         })
         resolve()
       })
