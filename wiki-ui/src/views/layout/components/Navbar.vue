@@ -72,6 +72,8 @@ export default {
   },
   data() {
     return {
+      isLogin: isLogin(),
+      isAdmin: isAdmin(),
       token: getToken(),
       activeIndex: this.$router.currentRoute.path
     }

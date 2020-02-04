@@ -69,7 +69,7 @@ const user = {
       })
     },
 
-    // 登出
+    // 退出登陆
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         // logout(state.token).then(() => {
@@ -80,7 +80,10 @@ const user = {
         // }).catch(error => {
         //   reject(error)
         // })
-        commit('SET_TOKEN', '')
+
+        commit('SET_TOKEN', null)
+        commit('SET_ID', null)
+        commit('SET_USERNAME', null)
         commit('SET_ROLES', [])
         removeToken()
         resolve()
@@ -90,7 +93,10 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
+        commit('SET_TOKEN', null)
+        commit('SET_ID', null)
+        commit('SET_USERNAME', null)
+        commit('SET_ROLES', [])
         removeToken()
         resolve()
       })

@@ -16,7 +16,6 @@ const config = {
   },
 
   actions: {
-    // 登出
     HWConfig({ commit, state }) {
       return new Promise((resolve, reject) => {
         form().then(res => {
