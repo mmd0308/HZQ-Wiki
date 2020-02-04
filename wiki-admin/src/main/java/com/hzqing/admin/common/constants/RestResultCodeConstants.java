@@ -14,8 +14,11 @@ public enum RestResultCodeConstants {
 
     UNAUTHORIZED("40100","未授权"),
 
+
     TOKEN_ERROR("40110", "Token 错误"),
+
     TOKEN_EXPIRE("40120", "Token 过期"),
+    TOKEN_MISSING("40130", "Token 不存在"),
 
     ARTICLE_UNAUTHORIZED("41100", "文章管理模块权限不足"),
     ARTICLE_NO_RELEASE("41110","该文章没有发布，您没有权限访问"),

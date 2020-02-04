@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.hzqing.admin.model.enums.doc.DocVisitLevel;
+import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
 import lombok.Data;
 import lombok.ToString;
 
@@ -43,5 +44,10 @@ public class DocDto {
      * 用户id
      */
     private Integer userId;
+
+    /**
+     * 当前用户对该文档的权限
+     */
+    private UserDocPrivilege userDocPrivilege;
 
 }

@@ -15,7 +15,7 @@ mvn clean package -Dmaven.test.skip=true
 
 # docker rmi mmd0308/wiki-admin:$version
 
-docker build -t mmd0308/wiki-admin:v2.0.0-beta.2 .
+docker build -t  registry.cn-hangzhou.aliyuncs.com/mmd0308/wiki-admin:v2.0.0-beta.3 .
 
 rm -rf  src/main/resources/static/*
 

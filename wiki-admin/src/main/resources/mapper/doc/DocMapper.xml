@@ -30,7 +30,31 @@
         <result column="update_time" property="updateTime"/>
 
         <result column="createName" property="createName" />
+        <result column="privilege" property="userDocPrivilege" />
     </resultMap>
+
+
+    <select id="selectPageList" resultMap="baseResultDto" parameterType="docDto">
+        select
+            d.id,
+            d.name,
+            d.space_id,
+            d.remark,
+            d.visit_level,
+            d.img,
+            d.create_by,
+            d.create_time,
+            d.update_by,
+            d.update_time,
+            u.name as createName,
+            ud.privilege
+        from hw_doc d
+            left join hw_user u on d.create_by = u.id
+            left join hw_user_doc ud on ud.doc_Id = d.id
+        where
+            ud.user_id = #{docDto.userId}
+    </select>
+
 
     <select id="selectShowPageByDto" resultMap="baseResultDto" parameterType="docDto">
         select
@@ -59,6 +83,7 @@
         </where>
         order by d.create_time desc
     </select>
+
     <select id="selectPageBySpaceOrLevel" resultMap="baseResultDto" parameterType="doc">
         select
             d.id,

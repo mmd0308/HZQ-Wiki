@@ -5,6 +5,7 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.model.dto.doc.DocDto;
@@ -102,10 +103,11 @@ public class DocContoller extends BaseController {
             @ApiImplicitParam(name = "size",value = "每页显示的数量",required = true,dataType = "int")
     })
     @GetMapping("/page/{num}/{size}")
-    public RestResult<Page<Doc>> getPage(@PathVariable int num, @PathVariable int size, Doc doc){
-        RestResult<Page<Doc>> result = RestResultFactory.getInstance().success();
+    public RestResult<Page<DocDto>> getPage(@PathVariable int num, @PathVariable int size, DocDto docDto){
+        RestResult<Page<DocDto>> result = RestResultFactory.getInstance().success();
         try{
-            Page<Doc> datas = docService.getPage(num,size,doc);
+            docDto.setUserId(UserAuthUtils.getUserId());
+            Page<DocDto> datas = docService.getPage(num,size,docDto);
             result.setData(datas);
         }catch (Exception e){
             log.error("DocContoller.getPage occur Exception: ", e);
@@ -147,8 +149,8 @@ public class DocContoller extends BaseController {
     public RestResult<Integer> removedById(@PathVariable int id) {
         RestResult<Integer> result = RestResultFactory.getInstance().success();
         try {
-            int res = docService.removedById(id);
-            result.setData(res);
+            //int res = docService.removedById(id);
+            result.setData(0);
         }catch (Exception e){
             log.error("DocContoller.removedById occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);

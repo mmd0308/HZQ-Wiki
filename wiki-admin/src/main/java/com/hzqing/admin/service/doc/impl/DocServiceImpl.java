@@ -71,8 +71,8 @@ public class DocServiceImpl implements IDocService {
     }
 
     @Override
-    public Page<Doc> getPage(int num, int size, Doc doc) {
-        return (Page<Doc>) docMapper.selectPage(new Page<>(num, size), new QueryWrapper<Doc>(doc));
+    public Page<DocDto> getPage(int num, int size, DocDto docDto) {
+        return (Page<DocDto>) docMapper.selectPageList(new Page<>(num, size),docDto);
     }
 
     @Override

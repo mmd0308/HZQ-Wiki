@@ -101,8 +101,8 @@ public class SpaceController extends BaseController {
     public RestResult<Integer> removedById(@PathVariable int id) {
         RestResult<Integer> result = RestResultFactory.getInstance().success();
         try {
-            int res = spaceService.removedById(id);
-            result.setData(res);
+           // int res = spaceService.removedById(id);
+            result.setData(0);
         }catch (Exception e){
             log.error("SpaceController.removedById occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);

@@ -111,8 +111,8 @@ public class ArticleContoller extends BaseController {
     @ApiOperation(value = "根据id，删除博客")
     @DeleteMapping("/{id}")
     public ResponseMessage removedById(@PathVariable int id) {
-        int res = articleService.removedById(id);
-        return responseMessage(res);
+        //int res = articleService.removedById(id);
+        return responseMessage(0);
     }
 
 }

@@ -2,12 +2,12 @@
 export const userDocPrivilege = {
   OWNER: {
     value: 'OWNER',
-    status: 'success',
+    status: 'primary',
     text: '拥有者'
   },
   VISITORS: {
     value: 'VISITORS',
-    status: 'warning',
+    status: 'info',
     text: '浏览者'
   },
   EDITORS: {
@@ -17,7 +17,7 @@ export const userDocPrivilege = {
   },
   ADMINISTRATOR: {
     value: 'ADMINISTRATOR',
-    status: 'warning',
+    status: 'success',
     text: '管理员'
   }
 }

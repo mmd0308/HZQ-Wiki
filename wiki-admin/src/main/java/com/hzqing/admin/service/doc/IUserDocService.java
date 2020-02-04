@@ -25,9 +25,12 @@ public interface IUserDocService {
     int create(UserDoc userDoc);
 
     /**
-     * 获取是否有该文档的编辑权限
+     * 获取当前用户时候有该文档的编辑权限
      * @param userDoc
      * @return
      */
     Boolean getDocPrivilege(UserDoc userDoc);
+
+
+
 }

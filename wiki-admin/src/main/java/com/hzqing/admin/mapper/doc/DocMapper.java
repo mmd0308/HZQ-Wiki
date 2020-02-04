@@ -33,4 +33,6 @@ public interface DocMapper  extends BaseMapper<Doc> {
     IPage<DocDto> selectPageBySpaceOrLevel(Page<Object> objectPage, Doc doc);
 
     IPage<DocDto> selectShowPageByDto(Page<Object> objectPage, DocDto docDto);
+
+    IPage<DocDto> selectPageList(Page<Object> objectPage, DocDto docDto);
 }

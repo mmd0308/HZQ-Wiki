@@ -2,12 +2,12 @@
 export const docVisitLevel = {
   PRIVATE: {
     value: 'PRIVATE',
-    status: 'success',
+    status: 'warning',
     text: '私有的'
   },
   PUBLIC: {
     value: 'PUBLIC',
-    status: 'warning',
+    status: 'success',
     text: '公开的'
   }
 }

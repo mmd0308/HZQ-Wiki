@@ -1,6 +1,8 @@
 package com.hzqing.admin.common.utils;
 
 import com.hzqing.admin.common.constants.ConstantSecurity;
+import com.hzqing.admin.common.constants.RestResultCodeConstants;
+import com.hzqing.admin.common.exception.BaseException;
 import com.hzqing.admin.model.dto.system.UserInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,8 @@ public class UserAuthUtils {
 
     /**
      * 判断用户是否登陆
+     * true 登陆
+     * false 没有登陆
      * @return
      */
     public static boolean isLogin(HttpServletRequest request){
@@ -45,6 +49,20 @@ public class UserAuthUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 用户如果没有登陆，抛出异常，否则返回true
+     * @return
+     */
+    public static boolean isLoginException(HttpServletRequest request){
+       if (!isLogin(request)){
+            throw new BaseException(
+                    RestResultCodeConstants.TOKEN_MISSING.getCode(),
+                    RestResultCodeConstants.TOKEN_MISSING.getMsg()
+            );
+       }
+        return true;
     }
 
 }

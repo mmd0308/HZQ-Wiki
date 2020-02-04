@@ -43,10 +43,10 @@ public interface IDocService {
      * 文档分页数据
      * @param num
      * @param size
-     * @param doc
+     * @param docDto
      * @return
      */
-    Page<Doc> getPage(int num, int size, Doc doc);
+    Page<DocDto> getPage(int num, int size, DocDto docDto);
 
     /**
      * 新增空间

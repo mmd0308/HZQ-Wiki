@@ -55,16 +55,29 @@
         label="访问级别"
         width="130" >
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.visitLevel != null" :type="docVisitLevel[scope.row.visitLevel].status" >{{ docVisitLevel[scope.row.visitLevel].text }}</el-tag>
+          <el-tag v-if="scope.row.visitLevel != null" :type="docVisitLevel[scope.row.visitLevel].status" size="small">{{ docVisitLevel[scope.row.visitLevel].text }}</el-tag>
         </template>
       </el-table-column>
+
+      <el-table-column
+        label="访问权限"
+        width="100" >
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.userDocPrivilege != null" :type="userDocPrivilege[scope.row.userDocPrivilege].status" size="small" >{{ userDocPrivilege[scope.row.userDocPrivilege].text }}</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="createName"
+        label="创建人"
+        width="130"/>
 
       <el-table-column
         fixed="right"
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
+          <el-button v-if="scope.row.userDocPrivilege === 'OWNER' || scope.row.userDocPrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-popconfirm
             confirm-button-text="删除"
             confirm-button-type="danger"
@@ -75,7 +88,7 @@
             title="您确定删除该条数据吗？"
             @onConfirm="handleRemoveById(scope.row.id)"
           >
-            <el-button slot="reference" type="text" size="small" >删除</el-button>
+            <el-button v-if="scope.row.userDocPrivilege === 'OWNER'" slot="reference" type="text" size="small" >删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -127,6 +140,7 @@
 <script>
 import { create, page, updateById, deleteById } from '@/api/index'
 import { docVisitLevel } from '@/api/doc/DocConstants'
+import { userDocPrivilege } from '@/api/Constants'
 export default {
   data() {
     return {
@@ -143,6 +157,7 @@ export default {
         pageSize: 10
       },
       docVisitLevel: docVisitLevel,
+      userDocPrivilege: userDocPrivilege,
       drawer: false,
       drawerForm: this.initDrawerForm(),
       drawerState: 'CREATE'
