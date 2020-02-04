@@ -1,6 +1,6 @@
 <template>
   <div class="index-container">
-    <h1>首页开发中...</h1>
+    <h1>代码在疯狂的更新中...</h1>
     <doc-index/>
     <article-index/>
   </div>
