@@ -46,16 +46,12 @@ public class UserDocController extends BaseController {
     @GetMapping("/privilege/{docId}")
     public RestResult<Boolean> getPrivilegeByUserIdAndDocId(@PathVariable Integer docId){
         RestResult<Boolean> result = RestResultFactory.getInstance().success();
-        result.setData(false);
         try{
             UserDoc userDoc = new UserDoc();
             userDoc.setUserId(UserAuthUtils.getUserId());
             userDoc.setDocId(docId);
-            userDoc = userDocService.getByUserIdAndDocId(userDoc);
-            // 表示该用户有该文档的编辑权限
-            if (null != userDoc && userDoc.getPrivilege() != UserDocPrivilege.VISITORS){
-                result.setData(true);
-            }
+            Boolean res = userDocService.getDocPrivilege(userDoc);
+            result.setData(res);
         }catch (Exception e){
             log.error("DocContoller.docPrivilege occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
