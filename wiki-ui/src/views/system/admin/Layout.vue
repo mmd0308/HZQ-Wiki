@@ -8,38 +8,6 @@
       <dashboard-admin :ref="paramsConstants['dashboard'].ref" />
     </el-tab-pane>
 
-    <el-tab-pane :name="paramsConstants['article'].name">
-      <span slot="label" >
-        <i class="el-icon-edit-outline"/>
-        博客管理
-      </span>
-      <article-admin :ref="paramsConstants['article'].ref"/>
-    </el-tab-pane>
-
-    <el-tab-pane :name="paramsConstants['tag'].name">
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        标签管理
-      </span>
-      <tag-admin :ref="paramsConstants['tag'].ref"/>
-    </el-tab-pane>
-
-    <el-tab-pane :name="paramsConstants['sapce'].name">
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        空间管理
-      </span>
-      <space-admin :ref="paramsConstants['sapce'].ref"/>
-    </el-tab-pane>
-
-    <el-tab-pane :name="paramsConstants['doc'].name">
-      <span slot="label">
-        <i class="el-icon-collection="/>
-        文档管理
-      </span>
-      <doc-admin :ref="paramsConstants['doc'].ref"/>
-    </el-tab-pane>
-
     <el-tab-pane :name="paramsConstants['user'].name">
       <span slot="label">
         <i class="el-icon-collection="/>
@@ -68,20 +36,12 @@
 </template>
 <script>
 import DashboardAdmin from './Dashboard'
-import ArticleAdmin from '../article/admin/Index'
-import TagAdmin from '../tag/admin/Index'
-import SpaceAdmin from '../space/admin/Index'
-import DocAdmin from '../doc/admin/Index'
-import UserAdmin from '../system/user/admin/Index'
-import LoginLogAdmin from '../system/log/login/Index'
-import ConfigAdmin from '../system/config/Index'
+import UserAdmin from '../user/admin/Index'
+import LoginLogAdmin from '../log/login/Index'
+import ConfigAdmin from '../config/Index'
 export default {
   components: {
     DashboardAdmin,
-    ArticleAdmin,
-    TagAdmin,
-    SpaceAdmin,
-    DocAdmin,
     UserAdmin,
     LoginLogAdmin,
     ConfigAdmin

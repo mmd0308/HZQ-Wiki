@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,9 +41,9 @@ public class UserContoller extends BaseController {
 
     @Autowired
     private IUserService userService;
-//
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @ApiOperation(value = "用户分页信息")
@@ -71,6 +72,7 @@ public class UserContoller extends BaseController {
         RestResult<User> result = RestResultFactory.getInstance().success();
         try{
             User user = userService.getById(id);
+            result.setData(user);
         }catch (Exception e){
             log.error("UserContoller.getById occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
@@ -80,16 +82,19 @@ public class UserContoller extends BaseController {
 
 
 
-    /**
-     * 检查密码是否正确
-     * @param user
-     * @return
-     */
+    @ApiOperation("检查密码是否正确")
     @PostMapping("/checkPass")
-    public ResponseMessage checkPass(@RequestBody User user){
-        //User oUser = userService.get(user.getId());
-      //  boolean matches = passwordEncoder.matches(user.getPassword(),oUser.getPassword());
-        return responseMessage(true);
+    public RestResult<Boolean> checkPass(@RequestBody User user){
+        RestResult result = RestResultFactory.getInstance().success();
+        try{
+            User res = userService.getById(user.getId());
+            boolean matches = passwordEncoder.matches(user.getPassword(),res.getPassword());
+            result.setData(matches);
+        }catch (Exception e){
+            log.error("UserContoller.checkPass occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 
 

@@ -8,6 +8,9 @@
           {{ item.name }}
         </el-button>
       </div>
+      <div v-if="(userId != null && userId != '') && (token != null && token != '')" style="position: absolute;right: 0px;top: 0px;">
+        <el-button type="primary" size="mini" @click="clickToAdd()">创建文档</el-button>
+      </div>
     </div>
     <div v-for="(item,index) in docLists" :key="index" class="boxs">
       <router-link :to="{ path: '/read/doc/' + item.id}">
@@ -29,12 +32,48 @@
         </div>
       </router-link>
     </div>
+
+    <!--新增 -->
+    <el-drawer
+      :visible.sync="drawer"
+      :with-header="false"
+      class="hzq-drawer">
+      <h4 class="header">新增文档</h4>
+      <el-divider/>
+      <div class="content">
+        <el-form :model="drawerForm" label-width="80px">
+          <el-form-item label="文档名称">
+            <el-input v-model="drawerForm.name"/>
+          </el-form-item>
+          <el-form-item label="文档权限">
+            <el-radio v-model="drawerForm.visitLevel" :label="docVisitLevel['PUBLIC'].value">公开</el-radio>
+            <el-radio v-model="drawerForm.visitLevel" :label="docVisitLevel['PRIVATE'].value">私有</el-radio>
+          </el-form-item>
+          <el-form-item label="备注说明">
+            <el-input
+              v-model="drawerForm.remark"
+              type="textarea"
+              placeholder="请输入内容"
+              maxlength="100"
+              show-word-limit
+            />
+          </el-form-item>
+        </el-form>
+
+        <div class="footer">
+          <el-button size="medium" type="info" @click="drawer = false">取消</el-button>
+          <el-button size="medium" type="primary" @click="handleSaveClick">保存 </el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
 import { showPage } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
 import { showAll } from '@/api/article/tag'
+import { docVisitLevel } from '@/api/doc/DocConstants'
+import { create } from '@/api/index'
 import $ from 'jquery'
 export default {
   data() {
@@ -44,12 +83,16 @@ export default {
         pageSize: 12
       },
       docLists: [],
-      total: 0
+      total: 0,
+      docVisitLevel: docVisitLevel,
+      drawer: false,
+      drawerForm: this.initDrawerForm()
     }
   },
   computed: {
     ...mapGetters([
-      'userId'
+      'userId',
+      'token'
     ])
   },
   created() {
@@ -57,6 +100,15 @@ export default {
     this.showTagsAll()
   },
   methods: {
+    initDrawerForm() {
+      return {
+        id: null,
+        name: null,
+        spaceId: null,
+        visitLevel: 'PUBLIC',
+        remark: null
+      }
+    },
     showTagsAll() {
       showAll().then(res => {
         this.tagsLists = res
@@ -85,6 +137,17 @@ export default {
     },
     imgError(item) {
       item.img = null
+    },
+    clickToAdd() {
+      this.drawer = true
+    },
+    handleSaveClick() {
+      // 创建
+      create('docs', this.drawerForm).then(() => {
+        this.drawer = false
+        this.drawerForm = this.initDrawerForm()
+        window.location.reload()
+      })
     }
   }
 }

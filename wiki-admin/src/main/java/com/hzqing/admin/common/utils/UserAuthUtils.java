@@ -25,6 +25,14 @@ public class UserAuthUtils {
     }
 
     /**
+     * 获取当前请求的用户id
+     * @return
+     */
+    public static Integer getUserId(){
+        return getUserInfo().getId();
+    }
+
+    /**
      * 判断用户是否登陆
      * @return
      */

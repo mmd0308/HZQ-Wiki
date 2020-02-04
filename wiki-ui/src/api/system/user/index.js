@@ -21,7 +21,7 @@ export function checkUsername(username) {
 }
 export function checkPass(params) {
   return request({
-    url: '/api/user/checkPass',
+    url: '/api/wiki/users/checkPass',
     method: 'post',
     data: params
   })

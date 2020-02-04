@@ -50,8 +50,10 @@
           <template slot="title">
             <avatar :username="username" :src="avatar" :size="40" style="float:left;margin-top:10px;" />
           </template>
-          <el-menu-item index="/set/user" >个人中心</el-menu-item>
-          <el-menu-item index="/set/article" >文章管理</el-menu-item>
+          <el-menu-item index="/admin/user" >个人中心</el-menu-item>
+          <el-menu-item index="/admin/article" >文章管理</el-menu-item>
+          <el-menu-item index="/admin/doc" >文档管理</el-menu-item>
+          <el-menu-item index="/admin/system" >系统管理</el-menu-item>
           <el-menu-item index="/login" @click="logout">退出登陆</el-menu-item>
         </el-submenu>
       </el-menu>

@@ -1,24 +1,26 @@
 <template>
-  <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="关键字">
-        <el-input v-model="formInline.user" size="small" placeholder="审批人"/>
-      </el-form-item>
-      <el-form-item label="文章状态">
-        <el-select v-model="formInline.region" size="small" placeholder="活动区域">
-          <el-option label="区域一" value="shanghai"/>
-          <el-option label="区域二" value="beijing"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item style="float:right">
-        <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-        <el-button type="info" size="small" @click="onSubmit">重置</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="hzq-admin">
+    <div class="headerForm">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="关键字">
+          <el-input v-model="formInline.user" size="small" placeholder="审批人"/>
+        </el-form-item>
+        <el-form-item label="文章状态">
+          <el-select v-model="formInline.region" size="small" placeholder="活动区域">
+            <el-option label="区域一" value="shanghai"/>
+            <el-option label="区域二" value="beijing"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="float:right">
+          <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
+          <el-button type="info" size="small" @click="onSubmit">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       v-loading="tableLoading"
       :data="tableLists"
-      :header-cell-style="{background:'whitesmoke',color:'#000000'}"
+      :header-cell-style="{background:'#545c64',color:'#ffffff'}"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.83)"

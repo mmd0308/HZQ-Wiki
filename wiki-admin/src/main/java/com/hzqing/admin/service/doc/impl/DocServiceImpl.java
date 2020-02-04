@@ -3,6 +3,7 @@ package com.hzqing.admin.service.doc.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.mapper.doc.DocMapper;
 import com.hzqing.admin.model.dto.doc.DocDto;
@@ -25,6 +26,7 @@ import java.util.List;
 @Service
 public class DocServiceImpl implements IDocService {
     @Autowired
+    @SuppressWarnings("all")
     private DocMapper docMapper;
 
     @Autowired
@@ -76,19 +78,24 @@ public class DocServiceImpl implements IDocService {
     @Override
     @Transactional
     public int create(Doc doc) {
+        doc.setCreateBy(UserAuthUtils.getUserId());
+        doc.setCreateTime(LocalDateTime.now());
         docMapper.insert(doc);
+
         // 新增用户和文档关系
         UserDoc userDoc = new UserDoc();
         userDoc.setDocId(doc.getId());
+        userDoc.setUserId(UserAuthUtils.getUserId());
         userDoc.setPrivilege(UserDocPrivilege.OWNER);
         userDoc.setCreateTime(LocalDateTime.now());
         userDocService.create(userDoc);
-
         return doc.getId();
     }
 
     @Override
     public void modifyById(Doc doc) {
+        doc.setUpdateBy(UserAuthUtils.getUserId());
+        doc.setUpdateTime(LocalDateTime.now());
         docMapper.updateById(doc);
     }
 

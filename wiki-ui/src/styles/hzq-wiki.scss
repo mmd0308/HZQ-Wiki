@@ -8,8 +8,25 @@
 
 .hzq{
 
-
-
+  &-admin{
+    .header{
+      
+    }
+    .headerForm{
+      margin:20px 10px;
+    }
+    .headerForm .el-form-item{
+      margin:0px;
+    }
+    ////// -- 针对直接是表单的,如个人中心,修改密码
+    .basic{
+      padding: 30px 30px 20px 20px;
+      background: #ffffff;
+    }
+    .basic .footer{
+      text-align: center;
+    }
+  }
   // 自定义element 抽屉样式
   &-drawer{
     .header{

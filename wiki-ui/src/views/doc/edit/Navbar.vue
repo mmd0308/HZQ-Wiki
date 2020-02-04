@@ -14,7 +14,8 @@
         </router-link>
       </el-button>
       <!-- 可读模式或者浏览模式,允许编辑 -->
-      <el-button v-if="docStatus == 'R' && docPrivilege != '1'" size="small" type="success" @click="toEdit">
+      <!-- docPrivilege != '1' -->
+      <el-button v-if="docStatus == 'R' && (userId != null && userId != '')" size="small" type="success" @click="toEdit">
         编辑
       </el-button>
     </div>

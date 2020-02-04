@@ -20,11 +20,18 @@ export const constantRouterMap = [
     children: [
       { path: 'index', component: () => import('@/views/index/index') },
       // { path: 'test', component: () => import('@/views/dashboard/test') },
+      { path: 'admin/article', component: () => import('@/views/article/admin/Layout') },
+      { path: 'admin/doc', component: () => import('@/views/doc/admin/Layout') },
+      { path: 'admin/user', component: () => import('@/views/system/user/admin/Layout') },
+      { path: 'admin/system', component: () => import('@/views/system/admin/Layout') },
+      // 后期删除 admin/:name
+      { path: 'admin/:name', component: () => import('@/views/admin/index') },
+
       { path: 'space', component: () => import('@/views/space/show/index') },
       { path: ':spaceId/doc', component: () => import('@/views/doc/show/index') },
       { path: 'doc', component: () => import('@/views/doc/show/index') },
-      { path: 'article', component: () => import('@/views/article/show/Layout') },
-      { path: 'admin/:name', component: () => import('@/views/admin/index') }
+      { path: 'article', component: () => import('@/views/article/show/Layout') }
+
     ]
   },
   {
