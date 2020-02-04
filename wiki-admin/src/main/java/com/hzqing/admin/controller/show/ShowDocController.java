@@ -7,8 +7,10 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.dto.doc.DocDto;
+import com.hzqing.admin.model.dto.system.UserInfo;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.entity.doc.Doc;
 import com.hzqing.admin.model.enums.article.ArticleState;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 不需要登陆获取到的文档
  * @author hzqing
@@ -49,15 +53,20 @@ public class ShowDocController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public RestResult<Page<DocDto>> getPage(@PathVariable int num, @PathVariable int size, DocShowPage docShowPage){
+    public RestResult<Page<DocDto>> getPage(@PathVariable int num, @PathVariable int size, DocShowPage docShowPage, HttpServletRequest request){
         // 默认返回值
         RestResult<Page<DocDto>> result = RestResultFactory.getInstance().success();
         try {
-            Doc doc = new Doc();
-            doc.setSpaceId(docShowPage.getSpaceId());
-            doc.setVisitLevel(DocVisitLevel.PUBLIC);
-            Page<DocDto> docPage = docService.getPageBySpaceOrLevel(num,size,doc);
-
+            DocDto docDto = new DocDto();
+            docDto.setSpaceId(docShowPage.getSpaceId());
+            docDto.setVisitLevel(DocVisitLevel.PUBLIC);
+            // 判断该请求是否是登陆状态的请求
+            if (UserAuthUtils.isLogin(request)){
+                UserInfo userInfo = UserAuthUtils.getUserInfo();
+                log.info("ShowDocController.getPage 获取该用户的所有文档，及公开文档！{}",userInfo);
+                docDto.setUserId(userInfo.getId());
+            }
+            Page<DocDto> docPage = docService.getShowPageByDto(num,size,docDto);
             result.setData(docPage);
         }catch (Exception e){
             log.error("ShowDocController.getPage occur Exception: ", e);

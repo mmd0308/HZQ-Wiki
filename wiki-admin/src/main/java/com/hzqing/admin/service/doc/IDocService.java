@@ -74,4 +74,15 @@ public interface IDocService {
      * @return
      */
     Doc getById(int id);
+
+    /**
+     * 首页展示
+     * 根据空间id及级别获取分页的文档 获取公开文档
+     * 登陆以后，获取该用户及所有开放文档
+     * @param num
+     * @param size
+     * @param docDto
+     * @return
+     */
+    Page<DocDto> getShowPageByDto(int num, int size, DocDto docDto);
 }

@@ -31,4 +31,6 @@ public interface DocMapper  extends BaseMapper<Doc> {
     Integer selectPrivilegeById(MemberDto memberDto);
 
     IPage<DocDto> selectPageBySpaceOrLevel(Page<Object> objectPage, Doc doc);
+
+    IPage<DocDto> selectShowPageByDto(Page<Object> objectPage, DocDto docDto);
 }

@@ -39,4 +39,9 @@ public class DocDto {
 
     private LocalDateTime updateTime;
 
+    /**
+     * 用户id
+     */
+    private Integer userId;
+
 }

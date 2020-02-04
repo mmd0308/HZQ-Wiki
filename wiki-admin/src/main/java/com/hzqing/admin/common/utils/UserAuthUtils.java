@@ -1,7 +1,11 @@
 package com.hzqing.admin.common.utils;
 
+import com.hzqing.admin.common.constants.ConstantSecurity;
 import com.hzqing.admin.model.dto.system.UserInfo;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 获取用户信息
@@ -18,6 +22,21 @@ public class UserAuthUtils {
      */
     public static UserInfo getUserInfo(){
         return  (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    /**
+     * 判断用户是否登陆
+     * @return
+     */
+    public static boolean isLogin(HttpServletRequest request){
+        // 平台token
+        String token = request.getHeader(ConstantSecurity.TOKEN_KEY);
+
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof UsernamePasswordAuthenticationToken
+            && (token != null && token.startsWith(ConstantSecurity.TOKEN_PREFIX))){
+            return true;
+        }
+        return false;
     }
 
 }

@@ -4,8 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzqing.admin.mapper.doc.DocMapper">
 
-
-
     <resultMap id="baseResult" type="doc">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
@@ -34,7 +32,33 @@
         <result column="createName" property="createName" />
     </resultMap>
 
-
+    <select id="selectShowPageByDto" resultMap="baseResultDto" parameterType="docDto">
+        select
+        d.id,
+        d.name,
+        d.space_id,
+        d.remark,
+        d.visit_level,
+        d.img,
+        d.create_by,
+        d.create_time,
+        d.update_by,
+        d.update_time,
+        u.name as createName
+        from hw_doc d left join hw_user u on d.create_by = u.id
+        <where>
+            <if test="docDto.visitLevel != null">
+                d.visit_level = #{docDto.visitLevel}
+            </if>
+            <if test="docDto.spaceId != null and docDto.spaceId != 0">
+                AND d.space_id = #{docDto.spaceId}
+            </if>
+            <if test="docDto.userId != null and docDto.userId != 0">
+                OR find_in_set(d.id,(select GROUP_CONCAT(doc_Id) from hw_user_doc where user_id = #{docDto.userId}))
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
     <select id="selectPageBySpaceOrLevel" resultMap="baseResultDto" parameterType="doc">
         select
             d.id,
@@ -57,7 +81,7 @@
                 d.space_id = #{doc.spaceId}
             </if>
         </where>
-        order by d.update_time desc
+        order by d.create_time desc
     </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="doc">

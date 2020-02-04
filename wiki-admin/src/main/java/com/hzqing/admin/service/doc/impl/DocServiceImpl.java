@@ -101,4 +101,10 @@ public class DocServiceImpl implements IDocService {
     public Doc getById(int id) {
         return docMapper.selectById(id);
     }
+
+    @Override
+    public Page<DocDto> getShowPageByDto(int num, int size, DocDto docDto) {
+        IPage<DocDto> docDtoIPage =  docMapper.selectShowPageByDto(new Page<>(num, size), docDto);
+        return (Page<DocDto>) docDtoIPage;
+    }
 }
