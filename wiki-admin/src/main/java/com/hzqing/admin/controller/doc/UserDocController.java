@@ -1,6 +1,10 @@
 package com.hzqing.admin.controller.doc;
 
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.exception.ExceptionProcessUtils;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.doc.MemberDto;
@@ -8,8 +12,11 @@ import com.hzqing.admin.dto.doc.UserDocDto;
 import com.hzqing.admin.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.entity.system.User;
+import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
 import com.hzqing.admin.service.doc.IUserDocService;
 import com.hzqing.admin.service.space.IUserSpaceService;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 用户和文档的关系
  * @author hzqing
  * @date 2019-05-20 08:26
  */
+@Slf4j
 @RestController
-@RequestMapping("/api/udoc")
+@RequestMapping("/api/wiki/users/docs")
 public class UserDocController extends BaseController {
 
     @Autowired
@@ -32,6 +41,27 @@ public class UserDocController extends BaseController {
     @Autowired
     private IUserSpaceService userSpaceService;
 
+
+    @ApiOperation("查询该用户对当前文档的操作权限，true 拥有， false 没有")
+    @GetMapping("/privilege/{docId}")
+    public RestResult<Boolean> getPrivilegeByUserIdAndDocId(@PathVariable Integer docId){
+        RestResult<Boolean> result = RestResultFactory.getInstance().success();
+        result.setData(false);
+        try{
+            UserDoc userDoc = new UserDoc();
+            userDoc.setUserId(UserAuthUtils.getUserId());
+            userDoc.setDocId(docId);
+            userDoc = userDocService.getByUserIdAndDocId(userDoc);
+            // 表示该用户有该文档的编辑权限
+            if (null != userDoc && userDoc.getPrivilege() != UserDocPrivilege.VISITORS){
+                result.setData(true);
+            }
+        }catch (Exception e){
+            log.error("DocContoller.docPrivilege occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
 
     @GetMapping("/page/{docId}")
     public ResponseMessage showPage(@PathVariable int docId, int pageNum, int pageSize, UserDoc userDoc){

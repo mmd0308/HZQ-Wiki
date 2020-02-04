@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getPrivilegeByUserIdAndDocId(docId) {
+  return request({
+    url: '/api/wiki/users/docs/privilege/' + docId,
+    method: 'get'
+  })
+}
+
 export function userDocPage(query, id) {
   return request({
     url: '/api/udoc/page/' + id,

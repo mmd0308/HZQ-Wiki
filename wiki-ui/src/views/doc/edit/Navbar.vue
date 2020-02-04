@@ -15,7 +15,7 @@
       </el-button>
       <!-- 可读模式或者浏览模式,允许编辑 -->
       <!-- docPrivilege != '1' -->
-      <el-button v-if="docStatus == 'R' && (userId != null && userId != '')" size="small" type="success" @click="toEdit">
+      <el-button v-if="editPrivilege()" size="small" type="success" @click="toEdit">
         编辑
       </el-button>
     </div>
@@ -23,8 +23,11 @@
 </template>
 <script>
 import { docPrivilege } from '@/api/doc/index'
+import { getPrivilegeByUserIdAndDocId } from '@/api/doc/userDOc'
 import { getById } from '@/api/index'
 import { mapGetters } from 'vuex'
+import { isAdmin, isLogin } from '@/utils/authUtils'
+import { userDocPrivilege } from '@/api/Constants'
 import bus from '@/assets/js/eventbus'
 export default {
   data() {
@@ -32,6 +35,8 @@ export default {
       moudle: 'show/docs',
       docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       docId: this.$route.params.id,
+      userDocPrivilege: userDocPrivilege,
+      isEditDoc: false,
       docPrivilege: '',
       paramsPrivilege: {
         userId: '',
@@ -51,7 +56,7 @@ export default {
   },
   created() {
     this.get()
-    // this.getPrivilege()
+    this.getPrivilege()
   },
   mounted() {
     var that = this
@@ -74,9 +79,15 @@ export default {
     },
     getPrivilege() {
       this.paramsPrivilege.userId = this.userId
-      docPrivilege(this.paramsPrivilege).then(res => {
-        this.docPrivilege = res.data
+      getPrivilegeByUserIdAndDocId(this.docId).then(res => {
+        this.isEditDoc = res
       })
+    },
+    editPrivilege() {
+      if (this.docStatus === 'R' && isLogin() && this.isEditDoc) { // 该拥有编辑此文档的权限
+        return true
+      }
+      return false
     }
   }
 }

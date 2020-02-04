@@ -51,17 +51,21 @@ public class DocContoller extends BaseController {
         return responseMessage(docDtos);
     }
 
-    /**
-     * 查询该用户对当前文档的操作权限
-     * @return
-     */
-    @GetMapping("/docPrivilege")
-    public ResponseMessage docPrivilege(MemberDto memberDto){
-        Integer privilege = docService.selectPrivilegeById(memberDto);
-        if (privilege == null)
-            privilege = 1;
-        return responseMessage(privilege);
-    }
+
+//    @ApiOperation(" 查询该用户对当前文档的操作权限")
+//    @GetMapping("/privilege")
+//    public RestResult<Boolean> docPrivilege(MemberDto memberDto){
+//        RestResult<Boolean> result = RestResultFactory.getInstance().success();
+//        try{
+//            Integer privilege = docService.selectPrivilegeById(memberDto);
+//
+//        }catch (Exception e){
+//            log.error("DocContoller.docPrivilege occur Exception: ", e);
+//            ExceptionProcessUtils.wrapperHandlerException(result,e);
+//        }
+//
+//        return result;
+//    }
 
 
     /**

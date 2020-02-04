@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzqing.admin.model.entity.base.BaseEntity;
 import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -24,18 +25,18 @@ import java.time.LocalDateTime;
 public class UserDoc extends BaseEntity {
 
     @TableId(value = "id",type= IdType.AUTO)
-    private int id;
+    private Integer id;
 
     @TableField("user_id")
-    private int userId;
+    private Integer userId;
 
     @TableField("doc_id")
-    private int docId;
+    private Integer docId;
 
     private UserDocPrivilege privilege;
 
     @TableField("create_by")
-    private int createBy;
+    private Integer createBy;
 
     @TableField("create_time")
     private LocalDateTime createTime;

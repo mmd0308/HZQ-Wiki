@@ -23,4 +23,11 @@ public interface IUserDocService {
     int deletedById(String id);
 
     int create(UserDoc userDoc);
+
+    /**
+     * 根据用户id和文档id获取数据
+     * @param userDoc
+     * @return
+     */
+    UserDoc getByUserIdAndDocId(UserDoc userDoc);
 }
