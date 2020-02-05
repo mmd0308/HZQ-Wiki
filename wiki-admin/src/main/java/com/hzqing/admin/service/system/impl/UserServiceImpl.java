@@ -72,4 +72,9 @@ public class UserServiceImpl implements IUserService {
         user.setUsername(username);
         return userMapper.selectOne(new QueryWrapper<>(user));
     }
+
+    @Override
+    public List<User> getAll() {
+        return userMapper.selectList(null);
+    }
 }

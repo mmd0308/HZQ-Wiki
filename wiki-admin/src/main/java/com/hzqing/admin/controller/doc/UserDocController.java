@@ -6,13 +6,14 @@ import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.space.UserSpace;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.dto.doc.UserDocDto;
 import com.hzqing.admin.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.doc.UserDoc;
+import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
+import com.hzqing.admin.model.enums.space.UserSpacePrivilege;
 import com.hzqing.admin.service.doc.IUserDocService;
 import com.hzqing.admin.service.space.IUserSpaceService;
 import io.swagger.annotations.ApiOperation;
@@ -85,7 +86,7 @@ public class UserDocController extends BaseController {
 
         List<MemberDto> res = new ArrayList<>(spaces.size()+ docs.size());
         spaces.forEach(item -> {
-            if (item.getPrivilege() != 0){
+            if (item.getPrivilege() != UserSpacePrivilege.OWNER){
                 MemberDto memberDto = new MemberDto();
                 BeanUtils.copyProperties(item,memberDto);
                 res.add(memberDto);

@@ -63,3 +63,18 @@ update  hw_user_doc  set privilege =2 where privilege=1;
 
 update  hw_user_doc  set privilege =1 where privilege=0;
 
+
+
+
+
+ALTER TABLE `hzq_wiki`.`hw_user_space` 
+CHANGE COLUMN `privilege` `privilege` INT(10) NULL DEFAULT NULL COMMENT '空间成员操作权限   1 拥有者 2 浏览者 3 编辑者 4 管理员 \n\n' ;
+
+update  hw_user_space  set privilege =4 where privilege=3;
+
+update  hw_user_space  set privilege =3 where privilege=2;
+
+update  hw_user_space  set privilege =2 where privilege=1;
+
+update  hw_user_space  set privilege =1 where privilege=0;
+

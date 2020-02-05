@@ -157,12 +157,4 @@ public class DocContoller extends BaseController {
         }
         return result;
     }
-
-
-    @GetMapping("/page")
-    public ResponseMessage page(int pageNum, int pageSize, Doc doc){
-        startPage(pageNum,pageSize);
-        List<Doc> docs = docService.selectList(doc);
-        return responseMessage(docs);
-    }
 }

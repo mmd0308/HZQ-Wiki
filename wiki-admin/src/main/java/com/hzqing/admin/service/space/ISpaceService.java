@@ -1,7 +1,7 @@
 package com.hzqing.admin.service.space;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.dto.space.SpaceDto;
+import com.hzqing.admin.model.dto.space.SpaceDto;
 import com.hzqing.admin.model.entity.space.Space;
 
 import java.util.List;
@@ -27,10 +27,10 @@ public interface ISpaceService {
      * 获取分页信息
      * @param num
      * @param size
-     * @param space
+     * @param spaceDto
      * @return
      */
-    Page<Space> getPage(int num, int size, Space space);
+    Page<SpaceDto> getPage(int num, int size, SpaceDto spaceDto);
 
     /**
      * 创建空间

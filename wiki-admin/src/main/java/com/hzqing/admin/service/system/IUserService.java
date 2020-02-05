@@ -56,4 +56,11 @@ public interface IUserService {
      * @return
      */
     User getByUserName(String username);
+
+    /**
+     * 获取所有的用户信息
+     * @return
+     */
+    List<User> getAll();
+
 }

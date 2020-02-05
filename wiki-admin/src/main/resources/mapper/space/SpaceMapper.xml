@@ -14,11 +14,46 @@
         <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
+    <resultMap id="baseResultDto" type="spaceDto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark" />
+        <result column="visit_level" property="visitLevel" />
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+
+        <result column="createName" property="createName" />
+        <result column="privilege" property="userSpacePrivilege" />
+    </resultMap>
 
 
     <sql id="tableName">
         hw_space
     </sql>
+
+
+
+    <select id="selectPageList" resultMap="baseResultDto" parameterType="spaceDto">
+        SELECT
+            s.id,
+            s.name,
+            s.remark,
+            s.visit_level,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            cu.name as 'createName',
+            us.privilege
+        FROM
+            hw_space s
+            left join hw_user cu on cu.id = s.create_by
+            left join hw_user_space us on us.space_id = s.id
+
+        where us.user_id  = #{spaceDto.userId}
+    </select>
 
     <select id="selectList" resultMap="baseResult" parameterType="space">
         SELECT

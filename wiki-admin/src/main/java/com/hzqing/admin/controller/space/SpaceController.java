@@ -5,8 +5,9 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.dto.space.SpaceDto;
+import com.hzqing.admin.model.dto.space.SpaceDto;
 import com.hzqing.admin.model.entity.space.Space;
 import com.hzqing.admin.service.space.ISpaceService;
 import io.swagger.annotations.Api;
@@ -44,8 +45,8 @@ public class SpaceController extends BaseController {
     public ResponseMessage getPageByUserId(@PathVariable int userId, int pageNum, int pageSize, Space space){
         startPage(pageNum,pageSize);
         space.setCreateBy(userId);
-        List<SpaceDto> spaces = spaceService.selectListByUserId(space);
-        return responseMessage(spaces);
+        //List<SpaceDto> spaces = spaceService.selectListByUserId(space);
+        return responseMessage(null);
     }
 
 
@@ -55,10 +56,11 @@ public class SpaceController extends BaseController {
             @ApiImplicitParam(name = "size",value = "每页显示的数量",required = true,dataType = "int")
     })
     @GetMapping("/page/{num}/{size}")
-    public RestResult<Page<Space>> getPage(@PathVariable int num, @PathVariable int size, Space space){
-        RestResult<Page<Space>> result = RestResultFactory.getInstance().success();
+    public RestResult<Page<SpaceDto>> getPage(@PathVariable int num, @PathVariable int size, SpaceDto spaceDto){
+        RestResult<Page<SpaceDto>> result = RestResultFactory.getInstance().success();
         try{
-            Page<Space> datas = spaceService.getPage(num,size,space);
+            spaceDto.setUserId(UserAuthUtils.getUserId());
+            Page<SpaceDto> datas = spaceService.getPage(num,size,spaceDto);
             result.setData(datas);
         }catch (Exception e){
             log.error("ShowSpaceController.getPage occur Exception: ", e);

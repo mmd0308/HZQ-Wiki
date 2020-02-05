@@ -51,24 +51,33 @@
 
       <el-table-column
         label="访问级别"
-        width="130" >
+        width="100" >
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.visitLevel != null" :type="spaceVisitLevel[scope.row.visitLevel].status" >{{ spaceVisitLevel[scope.row.visitLevel].text }}</el-tag>
+          <el-tag v-if="scope.row.visitLevel != null" :type="spaceVisitLevel[scope.row.visitLevel].status" size="small">{{ spaceVisitLevel[scope.row.visitLevel].text }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="访问权限"
+        width="100" >
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.userSpacePrivilege != null" :type="userSpacePrivilege[scope.row.userSpacePrivilege].status" size="small" >{{ userSpacePrivilege[scope.row.userSpacePrivilege].text }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column
-        prop="createTime"
-        width="160"
-        label="创建时间"/>
+        prop="createName"
+        label="创建人"
+        width="130"/>
 
       <el-table-column
         fixed="right"
         label="操作"
-        width="100">
+        width="130">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="handleMemberClick(scope.row)">成员</el-button>
+          <el-button v-if="scope.row.userSpacePrivilege === 'OWNER' || scope.row.userSpacePrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-popconfirm
+            style="margin-left:10px"
             confirm-button-text="删除"
             confirm-button-type="danger"
             cancel-button-text="不用了"
@@ -78,7 +87,7 @@
             title="您确定删除该条数据吗？"
             @onConfirm="handleRemoveById(scope.row.id)"
           >
-            <el-button slot="reference" type="text" size="small" >删除</el-button>
+            <el-button v-if="scope.row.userSpacePrivilege === 'OWNER'" slot="reference" type="text" size="small" >删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -96,31 +105,61 @@
 
     <!--编辑 -->
     <el-drawer
-      :visible.sync="editDrawer"
+      :visible.sync="drawer"
       :with-header="false"
       class="hzq-drawer">
       <h4 class="header">标签编辑</h4>
       <el-divider/>
       <div class="content">
-        <el-form :model="editTagForm" label-width="80px">
-          <el-form-item label="标签名称">
-            <el-input v-model="editTagForm.name"/>
+        <el-form :model="drawerForm" label-width="80px">
+          <el-form-item label="空间名称">
+            <el-input v-model="drawerForm.name"/>
+          </el-form-item>
+          <el-form-item label="空间权限">
+            <el-radio v-model="drawerForm.visitLevel" :label="spaceVisitLevel['PUBLIC'].value">公开</el-radio>
+            <el-radio v-model="drawerForm.visitLevel" :label="spaceVisitLevel['PRIVATE'].value">私有</el-radio>
+          </el-form-item>
+          <el-form-item label="备注说明">
+            <el-input
+              v-model="drawerForm.remark"
+              type="textarea"
+              placeholder="请输入内容"
+              maxlength="100"
+              show-word-limit
+            />
           </el-form-item>
         </el-form>
-
         <div class="footer">
-          <el-button size="medium" type="info" @click="editDrawer = false">取消</el-button>
-          <el-button size="medium" type="primary" @click="handleSaveClick"> 保存 </el-button>
+          <el-button size="medium" type="info" @click="drawer = false">取消</el-button>
+          <el-button v-if="drawerState === 'CREATE'" size="medium" type="primary" @click="handleSaveClick">保存 </el-button>
+          <el-button v-if="drawerState === 'UPDATE'" size="medium" type="primary" @click="handleUpdateClick">更新 </el-button>
         </div>
+      </div>
+    </el-drawer>
+
+    <!-- 添加成员 -->
+    <el-drawer
+      :visible.sync="drawerMember"
+      :with-header="false"
+      class="hzq-drawer">
+      <h4 class="header">成员管理</h4>
+      <el-divider/>
+      <div class="content">
+        <member ref="member" />
       </div>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import { page, updateById, deleteById } from '@/api/index'
+import { page, updateById, deleteById, create } from '@/api/index'
 import { spaceVisitLevel } from '@/api/space/SpaceConstants'
+import { userSpacePrivilege } from '@/api/Constants'
+import Member from './components/Member'
 export default {
+  components: {
+    Member
+  },
   data() {
     return {
       moudle: 'spaces',
@@ -136,30 +175,52 @@ export default {
         pageSize: 10
       },
       spaceVisitLevel: spaceVisitLevel,
-      editDrawer: false,
-      editTagForm: this.initForm()
+      userSpacePrivilege: userSpacePrivilege,
+      drawer: false,
+      drawerForm: this.initDrawerForm(),
+      drawerState: 'CREATE',
+      drawerMember: false
     }
   },
   methods: {
     init() {
       this.getPage()
     },
-    initForm() {
+    initDrawerForm() {
       return {
         id: null,
         name: null,
+        visitLevel: 'PUBLIC',
         remark: null
       }
     },
-    handleEditClick(row) {
-      this.editDrawer = true
-      this.editTagForm = this.initForm()
-      this.editTagForm = row
+    handleToCreate() {
+      this.drawer = true
+      this.drawerForm = this.initDrawerForm()
+      this.drawerState = 'CREATE'
     },
     handleSaveClick() {
+      // 创建
+      create(this.moudle, this.drawerForm).then(() => {
+        this.drawer = false
+        this.getPage()
+      })
+    },
+    handleMemberClick(row) {
+      this.drawerMember = true
+      debugger
+      this.$refs['member'].initPage(row.id)
+    },
+    handleEditClick(row) {
+      this.drawer = true
+      this.drawerState = 'UPDATE'
+      this.drawerForm = this.initDrawerForm()
+      this.drawerForm = row
+    },
+    handleUpdateClick() {
       // 编辑保存
-      updateById(this.moudle, this.editTagForm).then(() => {
-        this.editDrawer = false
+      updateById(this.moudle, this.drawerForm).then(() => {
+        this.drawer = false
       })
     },
     handleRemoveById(id) {

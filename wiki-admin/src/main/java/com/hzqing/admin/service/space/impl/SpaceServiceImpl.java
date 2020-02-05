@@ -1,11 +1,13 @@
 package com.hzqing.admin.service.space.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hzqing.admin.domain.space.UserSpace;
-import com.hzqing.admin.dto.space.SpaceDto;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.mapper.space.SpaceMapper;
+import com.hzqing.admin.model.dto.space.SpaceDto;
 import com.hzqing.admin.model.entity.space.Space;
+import com.hzqing.admin.model.entity.space.UserSpace;
+import com.hzqing.admin.model.enums.space.UserSpacePrivilege;
 import com.hzqing.admin.service.space.ISpaceService;
 import com.hzqing.admin.service.space.IUserSpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.List;
 public class SpaceServiceImpl implements ISpaceService {
 
     @Autowired
+    @SuppressWarnings("all")
     private SpaceMapper spaceMapper;
 
     /**
@@ -44,20 +47,24 @@ public class SpaceServiceImpl implements ISpaceService {
     }
 
     @Override
-    public Page<Space> getPage(int num, int size, Space space) {
-        return (Page<Space>) spaceMapper.selectPage(new Page<>(num,size),new QueryWrapper<Space>(space));
+    public Page<SpaceDto> getPage(int num, int size, SpaceDto spaceDto) {
+        IPage<SpaceDto> spaceDtoIPage = spaceMapper.selectPageList(new Page<>(num,size),spaceDto);
+        return (Page<SpaceDto>) spaceDtoIPage;
     }
 
     @Override
     @Transactional
     public int create(Space space) {
+        space.setCreateBy(UserAuthUtils.getUserId());
+        space.setCreateTime(LocalDateTime.now());
         spaceMapper.insert(space);
+
         // 新增空间的时候，插入拥有者
         UserSpace userSpace = new UserSpace();
         userSpace.setUserId(space.getCreateBy());
         userSpace.setCreateTime(LocalDateTime.now());
         userSpace.setSpaceId(space.getId());
-        userSpace.setPrivilege(0);
+        userSpace.setPrivilege(UserSpacePrivilege.OWNER);
         userSpace.setCreateBy(space.getCreateBy());
         userSpace.setCreateTime(LocalDateTime.now());
 

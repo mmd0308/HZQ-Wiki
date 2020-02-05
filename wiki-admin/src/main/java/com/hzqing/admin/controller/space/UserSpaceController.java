@@ -1,11 +1,19 @@
 package com.hzqing.admin.controller.space;
 
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.exception.ExceptionProcessUtils;
+import com.hzqing.admin.common.result.RestResult;
+import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
-import com.hzqing.admin.domain.space.UserSpace;
+import com.hzqing.admin.converter.system.UserConverter;
 import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
+import com.hzqing.admin.model.vo.system.UserMinimalVO;
 import com.hzqing.admin.service.space.IUserSpaceService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +24,17 @@ import java.util.List;
  * @author hzqing
  * @date 2019-05-20 08:26
  */
+@Slf4j
+@Api(tags = "用户和空间关系")
 @RestController
-@RequestMapping("/api/uspace")
+@RequestMapping("/api/wiki/users/spaces")
 public class UserSpaceController extends BaseController {
 
     @Autowired
     private IUserSpaceService userSpaceService;
+
+    @Autowired
+    private UserConverter userConverter;
 
 
     @GetMapping("/page/{spaceId}")
@@ -45,15 +58,20 @@ public class UserSpaceController extends BaseController {
         return responseMessage(spaces);
     }
 
-    /**
-     *  该空间不存在的用户
-     * @param spaceId
-     * @return
-     */
-    @GetMapping("/spaceNonUserAll/{spaceId}")
-    public ResponseMessage spaceNonUserAll(@PathVariable int spaceId){
-        List<User> spaces = userSpaceService.selectUserListBySID(spaceId);
-        return responseMessage(spaces);
+    @ApiOperation("该空间不存的所有用户")
+    @GetMapping("/all/non/{spaceId}")
+    public RestResult<UserMinimalVO> getUserAllBySpaceId(@PathVariable Integer spaceId){
+        RestResult result = RestResultFactory.getInstance().success();
+        try{
+            List<User> userList = userSpaceService.getUserAllBySpaceId(spaceId);
+            List<UserMinimalVO> res = userConverter.userToMinimalVO(userList);
+            result.setData(res);
+        }catch (Exception e){
+            log.error("UserSpaceController.getUserAll occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+
+        return result;
     }
 
     @PostMapping("/addOrUpdate")

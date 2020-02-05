@@ -10,7 +10,7 @@ export function userSpacePage(query, spaceId) {
 
 export function userSpaceAll(query, spaceId) {
   return request({
-    url: '/api/uspace/all/' + spaceId,
+    url: '/api/wiki/users/spaces/all/' + spaceId,
     method: 'get',
     params: query
   })
@@ -18,7 +18,7 @@ export function userSpaceAll(query, spaceId) {
 
 export function spaceNonUserAll(spaceId) {
   return request({
-    url: '/api/uspace/spaceNonUserAll/' + spaceId,
+    url: '/api/wiki/users/spaces/all/non/' + spaceId,
     method: 'get'
   })
 }
