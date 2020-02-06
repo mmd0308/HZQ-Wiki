@@ -1,7 +1,7 @@
 package com.hzqing.admin.mapper.space;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
 
@@ -17,4 +17,5 @@ public interface UserSpaceMapper extends BaseMapper<UserSpace> {
 
     List<User> selectUserListBySID(int spaceId);
 
+    List<UserSpaceDto> selectListBySpaceId(Integer spaceId);
 }

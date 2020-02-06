@@ -74,7 +74,7 @@
         label="操作"
         width="130">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleMemberClick(scope.row)">成员</el-button>
+          <el-button v-if="scope.row.userSpacePrivilege === 'OWNER' || scope.row.userSpacePrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleMemberClick(scope.row)">成员</el-button>
           <el-button v-if="scope.row.userSpacePrivilege === 'OWNER' || scope.row.userSpacePrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-popconfirm
             style="margin-left:10px"
@@ -145,7 +145,7 @@
       <h4 class="header">成员管理</h4>
       <el-divider/>
       <div class="content">
-        <member ref="member" />
+        <member ref="member" :space-id="spaceId" />
       </div>
     </el-drawer>
   </div>
@@ -163,6 +163,7 @@ export default {
   data() {
     return {
       moudle: 'spaces',
+      spaceId: null,
       formInline: {
         user: '',
         region: ''
@@ -208,8 +209,10 @@ export default {
     },
     handleMemberClick(row) {
       this.drawerMember = true
-      debugger
-      this.$refs['member'].initPage(row.id)
+      this.spaceId = row.id
+      if (this.$refs['member'] != null) { // 表示第一次加载成员组件
+        this.$refs['member'].initPage(row.id)
+      }
     },
     handleEditClick(row) {
       this.drawer = true

@@ -13,13 +13,13 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="选择用户">
+        <el-form-item label="选择权限">
           <el-select v-model="userSpaceForm.privilege" style="width:100%" >
             <el-option
-              v-for="item in privilegeData"
-              v-if="item.value != 0"
+              v-for="item in userSpacePrivilege"
+              v-if="item.value != 'OWNER'"
               :key="item.value"
-              :label="item.label"
+              :label="item.text"
               :value="item.value"/>
           </el-select>
         </el-form-item>
@@ -32,66 +32,64 @@
             value-format="yyyy-MM-dd"
             placeholder="选择过期时间"/>
         </el-form-item>
-        <el-button style="float:right;margin-right:30px;" type="success" @click="addUserToSpace">加入空间</el-button>
+        <el-button type="success" @click="addUserToSpace">加入空间</el-button>
       </el-form>
-
     </div>
-    <el-table
-      :data="userLists"
-      style="width: 100%">
-      <el-table-column
-        label="用户名称">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.fullName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="加入时间">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作权限" width="130">
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.privilege" disabled placeholder="请选择">
-            <el-option
-              v-for="item in privilegeData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="到期时间" width="110">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.expireTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="80">
-        <template v-if="scope.row.privilege != '0'" slot-scope="scope">
-          <el-button
-            size="mini"
-            type="danger"
-            @click="spaceDelete(scope.$index, scope.row)">
-            <i class="el-icon-delete"/>
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <div style="margin-top:20px">
+      <el-table
+        :data="userLists"
+        :header-cell-style="{background:'#545c64',color:'#ffffff'}"
+        style="width: 100%">
+        <el-table-column
+          label="用户名称">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.fullName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作权限"
+          width="80" >
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.privilege != null" :type="userSpacePrivilege[scope.row.privilege].status" size="small" >{{ userSpacePrivilege[scope.row.privilege].text }}</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="到期时间" width="110">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.expireTime }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" width="80">
+          <template v-if="scope.row.privilege != '0'" slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="spaceDelete(scope.$index, scope.row)">
+              <i class="el-icon-delete"/>
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
-import { userSpaceAll, deletedById, addOrUpdate, spaceNonUserAll } from '@/api/space/userSpace'
+import { userSpaceAll, addOrUpdate, spaceNonUserAll } from '@/api/space/userSpace'
+import { create, deleteById } from '@/api/index'
+import { userSpacePrivilege } from '@/api/Constants'
 export default {
-
+  props: {
+    spaceId: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
-      privilegeData: [
-        { value: 0, label: '拥有者' },
-        { value: 1, label: '浏览者' },
-        { value: 2, label: '编辑者' },
-        { value: 3, label: '管理员' }
-      ],
+      userSpacePrivilege: userSpacePrivilege,
       nonSpaceUserLists: [],
       state1: '',
       dialogTitle: '新增用户',
@@ -114,24 +112,27 @@ export default {
     }
   },
   created() {
-    // this.page()
-    // this.spaceNonUserAll()
+    this.initPage(null)
   },
   methods: {
     init() {
       return {
-        userId: '',
-        spaceId: this.spaceId,
-        privilege: 1,
-        expireTime: ''
+        userId: null,
+        spaceId: null,
+        privilege: null,
+        expireTime: null
       }
     },
     initPage(spaceId) {
-      alert(spaceId)
+      if (spaceId != null) {
+        this.spaceId = spaceId
+      }
+      this.page()
+      this.spaceNonUserAll()
     },
     page() {
-      userSpaceAll(this.listQuery, this.spaceId).then(response => {
-        this.userLists = response.data
+      userSpaceAll(this.spaceId).then(response => {
+        this.userLists = response
       })
     },
     spaceDelete(index, row) {
@@ -140,12 +141,7 @@ export default {
         cancelButtonText: '取消',
         typr: 'warning'
       }).then(() => {
-        deletedById(row.id).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '用户[' + row.fullName + ']删除成功!',
-            type: 'success'
-          })
+        deleteById('users/spaces', row.id).then(() => {
           this.page()
           this.spaceNonUserAll()
         })
@@ -153,18 +149,14 @@ export default {
     },
     spaceNonUserAll() {
       spaceNonUserAll(this.spaceId).then(res => {
-        this.nonSpaceUserLists = res.data
+        this.nonSpaceUserLists = res
       })
     },
     addUserToSpace() {
       this.$refs[this.ruleForm].validate((valid) => {
         if (valid) {
-          addOrUpdate(this.userSpaceForm).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '成员加入成功!',
-              type: 'success'
-            })
+          this.userSpaceForm.spaceId = this.spaceId
+          create('users/spaces', this.userSpaceForm).then(() => {
             this.spaceNonUserAll()
             this.page()
             this.userSpaceForm = this.init()

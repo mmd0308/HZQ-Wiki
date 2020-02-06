@@ -8,11 +8,10 @@ export function userSpacePage(query, spaceId) {
   })
 }
 
-export function userSpaceAll(query, spaceId) {
+export function userSpaceAll(spaceId) {
   return request({
     url: '/api/wiki/users/spaces/all/' + spaceId,
-    method: 'get',
-    params: query
+    method: 'get'
   })
 }
 

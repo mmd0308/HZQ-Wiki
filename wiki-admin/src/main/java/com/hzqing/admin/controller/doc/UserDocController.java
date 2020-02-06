@@ -8,7 +8,7 @@ import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.dto.doc.UserDocDto;
-import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;

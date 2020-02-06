@@ -1,8 +1,9 @@
 package com.hzqing.admin.service.space.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.mapper.space.UserSpaceMapper;
+import com.hzqing.admin.model.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.service.space.IUserSpaceService;
@@ -10,6 +11,7 @@ import com.hzqing.admin.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +55,11 @@ public class UserSpaceServiceImpl implements IUserSpaceService {
     }
 
     @Override
-    public void create(UserSpace userSpace) {
+    public int create(UserSpace userSpace) {
+        userSpace.setCreateBy(UserAuthUtils.getUserId());
+        userSpace.setCreateTime(LocalDateTime.now());
         userSpaceMapper.insert(userSpace);
+        return userSpace.getId();
     }
 
     @Override
@@ -72,5 +77,15 @@ public class UserSpaceServiceImpl implements IUserSpaceService {
             return userIds.contains(user.getId());
         });
         return userList;
+    }
+
+    @Override
+    public List<UserSpaceDto> getListAllBySpaceId(Integer spaceId) {
+        return userSpaceMapper.selectListBySpaceId(spaceId);
+    }
+
+    @Override
+    public int removedById(Integer id) {
+        return userSpaceMapper.deleteById(id);
     }
 }

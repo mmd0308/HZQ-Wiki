@@ -1,6 +1,6 @@
 package com.hzqing.admin.service.space;
 
-import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
 
@@ -25,8 +25,9 @@ public interface IUserSpaceService {
     /**
      * 创建
      * @param userSpace
+     * @return
      */
-    void create(UserSpace userSpace);
+    int create(UserSpace userSpace);
 
     /**
      * 获取该空间下面不存在的所有用户
@@ -35,4 +36,17 @@ public interface IUserSpaceService {
      */
     List<User> getUserAllBySpaceId(Integer spaceId);
 
+    /**
+     * 根据空间id，获取所有的数据
+     * @param spaceId
+     * @return
+     */
+    List<UserSpaceDto> getListAllBySpaceId(Integer spaceId);
+
+    /**
+     * 根据id，删除数据
+     * @param id
+     * @return
+     */
+    int removedById(Integer id);
 }

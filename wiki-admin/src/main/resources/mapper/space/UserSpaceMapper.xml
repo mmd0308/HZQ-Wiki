@@ -5,5 +5,34 @@
 <mapper namespace="com.hzqing.admin.mapper.space.UserSpaceMapper">
 
 
+    <resultMap id="baseResultDto" type="userSpaceDto">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="space_id" property="spaceId" />
+        <result column="privilege" property="privilege"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime"/>
+
+        <!--    用户名称    -->
+        <result column="fullName" property="fullName" />
+
+    </resultMap>
+
+
+    <select id="selectListBySpaceId" parameterType="int" resultMap="baseResultDto">
+        select
+            us.id,
+            us.user_id,
+            us.space_id,
+            us.privilege,
+            us.create_by,
+            us.create_time,
+            us.expire_time,
+            u.name as 'fullName'
+        from hw_user_space us
+            left join hw_user u on us.user_id = u.id
+        where us.space_id = #{spaceId}
+    </select>
 
 </mapper>

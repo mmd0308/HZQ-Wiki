@@ -6,7 +6,8 @@ import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.converter.system.UserConverter;
-import com.hzqing.admin.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.dto.space.UserSpaceDto;
+import com.hzqing.admin.model.entity.doc.Doc;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
 import com.hzqing.admin.model.vo.system.UserMinimalVO;
@@ -41,21 +42,22 @@ public class UserSpaceController extends BaseController {
     public ResponseMessage showPage(@PathVariable int spaceId, int pageNum, int pageSize, UserSpace userSpace){
         startPage(pageNum,pageSize);
         userSpace.setSpaceId(spaceId);
-        List<UserSpaceDto> spaces = userSpaceService.selectList(userSpace);
-        return responseMessage(spaces);
+        //List<UserSpaceDto> spaces = userSpaceService.selectList(userSpace);
+        return responseMessage(null);
     }
 
-    /**
-     * 获取该空间的所有人员
-     * @param spaceId
-     * @param userSpace
-     * @return
-     */
+    @ApiOperation("获取该空间的所有人员")
     @GetMapping("/all/{spaceId}")
-    public ResponseMessage all(@PathVariable int spaceId, UserSpace userSpace){
-        userSpace.setSpaceId(spaceId);
-        List<UserSpaceDto> spaces = userSpaceService.selectList(userSpace);
-        return responseMessage(spaces);
+    public RestResult<List<UserSpaceDto>> all(@PathVariable Integer spaceId){
+        RestResult<List<UserSpaceDto>> result = RestResultFactory.getInstance().success();
+        try{
+            List<UserSpaceDto> spaces = userSpaceService.getListAllBySpaceId(spaceId);
+            result.setData(spaces);
+        }catch (Exception e) {
+            log.error("UserSpaceController.all occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 
     @ApiOperation("该空间不存的所有用户")
@@ -74,6 +76,21 @@ public class UserSpaceController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "创建用户和空间关系")
+    @PostMapping
+    public RestResult<Integer> create(@RequestBody UserSpace userSpace){
+
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int id = userSpaceService.create(userSpace);
+            result.setData(id);
+        } catch (Exception e) {
+            log.error("UserSpaceController.create occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
+
     @PostMapping("/addOrUpdate")
     public ResponseMessage addOrUpdate(@RequestBody UserSpace userSpace){
         int res = -1;
@@ -87,15 +104,18 @@ public class UserSpaceController extends BaseController {
     }
 
 
-    /**
-     * 根据id删除
-     * @param id
-     * @return
-     */
-    @DeleteMapping("deleted/{id}")
-    public ResponseMessage deleted(@PathVariable String id) {
-        int res = userSpaceService.deletedById(id);
-        return responseMessage(res);
+    @ApiOperation(value = "根据id，删除")
+    @DeleteMapping("/{id}")
+    public RestResult<Integer> removedById(@PathVariable Integer id) {
+        RestResult<Integer> result = RestResultFactory.getInstance().success();
+        try {
+            int res = userSpaceService.removedById(id);
+            result.setData(res);
+        }catch (Exception e){
+            log.error("UserSpaceController.removedById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 
 
