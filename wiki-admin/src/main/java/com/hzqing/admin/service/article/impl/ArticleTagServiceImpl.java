@@ -40,4 +40,9 @@ public class ArticleTagServiceImpl implements IArticleTagService {
         articleTag.setTagId(id);
         articleTagMapper.delete(new QueryWrapper<>(articleTag));
     }
+
+    @Override
+    public List<ArticleTag> getListAll(ArticleTag articleTag) {
+        return articleTagMapper.selectList(new QueryWrapper<>(articleTag));
+    }
 }

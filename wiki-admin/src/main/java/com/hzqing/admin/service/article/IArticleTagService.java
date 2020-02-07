@@ -28,4 +28,12 @@ public interface IArticleTagService {
      * @param id
      */
     void removeByTagId(int id);
+
+    /**
+     * 根据条件，获取所有的数据
+     * @param articleTag
+     * @return
+     */
+    List<ArticleTag> getListAll(ArticleTag articleTag);
+
 }

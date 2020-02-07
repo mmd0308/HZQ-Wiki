@@ -84,7 +84,9 @@ import { getById, create, updateById } from '@/api/index'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 import { showAll } from '@/api/article/tag'
+import { getListAll } from '@/api/article/ArticleTag'
 import { imageUploadUrl } from '@/api/system/ImageConstants'
+import ArticleListsVue from '../../show/components/ArticleLists.vue'
 export default {
   data() {
     return {
@@ -182,6 +184,8 @@ export default {
         this.articleRelease.id = this.articleForm.id
         // 获取所有的标签
         this.showTagsAll()
+        // 获取该文章已经拥有的标签
+        this.getHaveTagListAll(this.articleForm.id)
       }
     },
     // 发布文章
@@ -190,6 +194,11 @@ export default {
       release(this.articleRelease).then(() => {
         // 跳转到阅读页面
         this.$router.push({ path: '/read/article/' + this.articleRelease.id })
+      })
+    },
+    getHaveTagListAll(articleId) {
+      getListAll(articleId).then(res => {
+        this.articleRelease.tagIds = res
       })
     },
     create() {
