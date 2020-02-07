@@ -25,6 +25,7 @@ import java.util.List;
 public class TagServiceImpl implements ITagService {
 
     @Autowired
+    @SuppressWarnings("all")
     private TagMapper tagMapper;
 
     @Autowired

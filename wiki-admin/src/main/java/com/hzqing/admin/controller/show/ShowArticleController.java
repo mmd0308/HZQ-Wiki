@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.constants.RestResultCodeConstants;
+import com.hzqing.admin.common.exception.BaseException;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
@@ -77,13 +78,22 @@ public class ShowArticleController {
         try{
             ArticleDto article = articleService.getDtoById(id);
 
-            // 判断该文章是否已经发布,如果没有发布，不能查看其他人的私有文档
+            // 判断该文章是否已经发布,如果没有发布，不能查看
             if (!article.getHwState().equals(ArticleState.RELEASE) && !UserAuthUtils.isLogin(request)){
                 throw new UnauthorizedException(
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getCode(),
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getMsg()
                 );
             }
+            // 登陆，获取的文章不是发布的
+            if (UserAuthUtils.isLogin(request) && !article.getHwState().equals(ArticleState.RELEASE)){
+                // 查看该文档是否是该用户
+                if (!UserAuthUtils.getUserId().equals(article.getUserId())){
+                    throw new BaseException(RestResultCodeConstants.ARTICLE_UNAUTHORIZED.getCode(),
+                            RestResultCodeConstants.ARTICLE_UNAUTHORIZED.getMsg());
+                }
+            }
+
             ArticleDetailVO articleDetailVO = articleConverter.DtoToDetailVO(article);
 
             result.setData(articleDetailVO);

@@ -2,6 +2,8 @@ package com.hzqing.admin.controller.article;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.constants.RestResultCodeConstants;
+import com.hzqing.admin.common.exception.BaseException;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
@@ -19,6 +21,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -37,6 +40,25 @@ public class ArticleContoller extends BaseController {
 
     @Autowired
     private ArticleConverter articleConverter;
+
+    @ApiOperation(value = "根据文章id，获取文章.只能获取当前用户自己的")
+    @GetMapping("/{id}")
+    public RestResult<Article> getById(@PathVariable Integer id){
+        RestResult result = RestResultFactory.getInstance().success();
+        try {
+            Article article = articleService.getById(id);
+            // 该文章不是当前用户自己的，不能获取修改
+            if (!UserAuthUtils.getUserId().equals(article.getUserId())){
+                throw new BaseException(RestResultCodeConstants.ARTICLE_UNAUTHORIZED.getCode(),
+                        RestResultCodeConstants.ARTICLE_UNAUTHORIZED.getMsg());
+            }
+            result.setData(article);
+        }catch (Exception e){
+            log.error("ArticleContoller.getById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
 
 
     @ApiOperation(value = "获取该博客分页查询，如果是已经登陆的，获取该用户的所有博客，如果是admin，获取所有用户的已发布博客")

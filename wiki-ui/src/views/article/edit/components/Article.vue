@@ -10,20 +10,20 @@
           {{ saveState }}
         </li>
         <li>
-          <router-link to="/set/article">
-            <el-button>草稿</el-button>
+          <router-link to="/admin/article">
+            <el-button size="small">草稿</el-button>
           </router-link>
         </li>
         <li>
-          <el-button type="primary" @click="preRelease">发布</el-button>
+          <el-button size="small" type="primary" @click="preRelease">发布</el-button>
         </li>
       </ul>
     </div>
     <mavon-editor
       ref="mavonEditor"
       :scroll-style="true"
-      :code-style="code_style"
       v-model="articleForm.content"
+      code-style="dark"
       class="hzq-wiki-height"
       @change="contentChange"
       @imgAdd="imgAdd"
@@ -31,18 +31,13 @@
 
     <el-drawer
       :visible.sync="drawer"
+      :with-header="false"
       size="25%"
-      direction="rtl"
-      class="hzq-drawer"
-      title="文章设置">
-      <div class="article-drawer__content">
+      class="hzq-drawer">
+      <h4 class="header">文章发布</h4>
+      <el-divider/>
+      <div class="content">
         <el-form :model="articleRelease">
-          <!-- <el-divider content-position="left">基本设置</el-divider>
-
-          <el-form-item label-width="80px" label="设计中...">
-            <el-input v-model="name" autocomplete="off"/>
-          </el-form-item> -->
-
           <el-divider content-position="left">标签</el-divider>
           <!-- 暂时禁止创建标签 TODO -->
           <el-select
@@ -99,7 +94,6 @@ export default {
       articleForm: this.init(),
       timeOut: null,
       title: '',
-      code_style: 'dark',
       tagLists: [], // 所有的标签,
       articleRelease: {
         hwDesc: '',
@@ -278,18 +272,6 @@ export default {
     li + li {
       margin-left: 10px;
     }
-  }
-  .article-drawer__content{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .article-drawer__content form {
-    flex: 1;
-    margin: 0 20px;
-  }
-  .article-drawer__footer {
-    display: flex;
   }
 }
 </style>
