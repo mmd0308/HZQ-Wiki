@@ -1,19 +1,13 @@
 <template>
   <div class="hzq-admin">
     <div class="headerForm">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" :model="listQuery" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="formInline.user" size="small" placeholder="审批人"/>
-        </el-form-item>
-        <el-form-item label="文章状态">
-          <el-select v-model="formInline.region" size="small" placeholder="活动区域">
-            <el-option label="区域一" value="shanghai"/>
-            <el-option label="区域二" value="beijing"/>
-          </el-select>
+          <el-input v-model="listQuery.name" size="small" placeholder="请输入空间名称关键字"/>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" size="small" >查询</el-button>
-          <el-button type="info" size="small" >重置</el-button>
+          <el-button type="primary" size="small" @click="handleQuery">查询</el-button>
+          <el-button type="info" size="small" @click="handleReset" >重置</el-button>
           <el-button type="success" size="small" @click="handleToCreate">新增</el-button>
         </el-form-item>
       </el-form>
@@ -164,16 +158,13 @@ export default {
     return {
       moudle: 'spaces',
       spaceId: null,
-      formInline: {
-        user: '',
-        region: ''
-      },
       tableLists: [],
       tableLoading: false,
       total: 0,
       listQuery: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        name: null
       },
       spaceVisitLevel: spaceVisitLevel,
       userSpacePrivilege: userSpacePrivilege,
@@ -230,6 +221,12 @@ export default {
       deleteById(this.moudle, id).then(() => {
         this.getPage()
       })
+    },
+    handleQuery() {
+      this.getPage()
+    },
+    handleReset() {
+      this.listQuery.name = null
     },
     getPage() {
       this.tableLoading = true

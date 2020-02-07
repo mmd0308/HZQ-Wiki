@@ -33,22 +33,6 @@ public class SpaceController extends BaseController {
     @Autowired
     private ISpaceService spaceService;
 
-    /**
-     * 获取制定用户的空间
-     * @param userId
-     * @param pageNum
-     * @param pageSize
-     * @param space
-     * @return
-     */
-    @GetMapping("/page/{userId}")
-    public ResponseMessage getPageByUserId(@PathVariable int userId, int pageNum, int pageSize, Space space){
-        startPage(pageNum,pageSize);
-        space.setCreateBy(userId);
-        //List<SpaceDto> spaces = spaceService.selectListByUserId(space);
-        return responseMessage(null);
-    }
-
 
     @ApiOperation(value = "空间分页分页数据")
     @ApiImplicitParams({
