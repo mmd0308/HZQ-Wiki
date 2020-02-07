@@ -12,7 +12,7 @@ public class Constant {
     /**
      * 超级管理员账号
      */
-    public static String ADMIN_USER_NAME = "admin";
+    public static final String ADMIN_USER_NAME = "admin";
 
 
 

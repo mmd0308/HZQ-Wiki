@@ -29,9 +29,8 @@
             icon="el-icon-info"
             icon-color="red"
             title="您确定删除该条数据吗？"
-            @onConfirm="handleRemoveById(scope.row.id)"
-          >
-            <el-button slot="reference" type="text" size="small" >删除</el-button>
+            @onConfirm="handleRemoveById(scope.row.id)" >
+            <el-button slot="reference" style="color: red;" type="text" size="small" >删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>

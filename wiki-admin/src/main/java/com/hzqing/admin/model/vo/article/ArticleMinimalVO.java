@@ -1,5 +1,6 @@
 package com.hzqing.admin.model.vo.article;
 
+import com.hzqing.admin.model.enums.article.ArticleState;
 import com.hzqing.admin.model.enums.article.ArticleUp;
 import lombok.Data;
 import lombok.ToString;
@@ -21,6 +22,8 @@ public class ArticleMinimalVO implements Serializable {
     private String title;
 
     private String hwDesc;
+
+    private ArticleState hwState;
 
     private ArticleUp hwUp;
 

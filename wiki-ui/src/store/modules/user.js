@@ -64,7 +64,7 @@ const user = {
           resolve(data)
         }).catch(error => {
           // reject('获取用户信息失败!' + error)
-          reject('获取用户信息失败!' + error)
+          console.log('获取用户信息失败!' + error)
         })
       })
     },

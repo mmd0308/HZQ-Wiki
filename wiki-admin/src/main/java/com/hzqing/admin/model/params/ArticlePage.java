@@ -8,4 +8,6 @@ import lombok.Data;
  */
 @Data
 public class ArticlePage {
+
+    private String title;
 }

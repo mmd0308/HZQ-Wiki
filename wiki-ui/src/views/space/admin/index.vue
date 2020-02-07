@@ -87,7 +87,7 @@
             title="您确定删除该条数据吗？"
             @onConfirm="handleRemoveById(scope.row.id)"
           >
-            <el-button v-if="scope.row.userSpacePrivilege === 'OWNER'" slot="reference" type="text" size="small" >删除</el-button>
+            <el-button v-if="scope.row.userSpacePrivilege === 'OWNER'" slot="reference" style="color: red;" type="text" size="small" >删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>

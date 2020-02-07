@@ -5,11 +5,13 @@ import com.hzqing.admin.common.ResponseMessage;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.converter.article.ArticleConverter;
 import com.hzqing.admin.model.entity.article.Article;
 import com.hzqing.admin.model.params.ArticlePage;
 import com.hzqing.admin.model.params.ArticleRelease;
+import com.hzqing.admin.model.vo.article.ArticleMinimalVO;
 import com.hzqing.admin.service.article.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,13 +38,6 @@ public class ArticleContoller extends BaseController {
     @Autowired
     private ArticleConverter articleConverter;
 
-    @ApiOperation(value = "根据文章id，获取文章。如果是当前用户，直接返回，如果是admin，只能返回已经发布的文章。----存在bug")
-    @GetMapping("/{id}")
-    public ResponseMessage getById(@PathVariable int id){
-        Article article = articleService.getById(id);
-        return responseMessage(article);
-    }
-
 
     @ApiOperation(value = "获取该博客分页查询，如果是已经登陆的，获取该用户的所有博客，如果是admin，获取所有用户的已发布博客")
     @ApiImplicitParams({
@@ -50,13 +45,19 @@ public class ArticleContoller extends BaseController {
             @ApiImplicitParam(name = "size", value = "每页展示数量", required = true, paramType = "path", dataType = "int"),
     })
     @GetMapping("/page/{num}/{size}")
-    public  RestResult<Page<Article>> getPage(@PathVariable int num, @PathVariable int size, ArticlePage articlePage){
+    public  RestResult<Page<ArticleMinimalVO>> getPage(@PathVariable int num, @PathVariable int size, ArticlePage articlePage){
         // 默认返回值
-        RestResult<Page<Article>> result = RestResultFactory.getInstance().success();
+        RestResult<Page<ArticleMinimalVO>> result = RestResultFactory.getInstance().success();
         try {
             Article article = new Article();
+            // 如果不是admin ，超级管理员，我们获取当前登陆用户的文章
+            if (!UserAuthUtils.isAdmin()){
+                article.setUserId(UserAuthUtils.getUserId());
+            }
+            article.setTitle(articlePage.getTitle());
             Page<Article> articlePages = articleService.getPage(num,size,article);
-            result.setData(articlePages);
+            Page<ArticleMinimalVO> res = articleConverter.pageArticleToPageArticleMinimalVo(articlePages);
+            result.setData(res);
         }catch (Exception e){
             log.error("ArticleContoller.page occur Exception: ", e);
             ExceptionProcessUtils.wrapperHandlerException(result,e);
@@ -110,9 +111,16 @@ public class ArticleContoller extends BaseController {
 
     @ApiOperation(value = "根据id，删除博客")
     @DeleteMapping("/{id}")
-    public ResponseMessage removedById(@PathVariable int id) {
-        //int res = articleService.removedById(id);
-        return responseMessage(0);
+    public RestResult removedById(@PathVariable int id) {
+        RestResult result = RestResultFactory.getInstance().success();
+        try{
+            int res = articleService.removedById(id);
+            result.setData(res);
+        }catch (Exception e){
+            log.error("ArticleContoller.removedById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
     }
 
 }

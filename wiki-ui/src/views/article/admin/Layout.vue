@@ -11,7 +11,7 @@
 
     <el-tab-pane :name="paramsConstants['tag'].name">
       <span slot="label">
-        <i class="el-icon-collection="/>
+        <i class="el-icon-edit-outline"/>
         标签管理
       </span>
       <tag-admin :ref="paramsConstants['tag'].ref"/>

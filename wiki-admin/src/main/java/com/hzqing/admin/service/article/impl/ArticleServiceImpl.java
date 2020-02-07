@@ -61,7 +61,13 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public Page<Article> getPage(int num, int size, Article article) {
-        return (Page<Article>) articleMapper.selectPage(new Page<>(num,size),new QueryWrapper<>(article));
+        Article query = new Article();
+        query.setUserId(article.getUserId());
+        final QueryWrapper<Article> queryWrapper = new QueryWrapper<>(query);
+        if (StringUtils.isNotEmpty(article.getTitle())){
+            queryWrapper.like("title",article.getTitle());
+        }
+        return (Page<Article>) articleMapper.selectPage(new Page<>(num,size),queryWrapper);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
+import com.hzqing.admin.common.utils.UserAuthUtils;
 import com.hzqing.admin.converter.article.ArticleConverter;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 不需要登陆获取到的文章数据
@@ -69,12 +72,13 @@ public class ShowArticleController {
 
     @ApiOperation(value = "根据文章id，获取文章")
     @GetMapping("/{id}")
-    public RestResult<ArticleDetailVO> getById(@PathVariable int id){
+    public RestResult<ArticleDetailVO> getById(@PathVariable int id, HttpServletRequest request){
         RestResult<ArticleDetailVO> result = RestResultFactory.getInstance().success();
         try{
             ArticleDto article = articleService.getDtoById(id);
-            // 判断该文章是否已经发布,如果没有发布，不能查看
-            if (!article.getHwState().equals(ArticleState.RELEASE)){
+
+            // 判断该文章是否已经发布,如果没有发布，不能查看其他人的私有文档
+            if (!article.getHwState().equals(ArticleState.RELEASE) && !UserAuthUtils.isLogin(request)){
                 throw new UnauthorizedException(
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getCode(),
                         RestResultCodeConstants.ARTICLE_NO_RELEASE.getMsg()

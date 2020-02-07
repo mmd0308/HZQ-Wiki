@@ -1,5 +1,6 @@
 package com.hzqing.admin.common.utils;
 
+import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.constants.ConstantSecurity;
 import com.hzqing.admin.common.constants.RestResultCodeConstants;
 import com.hzqing.admin.common.exception.BaseException;
@@ -24,6 +25,19 @@ public class UserAuthUtils {
      */
     public static UserInfo getUserInfo(){
         return  (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    /**
+     * 当前登陆账号是否是admin
+     * true 是
+     * false 否
+     * @return
+     */
+    public static Boolean isAdmin(){
+        if (getUserInfo().getUsername().equals(Constant.ADMIN_USER_NAME)){
+            return true;
+        }
+        return false;
     }
 
     /**
