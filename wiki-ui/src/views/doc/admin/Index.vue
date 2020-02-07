@@ -1,19 +1,13 @@
 <template>
   <div class="hzq-admin">
     <div class="headerForm">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" :model="listQuery" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="formInline.user" size="small" placeholder="审批人"/>
-        </el-form-item>
-        <el-form-item label="文章状态">
-          <el-select v-model="formInline.region" size="small" placeholder="活动区域">
-            <el-option label="区域一" value="shanghai"/>
-            <el-option label="区域二" value="beijing"/>
-          </el-select>
+          <el-input v-model="listQuery.name" size="small" placeholder="请输入文档名称关键字"/>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" size="small" >查询</el-button>
-          <el-button type="info" size="small" >重置</el-button>
+          <el-button type="primary" size="small" @click="handleQuery" >查询</el-button>
+          <el-button type="info" size="small" @click="handleReset" >重置</el-button>
           <el-button type="success" size="small" @click="handleToCreate">新增</el-button>
         </el-form-item>
       </el-form>
@@ -75,10 +69,15 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="100">
+        width="170">
         <template slot-scope="scope">
+          <router-link :to="{ path:'/read/doc/' + scope.row.id }">
+            <el-button type="text" size="small">查看</el-button>
+          </router-link>
+          <el-button v-if="scope.row.userDocPrivilege === 'OWNER' || scope.row.userDocPrivilege === 'ADMINISTRATOR'" style="margin-left: 10px;" type="text" size="small" @click="handleMemberClick(scope.row)">成员</el-button>
           <el-button v-if="scope.row.userDocPrivilege === 'OWNER' || scope.row.userDocPrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-popconfirm
+            style="margin-left: 10px;"
             confirm-button-text="删除"
             confirm-button-type="danger"
             cancel-button-text="不用了"
@@ -88,7 +87,7 @@
             title="您确定删除该条数据吗？"
             @onConfirm="handleRemoveById(scope.row.id)"
           >
-            <el-button v-if="scope.row.userDocPrivilege === 'OWNER'" slot="reference" type="text" size="small" >删除</el-button>
+            <el-button v-if="scope.row.userDocPrivilege === 'OWNER'" slot="reference" style="color: red;" type="text" size="small" >删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -154,7 +153,8 @@ export default {
       total: 0,
       listQuery: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        name: null
       },
       docVisitLevel: docVisitLevel,
       userDocPrivilege: userDocPrivilege,
@@ -179,6 +179,14 @@ export default {
       this.drawer = true
       this.drawerState = 'CREATE'
     },
+    handleMemberClick(row) {
+      alert('.')
+      // this.drawerMember = true
+      // this.spaceId = row.id
+      // if (this.$refs['member'] != null) { // 表示第一次加载成员组件
+      //   this.$refs['member'].initPage(row.id)
+      // }
+    },
     handleEditClick(row) {
       this.drawer = true
       this.drawerState = 'UPDATE'
@@ -202,6 +210,12 @@ export default {
       deleteById(this.moudle, id).then(() => {
         this.getPage()
       })
+    },
+    handleQuery() {
+      this.getPage()
+    },
+    handleReset() {
+      this.listQuery.name = null
     },
     getPage() {
       this.tableLoading = true

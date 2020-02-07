@@ -71,7 +71,7 @@
           <el-button v-if="scope.row.userSpacePrivilege === 'OWNER' || scope.row.userSpacePrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleMemberClick(scope.row)">成员</el-button>
           <el-button v-if="scope.row.userSpacePrivilege === 'OWNER' || scope.row.userSpacePrivilege === 'ADMINISTRATOR'" type="text" size="small" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-popconfirm
-            style="margin-left:10px"
+            style="margin-left: 10px;"
             confirm-button-text="删除"
             confirm-button-type="danger"
             cancel-button-text="不用了"

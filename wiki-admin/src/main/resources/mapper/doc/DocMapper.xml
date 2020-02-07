@@ -51,8 +51,12 @@
         from hw_doc d
             left join hw_user u on d.create_by = u.id
             left join hw_user_doc ud on ud.doc_Id = d.id
-        where
+        <where>
             ud.user_id = #{docDto.userId}
+            <if test="docDto.name != null and docDto.name != ''">
+                and d.name like '%${docDto.name}%'
+            </if>
+        </where>
     </select>
 
 

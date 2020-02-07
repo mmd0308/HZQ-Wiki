@@ -1,8 +1,5 @@
 package com.hzqing.admin.model.dto.doc;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.hzqing.admin.model.enums.doc.DocVisitLevel;
 import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
 import lombok.Data;
