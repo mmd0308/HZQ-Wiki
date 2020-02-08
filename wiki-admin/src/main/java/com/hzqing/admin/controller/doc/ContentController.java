@@ -58,7 +58,20 @@ public class ContentController extends BaseController {
     }
 
 
+    @ApiOperation(value = "根据id获取指定文章")
+    @GetMapping("/{id}")
+    public RestResult<Content> getById(@PathVariable int id){
+        RestResult<Content> result = RestResultFactory.getInstance().success();
+        try{
 
+            Content content = contentService.getById(id);
+            result.setData(content);
+        }catch (Exception e){
+            log.error("ContentController.getById occur Exception: ", e);
+            ExceptionProcessUtils.wrapperHandlerException(result,e);
+        }
+        return result;
+    }
 
 
 

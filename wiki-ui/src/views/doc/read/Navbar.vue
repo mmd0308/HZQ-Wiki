@@ -4,13 +4,13 @@
       {{ docForm.name }}
     </h3>
     <div style="float: right;">
-      <h3 style="color:#fff;margin:0px 20px; float:left">
-        {{ saveStatus }}
-      </h3>
       <el-button size="small" type="primary">
         <router-link to="/doc">
           首页
         </router-link>
+      </el-button>
+      <el-button v-if="editPrivilege()" size="small" type="success" @click="toEdit">
+        编辑
       </el-button>
     </div>
   </div>
@@ -19,22 +19,21 @@
 import { getPrivilegeByUserIdAndDocId } from '@/api/doc/userDOc'
 import { getById } from '@/api/index'
 import { mapGetters } from 'vuex'
+import { isLogin } from '@/utils/authUtils'
 import { userDocPrivilege } from '@/api/Constants'
-import bus from '@/assets/js/eventbus'
 export default {
   data() {
     return {
       moudle: 'show/docs',
-      docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       docId: this.$route.params.id,
       userDocPrivilege: userDocPrivilege,
       isEditDoc: false,
+      docPrivilege: '',
       paramsPrivilege: {
         userId: '',
         spaceId: this.$route.params.spaceId,
         docId: this.docId
       },
-      saveStatus: '',
       docForm: {
         name: ''
       }
@@ -47,13 +46,10 @@ export default {
   },
   created() {
     this.get()
-    this.getPrivilege()
-  },
-  mounted() {
-    var that = this
-    bus.$on('editDocSaveState', function(val) {
-      that.saveStatus = val
-    })
+    if (isLogin()) {
+      // 如果登陆了,获取该用户对此文档的操作权限
+      this.getPrivilege()
+    }
   },
   methods: {
     get() {
@@ -73,6 +69,12 @@ export default {
       getPrivilegeByUserIdAndDocId(this.docId).then(res => {
         this.isEditDoc = res
       })
+    },
+    editPrivilege() {
+      if (isLogin() && this.isEditDoc) { // 该拥有编辑此文档的权限
+        return true
+      }
+      return false
     }
   }
 }

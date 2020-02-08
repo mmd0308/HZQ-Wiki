@@ -12,7 +12,6 @@ import com.hzqing.admin.model.dto.space.UserSpaceDto;
 import com.hzqing.admin.model.entity.doc.UserDoc;
 import com.hzqing.admin.model.entity.space.UserSpace;
 import com.hzqing.admin.model.entity.system.User;
-import com.hzqing.admin.model.enums.doc.UserDocPrivilege;
 import com.hzqing.admin.model.enums.space.UserSpacePrivilege;
 import com.hzqing.admin.service.doc.IUserDocService;
 import com.hzqing.admin.service.space.IUserSpaceService;

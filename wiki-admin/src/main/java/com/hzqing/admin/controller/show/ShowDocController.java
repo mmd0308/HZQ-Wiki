@@ -3,6 +3,7 @@ package com.hzqing.admin.controller.show;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.constants.Constant;
 import com.hzqing.admin.common.constants.RestResultCodeConstants;
+import com.hzqing.admin.common.exception.BaseException;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
 import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
@@ -20,6 +21,7 @@ import com.hzqing.admin.model.params.doc.DocShowPage;
 import com.hzqing.admin.model.vo.article.ArticleDetailVO;
 import com.hzqing.admin.service.article.IArticleService;
 import com.hzqing.admin.service.doc.IDocService;
+import com.hzqing.admin.service.doc.IUserDocService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -46,6 +48,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ShowDocController {
     @Autowired
     private IDocService docService;
+
+    @Autowired
+    private IUserDocService userDocService;
 
     @ApiOperation(value = "公开展示的文档信息")
     @ApiImplicitParams({
@@ -77,19 +82,24 @@ public class ShowDocController {
 
     @ApiOperation(value = "根据id获取文档")
     @GetMapping("/{id}")
-    public RestResult<Doc> getById(@PathVariable int id){
+    public RestResult<Doc> getById(@PathVariable int id,HttpServletRequest request){
         RestResult<Doc> result = RestResultFactory.getInstance().success();
         try{
-
             Doc doc = docService.getById(id);
-
-            // 判断该文章是否已经发布,如果没有发布，不能查看
-            if (!doc.getVisitLevel().equals(DocVisitLevel.PUBLIC)){
+            // 判断该文章是否已经发布,如果没有发布并且用户没有登陆，不能查看
+            if (!doc.getVisitLevel().equals(DocVisitLevel.PUBLIC) && !UserAuthUtils.isLogin(request)){
                 throw new UnauthorizedException(
                         RestResultCodeConstants.DOC_NO_PUBLIC.getCode(),
                         RestResultCodeConstants.DOC_NO_PUBLIC.getMsg()
                 );
             }
+            // 登陆，获取的文档是私有的
+            if (UserAuthUtils.isLogin(request) && doc.getVisitLevel().equals(DocVisitLevel.PRIVATE)){
+                // 查看该用户是否有访问该文档的权限 TODO
+
+            }
+
+
             result.setData(doc);
         }catch (Exception e){
             log.error("ShowDocController.getById occur Exception: ", e);

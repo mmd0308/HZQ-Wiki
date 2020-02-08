@@ -2,7 +2,9 @@ package com.hzqing.admin.controller.doc;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.ResponseMessage;
+import com.hzqing.admin.common.constants.RestResultCodeConstants;
 import com.hzqing.admin.common.exception.ExceptionProcessUtils;
+import com.hzqing.admin.common.exception.support.UnauthorizedException;
 import com.hzqing.admin.common.result.RestResult;
 import com.hzqing.admin.common.result.RestResultFactory;
 import com.hzqing.admin.common.utils.UserAuthUtils;
@@ -10,6 +12,7 @@ import com.hzqing.admin.controller.base.BaseController;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
+import com.hzqing.admin.model.enums.doc.DocVisitLevel;
 import com.hzqing.admin.service.doc.IDocService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -68,17 +71,6 @@ public class DocContoller extends BaseController {
 //        return result;
 //    }
 
-
-    /**
-     * 根据id获取对象
-     * @param id
-     * @return
-     */
-    @GetMapping("/get/{id}")
-    public ResponseMessage get(@PathVariable int id){
-        DocDto docDto = docService.get(id);
-        return responseMessage(docDto);
-    }
 
     /**
      *  文档首页展示

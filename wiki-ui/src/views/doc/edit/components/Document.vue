@@ -1,21 +1,10 @@
 <template>
   <div class="doc-edit hzq-wiki-height">
     <mavon-editor
-      v-if="docStatus == 'R'"
-      v-model="contentForm.content"
-      :subfield="false"
-      :scroll-style="true"
-      :code-style="code_style"
-      :toolbars-flag="false"
-      class="hzq-wiki-height"
-      default-open="preview" />
-
-    <mavon-editor
-      v-else
       ref="mavonEditor"
       :scroll-style="true"
-      :code-style="code_style"
       v-model="contentForm.content"
+      code-style="dark"
       class="hzq-wiki-height"
       @imgAdd="imgAdd"
       @change="contentChange"
@@ -32,11 +21,9 @@ export default {
   data() {
     return {
       moudle: 'contents',
-      docStatus: this.$route.path.startsWith('/write') ? 'E' : 'R',
       contentForm: this.init(),
       timeOut: null,
-      saveState: '已保存',
-      code_style: 'dark'
+      saveState: '已保存'
     }
   },
   watch: {
@@ -63,7 +50,7 @@ export default {
       }
     },
     get(id) {
-      getById('show/' + this.moudle, id).then(res => {
+      getById(this.moudle, id).then(res => {
         this.contentForm = res
       })
     },
