@@ -1,5 +1,6 @@
 package com.hzqing.admin.service.space.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.common.utils.UserAuthUtils;
@@ -81,5 +82,10 @@ public class SpaceServiceImpl implements ISpaceService {
     @Override
     public int removedById(int id) {
         return spaceMapper.deleteById(id);
+    }
+
+    @Override
+    public List<Space> getListAll() {
+        return spaceMapper.selectList(new QueryWrapper<>(null));
     }
 }

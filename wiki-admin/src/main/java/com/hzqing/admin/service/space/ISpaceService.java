@@ -51,4 +51,12 @@ public interface ISpaceService {
      * @return 影响的行数
      */
     int removedById(int id);
+
+    /**
+     * 获取所有的文档
+     * @return
+     */
+    List<Space> getListAll();
+
+
 }

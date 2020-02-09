@@ -49,4 +49,11 @@ public interface IUserSpaceService {
      * @return
      */
     int removedById(Integer id);
+
+    /**
+     * 根据条件，获取所有的数据
+     * @param userSpace
+     * @return
+     */
+    List<UserSpace> getListAll(UserSpace userSpace);
 }

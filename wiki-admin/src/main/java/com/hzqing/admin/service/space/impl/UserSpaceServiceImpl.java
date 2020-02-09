@@ -88,4 +88,9 @@ public class UserSpaceServiceImpl implements IUserSpaceService {
     public int removedById(Integer id) {
         return userSpaceMapper.deleteById(id);
     }
+
+    @Override
+    public List<UserSpace> getListAll(UserSpace userSpace) {
+        return userSpaceMapper.selectList(new QueryWrapper<>(userSpace));
+    }
 }
