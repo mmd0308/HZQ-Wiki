@@ -1,16 +1,18 @@
 <template>
   <div class="index-container">
-    <h1>代码在疯狂的更新中...</h1>
+    <carousel />
     <doc-index/>
     <article-index/>
   </div>
 </template>
 <script>
+import Carousel from './components/Carousel'
 import DocIndex from './components/DocIndex'
 import ArticleIndex from './components/ArticleIndex'
 export default {
   name: 'Index',
   components: {
+    Carousel,
     DocIndex,
     ArticleIndex
   }
