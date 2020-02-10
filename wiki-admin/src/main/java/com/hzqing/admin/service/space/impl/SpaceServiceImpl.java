@@ -37,7 +37,8 @@ public class SpaceServiceImpl implements ISpaceService {
 
     @Override
     public List<SpaceDto> selectList(Space space) {
-        return spaceMapper.selectList(space);
+     //   return spaceMapper.selectList(space);
+        return null;
     }
 
 

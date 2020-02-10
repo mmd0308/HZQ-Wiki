@@ -13,11 +13,11 @@ public enum SpaceVisitLevel implements IEnum<Integer> {
 
     PUBLIC(2,"公开空间");
 
-    private int value;
+    private Integer value;
 
     private String desc;
 
-    SpaceVisitLevel(int value, String desc) {
+    SpaceVisitLevel(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }

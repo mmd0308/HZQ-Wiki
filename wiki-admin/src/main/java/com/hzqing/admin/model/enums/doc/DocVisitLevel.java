@@ -13,7 +13,7 @@ public enum DocVisitLevel implements IEnum<Integer> {
 
     PUBLIC(2,"公开文档");
 
-    private int value;
+    private Integer value;
 
     private String desc;
 

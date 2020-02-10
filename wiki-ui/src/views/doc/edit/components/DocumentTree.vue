@@ -45,7 +45,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="contentDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button v-if="contentFormStatus === 'add'" type="primary" @click="add">确 定</el-button>
+        <el-button v-else type="primary" @click="update">更 新</el-button>
       </div>
     </el-dialog>
 
@@ -54,7 +55,7 @@
 
 <script>
 import { getShowAllByDocId, deletedById } from '@/api/doc/content'
-import { create } from '@/api/index'
+import { create, updateById } from '@/api/index'
 import $ from 'jquery'
 import bus from '@/assets/js/eventbus'
 export default {
@@ -212,6 +213,14 @@ export default {
       this.contentDialogFormVisible = true
       this.contentFormStatus = 'edit'
       this.cancelRMenu()
+      this.contentTitle = '编辑文档'
+    },
+    update() {
+      updateById(this.moudle, this.contentForm).then(() => {
+        this.contentDialogFormVisible = false
+        // 创建完成之后选中
+        this.tree(this.contentForm.id)
+      })
     },
     onClickMethod(event, treeId, treeNode) {
       // 只有是父亲级别节点进行展开

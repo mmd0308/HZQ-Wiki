@@ -18,7 +18,7 @@ public enum UserSpacePrivilege implements IEnum<Integer> {
     ADMINISTRATOR(4,"管理员");
 
 
-    private int value;
+    private Integer value;
 
     private String desc;
 

@@ -2,7 +2,7 @@
   <div class="doc">
     <div style="margin-bottom: 15px;">
       <el-button type="info" size="mini" plain @click="clickTag(null)">全部</el-button>
-      <div v-for="(item,index) in tagsLists" :key="index" style="display: inline;">
+      <div v-for="(item,index) in spaceLists" :key="index" style="display: inline;">
         <el-divider direction="vertical"/>
         <el-button type="info" size="mini" plain @click="clickTag(item.id)">
           {{ item.name }}
@@ -71,7 +71,7 @@
 <script>
 import { showPage } from '@/api/doc/index'
 import { mapGetters } from 'vuex'
-import { showAll } from '@/api/article/tag'
+import { showAll } from '@/api/space/index'
 import { docVisitLevel } from '@/api/doc/DocConstants'
 import { create } from '@/api/index'
 import $ from 'jquery'
@@ -80,8 +80,10 @@ export default {
     return {
       listQuery: {
         pageNum: 1,
-        pageSize: 12
+        pageSize: 12,
+        spaceId: null
       },
+      spaceLists: [],
       docLists: [],
       total: 0,
       docVisitLevel: docVisitLevel,
@@ -97,7 +99,7 @@ export default {
   },
   created() {
     this.showDocPage()
-    this.showTagsAll()
+    this.showSpaceAll()
   },
   methods: {
     initDrawerForm() {
@@ -109,13 +111,23 @@ export default {
         remark: null
       }
     },
-    showTagsAll() {
+    showSpaceAll() {
       showAll().then(res => {
-        this.tagsLists = res
+        this.spaceLists = res
       })
     },
+    clickTag(id) {
+      this.listQuery.spaceId = id
+
+      this.listQuery.pageNum = 1
+      this.listQuery.pageSize = 12
+
+      this.docLists = []
+      this.total = 0
+      this.showDocPage()
+    },
     showDocPage() {
-      showPage(this.listQuery, this.userId).then(response => {
+      showPage(this.listQuery).then(response => {
         if (this.docLists.length === 0) {
           this.docLists = response.records
           this.total = response.total

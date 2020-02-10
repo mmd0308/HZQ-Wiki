@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function showAll() {
+  return request({
+    url: '/api/wiki/show/spaces/all',
+    method: 'get'
+  })
+}
+
 export function page(query) {
   return request({
     url: '/api/space/page',

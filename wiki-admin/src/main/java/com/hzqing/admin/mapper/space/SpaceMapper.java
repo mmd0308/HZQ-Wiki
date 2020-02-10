@@ -9,7 +9,6 @@ import com.hzqing.admin.model.entity.space.Space;
 import java.util.List;
 
 public interface SpaceMapper  extends BaseMapper<Space> {
-    List<SpaceDto> selectList(Space space);
 
     List<SpaceDto> selectListByUserId(Space space);
 

@@ -22,11 +22,11 @@ public enum ArticleState implements IEnum<Integer> {
     RELEASE(2,"发布");
 
 
-    private int value;
+    private Integer value;
 
     private String desc;
 
-    ArticleState(int value, String desc) {
+    ArticleState(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }
