@@ -9,7 +9,7 @@
       <span>&nbsp;·&nbsp;</span>
       <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">{{ keepToRecord }}</a></span>
       <span>&nbsp;·&nbsp;</span>
-      <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">V2.0.0-beta.4</a></span>
+      <span><a href="https://github.com/mmd0308/HZQ-Wiki" target="_blank">V2.0.0-beta.5</a></span>
     </div>
   </div>
 </template>
