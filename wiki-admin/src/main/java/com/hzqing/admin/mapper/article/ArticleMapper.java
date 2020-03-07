@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.model.dto.article.ArticleDto;
 import com.hzqing.admin.model.entity.article.Article;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author hzqing
  * @date 2019-07-1 18:50
  */
+@Repository
 public interface ArticleMapper extends BaseMapper<Article> {
 
     /**

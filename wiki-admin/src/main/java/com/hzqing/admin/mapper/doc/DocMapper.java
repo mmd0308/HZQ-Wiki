@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzqing.admin.dto.doc.MemberDto;
 import com.hzqing.admin.model.dto.doc.DocDto;
 import com.hzqing.admin.model.entity.doc.Doc;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author hzqing
  * @date 2019-05-17 09:55
  */
+@Repository
 public interface DocMapper  extends BaseMapper<Doc> {
     List<Doc> selectList(Doc doc);
 
